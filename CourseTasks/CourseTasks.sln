@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ranges", "Ranges\Ranges.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RangeComplex", "RangeComplex\RangeComplex.csproj", "{1F028795-AECA-470E-8EB9-39328B1EBDAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapes", "Shapes\Shapes.csproj", "{5E3A86A7-234D-49D1-A566-60464BCE2318}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1F028795-AECA-470E-8EB9-39328B1EBDAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F028795-AECA-470E-8EB9-39328B1EBDAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F028795-AECA-470E-8EB9-39328B1EBDAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E3A86A7-234D-49D1-A566-60464BCE2318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E3A86A7-234D-49D1-A566-60464BCE2318}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E3A86A7-234D-49D1-A566-60464BCE2318}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E3A86A7-234D-49D1-A566-60464BCE2318}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
