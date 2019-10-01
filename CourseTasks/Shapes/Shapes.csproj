@@ -43,8 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClassShapes.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="IShape.cs" />
+    <Compile Include="Shapes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
