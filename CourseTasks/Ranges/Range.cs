@@ -8,113 +8,84 @@ namespace Ranges
 {
     public class Range
     {
-        public double From;
-        public double To;
+        private double From;
+        private double To;
 
-        public void Arrange()
+        public Range(double from, double to)
         {
-            double left = Math.Min(this.From, this.To);
-            this.To = Math.Max(this.From, this.To);
-            this.From = left;
+            From = Math.Min(from, to);
+            To = Math.Max(from, to);
         }
 
         public bool IsInside(double numberToCheck)
         {
-            if ((numberToCheck >= Math.Min(this.From, this.To)) && (numberToCheck <= Math.Max(this.From, this.To)))
+            return (numberToCheck >= Math.Min(From, To)) && (numberToCheck <= Math.Max(From, To));
+        }
+
+        public double GetLength()
+        {
+            return Math.Abs(To - From);
+        }
+
+        public override string ToString()
+        {
+            if (this == null)
             {
-                return true;
+                return ("None");
             }
-            return false;
+            return ($"The left boundary is {this.From}, right one is {this.To}");
         }
 
-        public double Length()
+        public Range GetIntersection(Range range)
         {
-            return Math.Abs(this.To - this.From);
-        }
-
-        public void Print()
-        {
-            Console.WriteLine($"The left boundary is {this.From}, right one is {this.To}");
-        }
-
-        public Range Intersection(Range range2)
-        {
-            this.Arrange();
-            range2.Arrange();
-            if ((this.To < range2.From) || (range2.To < this.From))
+            if ((this.To <= range.From) || (range.To <= this.From))
             {
                 return null;
             }
-            Range intersection = new Range();
-            intersection.From = Math.Max(this.From, range2.From);
-            intersection.To = Math.Min(this.To, range2.To);
+            Range intersection = new Range(Math.Max(this.From, range.From), Math.Min(this.To, range.To));
             return intersection;
         }
 
-        public Range[] Conjunction(Range range2)
+        public Range[] GetUnion(Range range)
         {
-            this.Arrange();
-            range2.Arrange();
-
-            if (this.Intersection(range2) == null)
+            if ((this.To <= range.From) || (range.To <= this.From))
             {
-                Range[] conjunctionRanges = new Range[2];
-                conjunctionRanges[0] = this;
-                conjunctionRanges[1] = range2;
-                return conjunctionRanges;
+                Range[] unionRanges = { this, range };
+                return unionRanges;
             }
             else
             {
-                Range[] conjunctionRanges = new Range[1];
-                conjunctionRanges[0] = new Range();
-                conjunctionRanges[0].From = Math.Min(this.From, range2.From);
-                conjunctionRanges[0].To = Math.Max(this.To, range2.To);
-                return conjunctionRanges;
+                Range[] unionRanges = new Range[1];
+                unionRanges[0] = new Range(Math.Min(this.From, range.From), Math.Max(this.To, range.To));
+                return unionRanges;
             }
         }
 
-        public Range[] Difference(Range range2)
+        public Range[] GetDifference(Range range)
         {
-            this.Arrange();
-            range2.Arrange();
-
-            if (this.Intersection(range2) == null)
+            if ((this.To <= range.From) || (range.To <= this.From))
             {
-                Range[] conjunctionRanges = new Range[1];
-                conjunctionRanges[0] = new Range();
-                conjunctionRanges[0] = this;
-                return conjunctionRanges;
+                Range[] unionRanges = { this };
+                return unionRanges;
             }
-            else if (this.Intersection(range2).From == this.From && this.Intersection(range2).To == this.To)
+            else if (this.From >= range.From && this.To <= range.To)
             {
                 return null;
             }
-            else if (this.Intersection(range2).From > this.From && this.Intersection(range2).To < this.To)
+            else if (this.From < range.From && this.To > range.To)
             {
-                Range[] conjunctionRanges = new Range[2];
-                conjunctionRanges[0] = new Range();
-                conjunctionRanges[0].From = this.From;
-                conjunctionRanges[0].To = this.Intersection(range2).From;
-                conjunctionRanges[1] = new Range();
-                conjunctionRanges[1].From = this.Intersection(range2).To;
-                conjunctionRanges[1].To = this.To;
-                return conjunctionRanges;
+                Range[] UnionRanges = { new Range(this.From, range.From), new Range(range.To, this.To) };
+                return UnionRanges;
             }
-            else if (this.Intersection(range2).To == this.To)
+            else if (range.To == this.To)
             {
-                Range[] conjunctionRanges = new Range[1];
-                conjunctionRanges[0] = new Range();
-                conjunctionRanges[0].From = this.From;
-                conjunctionRanges[0].To = this.Intersection(range2).From;
-                return conjunctionRanges;
+                Range[] UnionRanges = { new Range(this.From, range.From) };
+                return UnionRanges;
             }
             else
             {
-                Range[] conjunctionRanges = new Range[1];
-                conjunctionRanges[0] = new Range();
-                conjunctionRanges[0].From = this.Intersection(range2).To;
-                conjunctionRanges[0].To = this.To;
-                return conjunctionRanges;
+                Range[] UnionRanges = { new Range(range.To, this.To) };
+                return UnionRanges;
             }
         }
     }

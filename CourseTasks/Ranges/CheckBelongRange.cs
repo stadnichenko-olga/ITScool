@@ -11,7 +11,6 @@ namespace Ranges
         static void Main()
         {
             bool doMore = true;
-            Range range = new Range();
 
             while (doMore)
             {
@@ -22,7 +21,6 @@ namespace Ranges
                     Console.ReadKey();
                     return;
                 }
-                range.From = leftBoundary;
 
                 Console.WriteLine("Add new right boundary");
                 if (!double.TryParse(Console.ReadLine(), out double rightBoundary))
@@ -31,12 +29,9 @@ namespace Ranges
                     Console.ReadKey();
                     return;
                 }
-                range.To = rightBoundary;
-
-                range.Arrange();
-                Console.Write($"The boundaries were arranged. ");
-                range.Print();
-                Console.WriteLine($"The length is equal to {range.Length()}");
+                Range range = new Range(leftBoundary,rightBoundary);
+                Console.WriteLine(range.ToString());
+                Console.WriteLine($"The length is equal to {range.GetLength()}");
 
                 Console.WriteLine("What number do you want to check?");
                 if (!double.TryParse(Console.ReadLine(), out double number))
@@ -48,7 +43,7 @@ namespace Ranges
 
                 if (range.IsInside(number))
                 {
-                    Console.WriteLine("The numbet is inside.");
+                    Console.WriteLine("The number is inside.");
                 }
                 else
                 {

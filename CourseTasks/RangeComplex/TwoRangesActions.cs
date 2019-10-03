@@ -12,8 +12,6 @@ namespace Ranges
         static void Main()
         {
             bool doMore = true;
-            Range range1 = new Range();
-            Range range2 = new Range();
 
             Console.WriteLine("Let's check intersection, conjunction and disjunction.");
 
@@ -26,7 +24,6 @@ namespace Ranges
                     Console.ReadKey();
                     return;
                 }
-                range1.From = leftBoundary;
 
                 Console.WriteLine("Add first right boundary");
                 if (!double.TryParse(Console.ReadLine(), out double rightBoundary))
@@ -35,7 +32,8 @@ namespace Ranges
                     Console.ReadKey();
                     return;
                 }
-                range1.To = rightBoundary;
+                Range range1 = new Range(leftBoundary, rightBoundary);
+                Console.WriteLine(range1.ToString());
 
                 Console.WriteLine("Add second left boundary");
                 if (!double.TryParse(Console.ReadLine(), out leftBoundary))
@@ -44,7 +42,6 @@ namespace Ranges
                     Console.ReadKey();
                     return;
                 }
-                range2.From = leftBoundary;
 
                 Console.WriteLine("Add second right boundary");
                 if (!double.TryParse(Console.ReadLine(), out rightBoundary))
@@ -53,38 +50,39 @@ namespace Ranges
                     Console.ReadKey();
                     return;
                 }
-                range2.To = rightBoundary;
+                Range range2 = new Range(leftBoundary, rightBoundary);
+                Console.WriteLine(range2.ToString());
 
                 Console.Write("Ranges intersection = ");
-                if (range1.Intersection(range2) != null)
+                if (range1.GetIntersection(range2) != null)
                 {
-                    range1.Intersection(range2).Print();
+                    Console.WriteLine(range1.GetIntersection(range2).ToString());
                 }
 
                 Console.Write("Ranges conjunction: ");
-                Range[] rangesConjunction = range1.Conjunction(range2);
+                Range[] rangesConjunction = range1.GetUnion(range2);
                 foreach (Range result in rangesConjunction)
                 {
-                    result.Print();
+                    Console.WriteLine(result.ToString());
                 }
 
                 Console.Write("Ranges difference Range1/Range2: ");
-                Range[] rangesDifference = range1.Difference(range2);
+                Range[] rangesDifference = range1.GetDifference(range2);
                 if (rangesDifference != null)
                 {
                     foreach (Range result in rangesDifference)
                     {
-                        result.Print();
+                        Console.WriteLine(result.ToString());
                     }
                 }
 
                 Console.Write("Ranges difference Range2/Range1: ");
-                rangesDifference = range2.Difference(range1);
+                rangesDifference = range2.GetDifference(range1);
                 if (rangesDifference != null)
                 {
                     foreach (Range result in rangesDifference)
                     {
-                        result.Print();
+                        Console.WriteLine(result.ToString());
                     }
                 }
 
