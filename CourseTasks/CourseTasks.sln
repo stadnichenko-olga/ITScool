@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RangeComplex", "RangeComple
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shapes", "Shapes\Shapes.csproj", "{5E3A86A7-234D-49D1-A566-60464BCE2318}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vectors", "Vectors\Vectors.csproj", "{72C2045D-227E-4F10-A345-4785A358C8DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5E3A86A7-234D-49D1-A566-60464BCE2318}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E3A86A7-234D-49D1-A566-60464BCE2318}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E3A86A7-234D-49D1-A566-60464BCE2318}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72C2045D-227E-4F10-A345-4785A358C8DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72C2045D-227E-4F10-A345-4785A358C8DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72C2045D-227E-4F10-A345-4785A358C8DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72C2045D-227E-4F10-A345-4785A358C8DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
