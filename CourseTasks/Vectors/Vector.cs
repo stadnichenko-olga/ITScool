@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace Vectors
 {
     public class Vector
@@ -13,35 +12,40 @@ namespace Vectors
             {
                 throw new ArgumentException(String.Format("{0} is less than 1", n), "n");
             }
+            vector = new double[n];
             for (int i = 0; i < n; i++)
             {
                 vector[i] = 0;
             }
         }
 
-        public Vector(double[] vector)
+        public Vector(double[] coordinates)
         {
-            this.vector = vector;
+            vector = new double[coordinates.Length];
+            coordinates.CopyTo(vector, 0);
         }
 
         public Vector(Vector vectorToCopy)
         {
-            this.vector = vectorToCopy.vector;
+            vector = new double[vectorToCopy.GetSize()];
+            vectorToCopy.vector.CopyTo(this.vector, 0);
         }
 
-        public Vector(int n, double[] vector)
+        public Vector(int n, double[] coordinates)
         {
             if (n <= 0)
             {
                 throw new ArgumentException(String.Format("Dimension {0} is less than 1", n));
             }
-            for (int i = 0; i < vector.Length; i++)
+
+            vector = new double[n];
+            for (int i = 0; i < Math.Min(coordinates.Length, n); i++)
             {
-                this.vector[i] = vector[i];
+                vector[i] = coordinates[i];
             }
-            for (int i = vector.Length; i < n; i++)
+            for (int i = coordinates.Length; i < n; i++)
             {
-                this.vector[i] = 0;
+                vector[i] = 0;
             }
         }
 
@@ -52,7 +56,7 @@ namespace Vectors
 
         public override string ToString()
         {
-            return string.Join(",", vector);
+            return string.Join(", ", vector);
         }
 
         public void GetVectorsSumm(Vector vector2)
@@ -61,8 +65,12 @@ namespace Vectors
             {
                 vector[i] += vector2.vector[i];
             }
+            Array.Resize(ref vector, Math.Max(GetSize(), vector2.GetSize()));
+            for (int i = GetSize() - 1; i < vector2.GetSize(); i++)
+            {
+                vector[i] = vector2.vector[i];
+            }
         }
-
 
         public void GetVectorsDifference(Vector vector2)
         {
@@ -85,7 +93,7 @@ namespace Vectors
             GetVectorMultiplicationByScalar(-1);
         }
 
-        public double GetVectorLength()
+        public double GetLength()
         {
             double length = 0;
             foreach (double coordinate in vector)
@@ -136,7 +144,7 @@ namespace Vectors
 
         public static Vector GetVectorsSumm(Vector vector1, Vector vector2)
         {
-            int n = Math.Min(vector1.GetSize(), vector2.GetSize());
+            int n = Math.Max(vector1.GetSize(), vector2.GetSize());
             double[] vectorsSumm = new double[n];
             int i = 0;
             if (vector1.GetSize() <= vector2.GetSize())
@@ -183,7 +191,7 @@ namespace Vectors
                 throw new ArgumentException(String.Format("Dimensions are not equal"));
             }
             double vectorsMultiplication = 0;
-            for (int i= 0; i< vector1.GetSize(); i++)
+            for (int i = 0; i < vector1.GetSize(); i++)
             {
                 vectorsMultiplication += vector1.vector[i] * vector2.vector[i];
             }
