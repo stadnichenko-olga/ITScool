@@ -33,19 +33,18 @@ namespace Shapes
 
         public override bool Equals(object obj)
         {
-            IShape shape2 = obj as IShape;
-
-            if (!(shape2 is Circle))
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
 
-            return (GetArea() == shape2.GetArea());
+            Circle shape = obj as Circle;
+            return (radius == shape.radius);
         }
 
         public override int GetHashCode()
         {
-            return 2;
+            return ToString().GetHashCode();
         }
 
         public override string ToString()

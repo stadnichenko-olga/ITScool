@@ -32,22 +32,22 @@ namespace Shapes
         {
             return 2 * (height + width);
         }
-        
+
         public override bool Equals(object obj)
         {
-            IShape shape2 = obj as IShape;
-
-            if (!(shape2 is Rectangle))
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
 
-            return (GetArea() == shape2.GetArea());
+            Rectangle shape = obj as Rectangle;
+            
+            return (width == shape.width) && (height == shape.height);
         }
 
         public override int GetHashCode()
         {
-            return 2;
+            return ToString().GetHashCode();
         }
 
         public override string ToString()

@@ -9,28 +9,30 @@ namespace Shapes
         {
             var rand = new Random();
 
-            var shapesArray = new List<IShape>();
-            shapesArray.Add(new Circle(rand.Next(1, 10)));
-            shapesArray.Add(new Circle(rand.Next(1, 10)));
-            shapesArray.Add(new Circle(rand.Next(1, 10)));
+            List<IShape> shapesArray = new List<IShape>()
+            {
+            new Circle(rand.Next(1, 10)),
+            new Circle(rand.Next(1, 10)),
+            new Circle(rand.Next(1, 10)),
 
-            shapesArray.Add(new Square(rand.Next(1, 10)));
-            shapesArray.Add(new Square(rand.Next(1, 10)));
-            shapesArray.Add(new Square(rand.Next(1, 10)));
+            new Square(rand.Next(1, 10)),
+            new Square(rand.Next(1, 10)),
+            new Square(rand.Next(1, 10)),
 
-            shapesArray.Add(new Rectangle(rand.Next(1, 10), rand.Next(1, 10)));
-            shapesArray.Add(new Rectangle(rand.Next(1, 10), rand.Next(1, 10)));
-            shapesArray.Add(new Rectangle(rand.Next(1, 10), rand.Next(1, 10)));
+            new Rectangle(rand.Next(1, 10), rand.Next(1, 10)),
+            new Rectangle(rand.Next(1, 10), rand.Next(1, 10)),
+            new Rectangle(rand.Next(1, 10), rand.Next(1, 10)),
 
-            shapesArray.Add(new Triangle(rand.Next(1, 10), rand.Next(1, 10),
-                                         rand.Next(1, 10), rand.Next(1, 10),
-                                         rand.Next(1, 10), rand.Next(1, 10)));
-            shapesArray.Add(new Triangle(rand.Next(1, 10), rand.Next(1, 10),
-                                         rand.Next(1, 10), rand.Next(1, 10),
-                                         rand.Next(1, 10), rand.Next(1, 10)));
-            shapesArray.Add(new Triangle(rand.Next(1, 10), rand.Next(1, 10),
-                                         rand.Next(1, 10), rand.Next(1, 10),
-                                         rand.Next(1, 10), rand.Next(1, 10)));
+            new Triangle(rand.Next(1, 10), rand.Next(1, 10),
+                         rand.Next(1, 10), rand.Next(1, 10),
+                         rand.Next(1, 10), rand.Next(1, 10)),
+            new Triangle(rand.Next(1, 10), rand.Next(1, 10),
+                         rand.Next(1, 10), rand.Next(1, 10),
+                         rand.Next(1, 10), rand.Next(1, 10)),
+            new Triangle(rand.Next(1, 10), rand.Next(1, 10),
+                         rand.Next(1, 10), rand.Next(1, 10),
+                         rand.Next(1, 10), rand.Next(1, 10)),
+            };
             return shapesArray;
         }
 
@@ -45,20 +47,20 @@ namespace Shapes
             }
 
             ShapesAreaComparer comparer1 = new ShapesAreaComparer();
-
             shapesArray.Sort(comparer1);
+
             Console.Write("Shape with largest area: ");
             IShape shapeLargeArea = shapesArray[0];
             Console.WriteLine(shapeLargeArea.ToString());
 
             ShapesPerimeterComparer comparer2 = new ShapesPerimeterComparer();
-
             shapesArray.Sort(comparer2);
-            Console.Write("Shape with largest perimeter: ");
-            IShape shapeLargePerimeter = shapesArray[0];
-            Console.WriteLine(shapeLargePerimeter.ToString());
+            
+            Console.Write("Second shape with largest perimeter: ");
+            IShape secondShapeLargePerimeter = shapesArray[1];
+            Console.WriteLine(secondShapeLargePerimeter.ToString());
 
-            if (shapeLargeArea.Equals(shapeLargePerimeter))
+            if (shapeLargeArea.Equals(secondShapeLargePerimeter))
             {
                 Console.Write("Shapes are the same.");
             }

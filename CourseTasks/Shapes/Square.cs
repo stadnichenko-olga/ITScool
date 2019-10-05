@@ -29,22 +29,21 @@ namespace Shapes
         {
             return 4 * side;
         }
-        
+
         public override bool Equals(object obj)
         {
-            IShape shape2 = obj as IShape;
-
-            if (!(shape2 is Square))
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
 
-            return (GetArea() == shape2.GetArea());
+            Square shape = obj as Square;
+            return (side == shape.side);
         }
 
         public override int GetHashCode()
         {
-            return 1;
+            return ToString().GetHashCode();
         }
         public override string ToString()
         {

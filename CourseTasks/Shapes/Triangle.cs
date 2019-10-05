@@ -46,19 +46,20 @@ namespace Shapes
 
         public override bool Equals(object obj)
         {
-            IShape shape2 = obj as IShape;
-
-            if (!(shape2 is Triangle))
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
 
-            return (GetArea() == shape2.GetArea());
+            Triangle shape = obj as Triangle;
+            return (shape.x1 == x1 && shape.y1 == y1 && 
+                    shape.x2 == x2 && shape.y2 == y2 && 
+                    shape.x3 == x3 && shape.y3 == y3);
         }
 
         public override int GetHashCode()
         {
-            return 6;
+            return ToString().GetHashCode();
         }
 
         public override string ToString()
