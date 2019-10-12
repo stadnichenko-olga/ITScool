@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Shapes
+namespace Shapes.ShapePatterns
 {
     public class Circle : IShape
     {
@@ -37,19 +37,18 @@ namespace Shapes
             {
                 return false;
             }
-
-            Circle shape = obj as Circle;
-            return (radius == shape.radius);
+            
+            return obj is Circle shape && this.radius == shape.radius;
         }
 
         public override int GetHashCode()
         {
-            return ToString().GetHashCode();
+            return radius.GetHashCode();
         }
 
         public override string ToString()
         {
-            return ($"Circle, radius = {radius}");
+            return $"Circle, radius = {radius}";
         }
     }
 }

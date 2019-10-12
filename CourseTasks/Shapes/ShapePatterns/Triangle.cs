@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Shapes
+namespace Shapes.ShapePatterns
 {
     public class Triangle : IShape
     {
@@ -38,10 +38,15 @@ namespace Shapes
 
         public double GetPerimeter()
         {
-            double a = Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-            double b = Math.Sqrt((x3 - x1) * (x3 - x1) + (y3 - y1) * (y3 - y1));
-            double c = Math.Sqrt((x2 - x3) * (x2 - x3) + (y2 - y3) * (y2 - y3));
+            double a = GetLength(x1, x2, y1, y2);
+            double b = GetLength(x1, x3, y1, y3);
+            double c = GetLength(x2, x3, y2, y3);
             return a + b + c;
+        }
+
+        private double GetLength(double x1, double x2, double y1, double y2)
+        {
+            return Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         }
 
         public override bool Equals(object obj)
@@ -51,20 +56,22 @@ namespace Shapes
                 return false;
             }
 
-            Triangle shape = obj as Triangle;
-            return (shape.x1 == x1 && shape.y1 == y1 && 
-                    shape.x2 == x2 && shape.y2 == y2 && 
-                    shape.x3 == x3 && shape.y3 == y3);
+            return obj is Triangle shape &&
+                   shape.x1 == this.x1 && shape.y1 == this.y1 &&
+                   shape.x2 == this.x2 && shape.y2 == this.y2 &&
+                   shape.x3 == this.x3 && shape.y3 == this.y3;
         }
 
         public override int GetHashCode()
         {
-            return ToString().GetHashCode();
+            return x1.GetHashCode() ^ y1.GetHashCode() ^
+                   x2.GetHashCode() ^ y2.GetHashCode() ^
+                   x3.GetHashCode() ^ y3.GetHashCode();
         }
 
         public override string ToString()
         {
-            return ($"Triangle, x1 = {x1}, y1 = {y1}, x2 = {x2}, y2 = {y2}, x3 = {x3}, y3 = {y3}");
+            return $"Triangle, x1 = {x1}, y1 = {y1}, x2 = {x2}, y2 = {y2}, x3 = {x3}, y3 = {y3}";
         }
     }
 }

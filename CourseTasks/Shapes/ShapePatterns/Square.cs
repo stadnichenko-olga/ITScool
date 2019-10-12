@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Shapes
+﻿namespace Shapes.ShapePatterns
 {
     public class Square : IShape
     {
@@ -37,17 +35,17 @@ namespace Shapes
                 return false;
             }
 
-            Square shape = obj as Square;
-            return (side == shape.side);
+            return obj is Square shape && this.side == shape.side;
         }
 
         public override int GetHashCode()
         {
-            return ToString().GetHashCode();
+            return side.GetHashCode();
         }
+
         public override string ToString()
         {
-            return ($"Square, side = {side}");
+            return $"Square, side = {side}";
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Shapes
+﻿namespace Shapes.ShapePatterns
 {
     public class Rectangle : IShape
     {
@@ -40,19 +38,17 @@ namespace Shapes
                 return false;
             }
 
-            Rectangle shape = obj as Rectangle;
-            
-            return (width == shape.width) && (height == shape.height);
+            return obj is Rectangle shape && this.width == shape.width && this.height == shape.height;
         }
 
         public override int GetHashCode()
         {
-            return ToString().GetHashCode();
+            return width.GetHashCode() ^ height.GetHashCode();
         }
 
         public override string ToString()
         {
-            return ($"Rectangle, height = {height}, width = {width}");
+            return $"Rectangle, height = {height}, width = {width}";
         }
     }
 }
