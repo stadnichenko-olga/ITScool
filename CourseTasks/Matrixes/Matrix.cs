@@ -47,7 +47,7 @@ namespace Matrixes
             }
         }
         
-        public int GetFirstDimensions(Matrix matrix)
+        public int GetFirstDimensions()
         {
             int m = 0;
             foreach (var vector in matrix)
@@ -57,9 +57,9 @@ namespace Matrixes
             return m;
         }
 
-        public int GetSecondDimensions(Matrix matrix)
+        public int GetSecondDimensions()
         {
-            return matrix[0].GetSize;
+            return matrix[0].GetSize();
         }
 
         public override string ToString()

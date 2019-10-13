@@ -29,6 +29,7 @@ namespace Vectors
             vector2.GetVectorMultiplicationByScalar(3);
             Console.WriteLine("Vector2 * 3: "  + vector2.ToString());
             Console.WriteLine($"Vector2[3] = {vector2.GetVectorCoordinate(3)}");
+
             if (vector1.Equals(vector2))
             {
                 Console.WriteLine("Vectors are the same.");
@@ -50,9 +51,9 @@ namespace Vectors
             Console.WriteLine("vector1: " + vector1.ToString());
 
             Vector vector3 = new Vector(vector2);
-            vector2.GetVectorsSumm(vector1);
+            vector2.GetVectorsSum(vector1);
             Console.WriteLine("Dynamic: vector1 + vector2 = " + vector2.ToString());
-            Console.WriteLine("Static:  vector1 + vector2 = " + Vector.GetVectorsSumm(vector3, vector1).ToString());
+            Console.WriteLine("Static:  vector1 + vector2 = " + Vector.GetVectorsSum(vector3, vector1).ToString());
 
             vector2.GetVectorMultiplicationByScalar(2);
             vector3 = new Vector(vector2);
@@ -70,9 +71,9 @@ namespace Vectors
             Console.WriteLine("vector1: " + vector1.ToString());
 
             vector3 = new Vector(vector2);
-            vector2.GetVectorsSumm(vector1);
+            vector2.GetVectorsSum(vector1);
             Console.WriteLine("Dynamic: vector1 + vector2 = " + vector2.ToString());
-            Console.WriteLine("Static:  vector1 + vector2 = " + Vector.GetVectorsSumm(vector3, vector1).ToString());
+            Console.WriteLine("Static:  vector1 + vector2 = " + Vector.GetVectorsSum(vector3, vector1).ToString());
 
             vector2.GetVectorMultiplicationByScalar(2);
             vector3 = new Vector(vector2);

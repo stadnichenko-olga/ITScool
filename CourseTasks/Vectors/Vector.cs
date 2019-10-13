@@ -10,43 +10,43 @@ namespace Vectors
         {
             if (n <= 0)
             {
-                throw new ArgumentException(String.Format("{0} is less than 1", n), "n");
+                throw new ArgumentException($"{nameof(n)} is less than 1");
             }
+
             vector = new double[n];
-            for (int i = 0; i < n; i++)
-            {
-                vector[i] = 0;
-            }
         }
 
         public Vector(double[] coordinates)
         {
+            if (coordinates.Length == 0)
+            {
+                throw new ArgumentException($"Dimension of {nameof(coordinates)} is less than 1");
+            }
+
             vector = new double[coordinates.Length];
             coordinates.CopyTo(vector, 0);
         }
 
         public Vector(Vector vectorToCopy)
         {
+            if (vectorToCopy.GetSize() == 0)
+            {
+                throw new ArgumentException($"Dimension of {nameof(vectorToCopy)} is less than 1");
+            }
+
             vector = new double[vectorToCopy.GetSize()];
-            vectorToCopy.vector.CopyTo(this.vector, 0);
+            vectorToCopy.vector.CopyTo(vector, 0);
         }
 
         public Vector(int n, double[] coordinates)
         {
-            if (n <= 0)
+            if (n <= 0 || coordinates.Length == 0)
             {
-                throw new ArgumentException(String.Format("Dimension {0} is less than 1", n));
+                throw new ArgumentException($"Dimension of {nameof(coordinates)} or {nameof(n)} is less than 1");
             }
 
             vector = new double[n];
-            for (int i = 0; i < Math.Min(coordinates.Length, n); i++)
-            {
-                vector[i] = coordinates[i];
-            }
-            for (int i = coordinates.Length; i < n; i++)
-            {
-                vector[i] = 0;
-            }
+            Array.Copy(coordinates, coordinates.GetLowerBound(0), vector, vector.GetLowerBound(0), Math.Min(n,coordinates.Length));            
         }
 
         public int GetSize()
@@ -59,58 +59,84 @@ namespace Vectors
             return string.Join(", ", vector);
         }
 
-        public void GetVectorsSumm(Vector vector2)
+        public Vector GetVectorsSum(Vector vector2)
         {
-            for (int i = 0; i < Math.Min(GetSize(), vector2.GetSize()); i++)
+            int n = Math.Min(GetSize(), vector2.GetSize());
+
+            for (int i = 0; i < n; i++)
             {
                 vector[i] += vector2.vector[i];
             }
-            Array.Resize(ref vector, Math.Max(GetSize(), vector2.GetSize()));
-            for (int i = GetSize() - 1; i < vector2.GetSize(); i++)
+
+            if (GetSize() < vector2.GetSize())
             {
-                vector[i] = vector2.vector[i];
+                Array.Resize(ref vector, vector2.GetSize());
+                for (int i = GetSize() - 1; i < vector2.GetSize(); i++)
+                {
+                    vector[i] = vector2.vector[i];
+                }
             }
+
+            return this;
         }
 
-        public void GetVectorsDifference(Vector vector2)
+        public Vector GetVectorsDifference(Vector vector2)
         {
-            for (int i = 0; i < Math.Min(GetSize(), vector2.GetSize()); i++)
+            int n = Math.Min(GetSize(), vector2.GetSize());
+
+            for (int i = 0; i < n; i++)
             {
                 vector[i] -= vector2.vector[i];
             }
+
+            if (GetSize() < vector2.GetSize())
+            {
+                Array.Resize(ref vector, vector2.GetSize());
+                for (int i = GetSize() - 1; i < vector2.GetSize(); i++)
+                {
+                    vector[i] = -vector2.vector[i];
+                }
+            }
+
+            return this;
         }
 
-        public void GetVectorMultiplicationByScalar(double scalar)
+        public Vector GetVectorMultiplicationByScalar(double scalar)
         {
             for (int i = 0; i < GetSize(); i++)
             {
                 vector[i] *= scalar;
             }
+
+            return this;
         }
 
-        public void GetReverseVector()
+        public Vector GetReverseVector()
         {
             GetVectorMultiplicationByScalar(-1);
+            return this;
         }
 
         public double GetLength()
         {
             double length = 0;
+
             foreach (double coordinate in vector)
             {
                 length += coordinate * coordinate;
             }
+
             return Math.Sqrt(length);
         }
 
         public double GetVectorCoordinate(int i)
         {
-            return vector[i - 1];
+            return vector[i];
         }
 
         public void SetVectorCoordinate(int i, double value)
         {
-            vector[i - 1] = value;
+            vector[i] = value;
         }
 
         public override bool Equals(object obj)
@@ -118,80 +144,36 @@ namespace Vectors
             if (obj == null || GetType() != obj.GetType())
             {
                 return false;
-            }
+            }            
 
-            Vector vector2 = obj as Vector;
-            if (this.GetSize() != vector2.GetSize())
-            {
-                return false;
-            }
-            int i = 0;
-            foreach (double coordinate in vector2.vector)
-            {
-                if (coordinate != vector[i])
-                {
-                    return false;
-                }
-                i++;
-            }
-            return true;
+            return obj is Vector vector2 && this.GetVectorsDifference(vector2).GetLength() == 0;
         }
 
         public override int GetHashCode()
         {
-            return ToString().GetHashCode();
+            return GetLength().GetHashCode() ^ vector.GetHashCode();
         }
 
-        public static Vector GetVectorsSumm(Vector vector1, Vector vector2)
+        public static Vector GetVectorsSum(Vector vector1, Vector vector2)
         {
-            int n = Math.Max(vector1.GetSize(), vector2.GetSize());
-            double[] vectorsSumm = new double[n];
-            int i = 0;
-            if (vector1.GetSize() <= vector2.GetSize())
-            {
-                foreach (double coordinate in vector1.vector)
-                {
-                    vectorsSumm[i] = coordinate + vector2.vector[i];
-                    i++;
-                }
-                while (i < n)
-                {
-                    vectorsSumm[i] = vector2.vector[i];
-                    i++;
-                };
-            }
-            else
-            {
-                foreach (double coordinate in vector2.vector)
-                {
-                    vectorsSumm[i] = coordinate + vector1.vector[i];
-                    i++;
-                }
-                while (i < n)
-                {
-                    vectorsSumm[i] = vector1.vector[i];
-                    i++;
-                };
-            }
-
-            return new Vector(vectorsSumm);
+            Vector vectorsTemp = new Vector(vector1);
+            vectorsTemp.GetVectorsSum(vector2);
+            return vectorsTemp;
         }
 
         public static Vector GetVectorsDifference(Vector vector1, Vector vector2)
         {
-            Vector vectorTemp = new Vector(vector2);
-            vectorTemp.GetReverseVector();
-            return GetVectorsSumm(vector1, vectorTemp);
+            Vector vectorsTemp = new Vector(vector1);
+            vectorsTemp.GetVectorsDifference(vector2);
+            return vectorsTemp;
         }
 
         public static double GetVectorsMultiplication(Vector vector1, Vector vector2)
-        {
-            if (vector1.GetSize() != vector2.GetSize())
-            {
-                throw new ArgumentException(String.Format("Dimensions are not equal"));
-            }
+        {            
             double vectorsMultiplication = 0;
-            for (int i = 0; i < vector1.GetSize(); i++)
+            int n = Math.Min(vector1.GetSize(), vector2.GetSize());
+
+            for (int i = 0; i < n; i++)
             {
                 vectorsMultiplication += vector1.vector[i] * vector2.vector[i];
             }
