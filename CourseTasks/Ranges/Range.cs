@@ -1,89 +1,80 @@
 ﻿using System;
 
-
 namespace Ranges
 {
     public class Range
     {
-        private double from;
-        private double to;
+        public double From { get; set; }
+
+        public double To { get; set; }
 
         public Range(double from, double to)
         {
-            this.from = Math.Min(from, to);
-            this.to = Math.Max(from, to);
+            From = Math.Min(from, to);
+            To = Math.Max(from, to);
+        }
+
+        public Range(Range range)
+        {
+            From = range.From;
+            To = range.To;
         }
 
         public bool IsInside(double numberToCheck)
         {
-            return (numberToCheck >= Math.Min(from, to)) && (numberToCheck <= Math.Max(from, to));
+            return ((numberToCheck > To) && (numberToCheck < From)) || (numberToCheck == To) || (numberToCheck == From);
         }
 
         public double GetLength()
         {
-            return Math.Abs(to - from);
+            return To - From;
         }
 
         public override string ToString()
         {
-            if (this == null)
-            {
-                return ("None");
-            }
-            return ($"The left boundary is {this.from}, right one is {this.to}");
+            return $"The left boundary is {From}, right one is {To}";
         }
 
         public Range GetIntersection(Range range)
         {
-            if ((this.to <= range.from) || (range.to <= this.from))
+            if ((To <= range.From) || (range.To <= From))
             {
                 return null;
             }
-            Range intersection = new Range(Math.Max(this.from, range.from), Math.Min(this.to, range.to));
-            return intersection;
+
+            return new Range(Math.Max(From, range.From), Math.Min(To, range.To));
         }
 
         public Range[] GetUnion(Range range)
         {
-            if ((this.to <= range.from) || (range.to <= this.from))
+            if ((To < range.From) || (range.To < From))
             {
-                Range[] unionRanges = { this, range };
-                return unionRanges;
+                return new Range[2] { new Range(this), new Range(range) };
             }
-            else
-            {
-                Range[] unionRanges = new Range[1];
-                unionRanges[0] = new Range(Math.Min(this.from, range.from), Math.Max(this.to, range.to));
-                return unionRanges;
-            }
+
+            return new Range[1] { new Range(Math.Min(From, range.From), Math.Max(To, range.To)) };
         }
 
         public Range[] GetDifference(Range range)
         {
-            if ((this.to <= range.from) || (range.to <= this.from))
+            if (To <= range.From || From >= range.To)
             {
-                Range[] unionRanges = { this };
-                return unionRanges;
+                return new Range[1] { new Range(this) };
             }
-            else if (this.from >= range.from && this.to <= range.to)
+            else if (From >= range.From && To <= range.To)
             {
                 return null;
             }
-            else if (this.from < range.from && this.to > range.to)
+            else if (From < range.From && To <= range.To)
             {
-                Range[] UnionRanges = { new Range(this.from, range.from), new Range(range.to, this.to) };
-                return UnionRanges;
+                return new Range[1] { new Range(From, range.From) }; ;
             }
-            else if (range.to == this.to)
+            else if (From >= range.From && To > range.To)
             {
-                Range[] UnionRanges = { new Range(this.from, range.from) };
-                return UnionRanges;
+                return new Range[1] { new Range(range.To, To) }; ;
             }
-            else
-            {
-                Range[] UnionRanges = { new Range(range.to, this.to) };
-                return UnionRanges;
-            }
+
+            return new Range[2] { new Range(From, range.From), new Range(range.To, To) }; 
         }
     }
 }
