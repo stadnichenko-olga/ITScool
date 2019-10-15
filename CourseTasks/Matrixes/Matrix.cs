@@ -139,13 +139,24 @@ namespace Matrixes
 
         public Vector GetVectorIndex(int i)
         {
+            if (i < 0 || i >= GetFirstDimension())
+            {
+                throw new ArgumentException($"Index of vector {nameof(i)} is invalid");
+            }
+
             return new Vector(matrix[i]);
         }
 
         public Vector GetColumnIndex(int i)
         {
+            if (i < 0 || i >= GetFirstDimension())
+            {
+                throw new ArgumentException($"Index of column {nameof(i)} is invalid");
+            }
+
             double[] column = new double[GetFirstDimension()];
             int j = 0;
+
             foreach (Vector line in matrix)
             {
                 column[j] = line.GetVectorCoordinate(i);
@@ -155,6 +166,11 @@ namespace Matrixes
 
         public void SetVectorIndex(int i, Vector value)
         {
+            if (i < 0 || i >= GetFirstDimension())
+            {
+                throw new ArgumentException($"Index of vector {nameof(i)} is invalid");
+            }
+
             matrix[i] = new Vector(value);
         }
         
@@ -168,6 +184,39 @@ namespace Matrixes
             }
 
             return result;
+        }
+
+        private Matrix ExtractVectorFromMatrix(int i)
+        {
+            if (i < 0 || i >= GetSecondDimension())
+            {
+                throw new ArgumentException($"Index of extracted column {nameof(i)} is invalid");
+            }
+
+            Matrix result = new Matrix(GetFirstDimension(), GetSecondDimension()-1);
+
+            for (int j = 0; j < i; j++)
+            {
+                result.matrix[j] = new Vector(matrix[j]);
+            }
+            for (int j=i; j< GetFirstDimension()-1; j++)
+            {
+                matrix[j] = new Vector(matrix[j + 1]);
+            }            
+            
+            return result;
+        }
+
+        private Matrix ExtractColumnFromMatrix(int i)
+        {
+            if (i < 0 || i >= GetSecondDimension())
+            {
+                throw new ArgumentException($"Index of extracted column {nameof(i)} is invalid");
+            }
+
+            Matrix result = GetTranspanentMatrix().ExtractVectorFromMatrix(i);
+
+            return result.GetTranspanentMatrix();
         }
 
         public override string ToString()
@@ -189,6 +238,45 @@ namespace Matrixes
         public static Matrix GetMatrixesDifference(Matrix matrix1, Matrix matrix2)
         {
             return matrix1.GetMatrixesDifference(matrix2);
+        }
+
+        public static Matrix GetMatrixesMultiplication(Matrix matrix1, Matrix matrix2)
+        {
+            int m = matrix1.GetFirstDimension();
+            int n = matrix2.GetSecondDimension();
+            double[,] result = new double[m, n];
+
+            for (int i=0; i<m; i++)
+            {
+                for (int j=0; j<n; j++)
+                {
+                    result[i, j] = Vector.GetVectorsMultiplication(matrix1.GetVectorIndex(i), matrix2.GetColumnIndex(j));
+                }
+            }
+
+            return new Matrix(result);
+        }
+
+        public static double GetDeterminant(Matrix matrix)
+        {
+            Matrix matrixD = new Matrix(matrix);
+            if (matrixD.GetFirstDimension() != matrixD.GetSecondDimension())
+            {
+                throw new ArgumentException($"{nameof(matrixD)} is not squared");
+            }
+            int n = matrixD.GetFirstDimension();
+            if (n == 2)
+            {
+                return matrixD.matrix[0].GetVectorCoordinate(0) * matrixD.matrix[1].GetVectorCoordinate(1) -
+                       matrixD.matrix[1].GetVectorCoordinate(0) * matrixD.matrix[0].GetVectorCoordinate(1);
+            }
+            double result = 0;
+            for (var j = 0; j < n; j++)
+            {
+                result += Math.Pow(-1, j+1) * matrixD.matrix[1].GetVectorCoordinate(j) *
+                    GetDeterminant(matrixD.ExtractColumnFromMatrix(j).ExtractVectorFromMatrix(1));
+            }
+            return result;
         }
     }
 }
