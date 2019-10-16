@@ -30,12 +30,16 @@
 
         public override bool Equals(object obj)
         {
+            if (obj == this) return true;
+
             if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
 
-            return obj is Square shape && this.side == shape.side;
+            Square shape = (Square)obj;
+
+            return side == shape.side;
         }
 
         public override int GetHashCode()

@@ -33,12 +33,16 @@ namespace Shapes.ShapePatterns
 
         public override bool Equals(object obj)
         {
+            if (obj == this) return true;
+
             if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
-            
-            return obj is Circle shape && this.radius == shape.radius;
+
+            Circle shape = (Circle)obj;
+
+            return radius == shape.radius;
         }
 
         public override int GetHashCode()

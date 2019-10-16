@@ -44,22 +44,25 @@ namespace Shapes.ShapePatterns
             return a + b + c;
         }
 
-        private double GetLength(double x1, double x2, double y1, double y2)
+        private static double GetLength(double x1, double x2, double y1, double y2)
         {
             return Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         }
 
         public override bool Equals(object obj)
         {
+            if (obj == this) return true;
+
             if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
 
-            return obj is Triangle shape &&
-                   shape.x1 == this.x1 && shape.y1 == this.y1 &&
-                   shape.x2 == this.x2 && shape.y2 == this.y2 &&
-                   shape.x3 == this.x3 && shape.y3 == this.y3;
+            Triangle shape = (Triangle)obj;
+
+            return shape.x1 == x1 && shape.y1 == y1 &&
+                   shape.x2 == x2 && shape.y2 == y2 &&
+                   shape.x3 == x3 && shape.y3 == y3;
         }
 
         public override int GetHashCode()

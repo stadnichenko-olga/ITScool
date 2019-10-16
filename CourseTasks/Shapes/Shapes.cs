@@ -7,7 +7,7 @@ namespace Shapes
 {
     class Shapes
     {
-        public static List<IShape> InitShapeArray()
+        public static List<IShape> InitShapeList()
         {
             var random = new Random();
 
@@ -40,7 +40,7 @@ namespace Shapes
 
         static void Main(string[] args)
         {
-            List<IShape> shapesList = InitShapeArray();
+            List<IShape> shapesList = InitShapeList();
 
             foreach (var shape in shapesList)
             {

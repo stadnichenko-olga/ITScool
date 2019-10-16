@@ -33,12 +33,16 @@
 
         public override bool Equals(object obj)
         {
+            if (obj == this) return true;
+
             if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
 
-            return obj is Rectangle shape && this.width == shape.width && this.height == shape.height;
+            Rectangle shape = (Rectangle)obj;
+
+            return width == shape.width && height == shape.height;
         }
 
         public override int GetHashCode()
