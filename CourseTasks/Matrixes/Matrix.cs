@@ -202,7 +202,7 @@ namespace Matrixes
             for (int j=i; j< GetFirstDimension()-1; j++)
             {
                 matrix[j] = new Vector(matrix[j + 1]);
-            }            
+            }    
             
             return result;
         }
