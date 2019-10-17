@@ -10,7 +10,7 @@ namespace Vectors
         {
             if (n <= 0)
             {
-                throw new ArgumentException($"{nameof(n)} is less than 1");
+                throw new ArgumentException($"Dimension of {nameof(vector)} is less than 1");
             }
 
             vector = new double[n];
@@ -20,7 +20,7 @@ namespace Vectors
         {
             if (coordinates.Length == 0)
             {
-                throw new ArgumentException($"Dimension of {nameof(coordinates)} is less than 1");
+                throw new ArgumentException($"Dimension of {nameof(vector)} is less than 1");
             }
 
             vector = new double[coordinates.Length];
@@ -29,11 +29,6 @@ namespace Vectors
 
         public Vector(Vector vectorToCopy)
         {
-            if (vectorToCopy.GetSize() == 0)
-            {
-                throw new ArgumentException($"Dimension of {nameof(vectorToCopy)} is less than 1");
-            }
-
             vector = new double[vectorToCopy.GetSize()];
             vectorToCopy.vector.CopyTo(vector, 0);
         }
@@ -42,22 +37,16 @@ namespace Vectors
         {
             if (n <= 0 || coordinates.Length == 0)
             {
-                throw new ArgumentException($"Dimension of {nameof(coordinates)} or {nameof(n)} is less than 1");
+                throw new ArgumentException($"Dimension of {nameof(vector)} is less than 1");
             }
 
             vector = new double[n];
-            Array.Copy(coordinates, coordinates.GetLowerBound(0), vector, vector.GetLowerBound(0), Math.Min(n,coordinates.Length));            
+            Array.Copy(coordinates, 0, vector, 0, Math.Min(n,coordinates.Length));            
         }
 
-        public int GetSize()
-        {
-            return vector.Length;
-        }
+        public int GetSize() => vector.Length;
 
-        public override string ToString()
-        {
-            return string.Join(", ", vector);
-        }
+        public override string ToString() => string.Concat("{", string.Join(", ", vector), " }, ");
 
         public Vector GetVectorsSum(Vector vector2)
         {
@@ -111,11 +100,7 @@ namespace Vectors
             return this;
         }
 
-        public Vector GetReverseVector()
-        {
-            GetVectorMultiplicationByScalar(-1);
-            return this;
-        }
+        public Vector GetReverseVector() => GetVectorMultiplicationByScalar(-1);
 
         public double GetLength()
         {
@@ -129,10 +114,7 @@ namespace Vectors
             return Math.Sqrt(length);
         }
 
-        public double GetVectorCoordinate(int i)
-        {
-            return vector[i];
-        }
+        public double GetVectorCoordinate(int i) => vector[i];
 
         public void SetVectorCoordinate(int i, double value)
         {
@@ -149,10 +131,7 @@ namespace Vectors
             return obj is Vector vector2 && this.GetVectorsDifference(vector2).GetLength() == 0;
         }
 
-        public override int GetHashCode()
-        {
-            return GetLength().GetHashCode() ^ vector.GetHashCode();
-        }
+        public override int GetHashCode() => GetLength().GetHashCode() ^ vector.GetHashCode();
 
         public static Vector GetVectorsSum(Vector vector1, Vector vector2)
         {

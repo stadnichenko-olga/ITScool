@@ -48,8 +48,9 @@ namespace Vectors
             Console.WriteLine($"Set {vector1.GetSize() + 1}-th coordinate equal to 10.");
             vector2.SetVectorCoordinate(vector1.GetSize() + 1, 10);
             Console.WriteLine("vector2: " + vector2.ToString());
+            vector1.GetVectorMultiplicationByScalar(2);
             Console.WriteLine("vector1: " + vector1.ToString());
-
+            
             Vector vector3 = new Vector(vector2);
             vector2.GetVectorsSum(vector1);
             Console.WriteLine("Dynamic: vector1 + vector2 = " + vector2.ToString());
