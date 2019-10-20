@@ -9,9 +9,13 @@ namespace Matrixes
 
         public Matrix(int m, int n)
         {
-            if (n <= 0 || m <= 0)
+            if (n <= 0)
             {
-                throw new ArgumentException("One or both dimensions is less than 1");
+                throw new ArgumentException($"Dimension {nameof(n)} is less than 1");
+            }
+            else if (m <= 0)
+            {
+                throw new ArgumentException($"Dimension {nameof(m)} is less than 1");
             }
             matrix = new Vector[m];
             for (int i = 0; i < m; i++)
@@ -83,25 +87,25 @@ namespace Matrixes
 
             for (int i = 0; i < GetFirstDimension(); i++)
             {
-                result.matrix[i] = matrix[i].GetVectorMultiplicationByScalar(scalar);
+                result.matrix[i] = matrix[i].GetMultiplicationByScalar(scalar);
             }
 
             return result;
         }
 
-        public Vector MultiplyByVector(Vector vectorToMuliplicate)
+        public Vector MultiplyByVector(Vector vectorToMultiplicate)
         {           
             double[] result = new double[GetFirstDimension()];
 
             for (int i = 0; i < GetFirstDimension(); i++)
             {
-                result[i] = Vector.GetVectorsMultiplication(matrix[i], vectorToMuliplicate);
+                result[i] = Vector.GetMultiplication(matrix[i], vectorToMultiplicate);
             }
 
             return new Vector(result);
         }
 
-        public Matrix GetMatrixesSum(Matrix matrix2)
+        public Matrix GetSum(Matrix matrix2)
         {
             int m = Math.Max(GetFirstDimension(), matrix2.GetFirstDimension());
             int n = Math.Max(GetSecondDimension(), matrix2.GetSecondDimension());
@@ -111,7 +115,7 @@ namespace Matrixes
 
             for (int i = 0; i < mMin; i++)
             {
-                result.matrix[i] = matrix[i].GetVectorsSum(matrix2.matrix[i]);
+                result.matrix[i] = matrix[i].GetSum(matrix2.matrix[i]);
             }
 
             if (GetFirstDimension() != matrix2.GetFirstDimension())
@@ -119,22 +123,23 @@ namespace Matrixes
                 for (int i = mMin; i < GetFirstDimension(); i++)
                 {
                     Vector zero = new Vector(n);
-                    result.matrix[i] = matrix[i].GetVectorsSum(zero);
+                    result.matrix[i] = matrix[i].GetSum(zero);
                 }
 
                 for (int i = mMin; i < matrix2.GetFirstDimension(); i++)
                 {
                     Vector zero = new Vector(n);
-                    result.matrix[i] = matrix2.matrix[i].GetVectorsSum(zero);
+                    result.matrix[i] = matrix2.matrix[i].GetSum(zero);
                 }
             }
 
             return result;
         }
 
-        public Matrix GetMatrixesDifference(Matrix matrix2)
+        public Matrix GetDifference(Matrix matrix2)
         {
-            return GetMatrixesSum(matrix2.MultiplyByScalar(-1));
+            Matrix matrixTemp = new Matrix(matrix2);
+            return GetSum(matrixTemp.MultiplyByScalar(-1));
         }
 
         public Vector GetVectorIndex(int i)
@@ -154,12 +159,14 @@ namespace Matrixes
                 throw new ArgumentException($"Index of column {nameof(i)} is invalid");
             }
 
+
             double[] column = new double[GetFirstDimension()];
             int j = 0;
 
             foreach (Vector line in matrix)
             {
-                column[j] = line.GetVectorCoordinate(i);
+                column[j] = line.GetCoordinate(i);
+                j++;
             }
             return new Vector(column);
         }
@@ -168,10 +175,10 @@ namespace Matrixes
         {
             if (i < 0 || i >= GetFirstDimension())
             {
-                throw new ArgumentException($"Index of vector {nameof(i)} is invalid");
-            }
+                throw new ArgumentException($"Value of {nameof(i)} is invalid");
+            }           
 
-            matrix[i] = new Vector(value);
+            matrix[i] = new Vector(new Vector(GetSecondDimension(), Vector.ConvertToArray(value)));
         }
         
         public Matrix GetTranspanentMatrix()
@@ -180,7 +187,7 @@ namespace Matrixes
 
             for (int i=0; i< GetSecondDimension(); i++)
             {
-                result.matrix[i] = GetColumnIndex(i);
+                result.matrix[i] = new Vector(GetColumnIndex(i));
             }
 
             return result;
@@ -224,23 +231,25 @@ namespace Matrixes
             string result = "{ ";
             foreach (Vector line in matrix)
             {
-                result = string.Concat(result, "{", string.Join(", ", line), " }, ");
+                result += string.Join("; ", line);                
             }
 
-            return result = string.Concat(result, " }");
+            return result+" }";
         }
 
-        public static Matrix GetMatrixesSum(Matrix matrix1, Matrix matrix2)
-        {            
-            return matrix1.GetMatrixesSum(matrix2);
-        }
-
-        public static Matrix GetMatrixesDifference(Matrix matrix1, Matrix matrix2)
+        public static Matrix GetSum(Matrix matrix1, Matrix matrix2)
         {
-            return matrix1.GetMatrixesDifference(matrix2);
+            Matrix matrixTemp = new Matrix(matrix1);
+            return matrixTemp.GetSum(matrix2);
         }
 
-        public static Matrix GetMatrixesMultiplication(Matrix matrix1, Matrix matrix2)
+        public static Matrix GetDifference(Matrix matrix1, Matrix matrix2)
+        {
+            Matrix matrixTemp = new Matrix(matrix1);
+            return matrixTemp.GetDifference(matrix2);
+        }
+
+        public static Matrix GetMultiplication(Matrix matrix1, Matrix matrix2)
         {
             int m = matrix1.GetFirstDimension();
             int n = matrix2.GetSecondDimension();
@@ -250,7 +259,7 @@ namespace Matrixes
             {
                 for (int j=0; j<n; j++)
                 {
-                    result[i, j] = Vector.GetVectorsMultiplication(matrix1.GetVectorIndex(i), matrix2.GetColumnIndex(j));
+                    result[i, j] = Vector.GetMultiplication(matrix1.GetVectorIndex(i), matrix2.GetColumnIndex(j));
                 }
             }
 
@@ -267,13 +276,13 @@ namespace Matrixes
             int n = matrixD.GetFirstDimension();
             if (n == 2)
             {
-                return matrixD.matrix[0].GetVectorCoordinate(0) * matrixD.matrix[1].GetVectorCoordinate(1) -
-                       matrixD.matrix[1].GetVectorCoordinate(0) * matrixD.matrix[0].GetVectorCoordinate(1);
+                return matrixD.matrix[0].GetCoordinate(0) * matrixD.matrix[1].GetCoordinate(1) -
+                       matrixD.matrix[1].GetCoordinate(0) * matrixD.matrix[0].GetCoordinate(1);
             }
             double result = 0;
             for (var j = 0; j < n; j++)
             {
-                result += Math.Pow(-1, j+1) * matrixD.matrix[1].GetVectorCoordinate(j) *
+                result += Math.Pow(-1, j+1) * matrixD.matrix[1].GetCoordinate(j) *
                     GetDeterminant(matrixD.ExtractColumnFromMatrix(j).ExtractVectorFromMatrix(1));
             }
             return result;

@@ -48,9 +48,22 @@ namespace Vectors
             Array.Copy(coordinatesInit, 0, coordinates, 0, Math.Min(n, coordinatesInit.Length));
         }
 
+        public static double[] ConvertToArray(Vector vector)
+        {            
+            int n = vector.GetSize();
+            double[] array = new double[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                array[i] = vector.GetCoordinate(i);
+            }
+
+            return array;
+        }
+
         public int GetSize() => coordinates.Length;
 
-        public override string ToString() => string.Concat("{", string.Join("; ", coordinates), " }, ");
+        public override string ToString() => string.Concat("{", string.Join("; ", coordinates), " } ");
 
         public Vector GetSum(Vector vector2)
         {
