@@ -2,8 +2,8 @@
 {
     public class Rectangle : IShape
     {
-        private double width;
-        private double height;
+        private readonly double width;
+        private readonly double height;
 
         public Rectangle(double width, double height)
         {
@@ -33,7 +33,10 @@
 
         public override bool Equals(object obj)
         {
-            if (obj == this) return true;
+            if (obj == this)
+            {
+                return true;
+            }
 
             if (obj == null || GetType() != obj.GetType())
             {

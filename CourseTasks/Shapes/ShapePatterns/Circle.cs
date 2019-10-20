@@ -4,7 +4,7 @@ namespace Shapes.ShapePatterns
 {
     public class Circle : IShape
     {
-        private double radius;
+        private readonly double radius;
 
         public Circle(double radius)
         {
@@ -33,7 +33,10 @@ namespace Shapes.ShapePatterns
 
         public override bool Equals(object obj)
         {
-            if (obj == this) return true;
+            if (obj == this)
+            {
+                return true;
+            }
 
             if (obj == null || GetType() != obj.GetType())
             {

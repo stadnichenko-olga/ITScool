@@ -2,7 +2,7 @@
 {
     public class Square : IShape
     {
-        private double side;
+        private readonly double side;
 
         public Square(double side)
         {
@@ -30,7 +30,10 @@
 
         public override bool Equals(object obj)
         {
-            if (obj == this) return true;
+            if (obj == this)
+            {
+                return true;
+            }
 
             if (obj == null || GetType() != obj.GetType())
             {

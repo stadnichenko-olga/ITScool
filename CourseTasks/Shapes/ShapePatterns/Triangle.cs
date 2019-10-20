@@ -4,12 +4,12 @@ namespace Shapes.ShapePatterns
 {
     public class Triangle : IShape
     {
-        private double x1;
-        private double y1;
-        private double x2;
-        private double y2;
-        private double x3;
-        private double y3;
+        private readonly double x1;
+        private readonly double y1;
+        private readonly double x2;
+        private readonly double y2;
+        private readonly double x3;
+        private readonly double y3;
 
         public Triangle(double x1, double y1, double x2, double y2, double x3, double y3)
         {
@@ -51,7 +51,10 @@ namespace Shapes.ShapePatterns
 
         public override bool Equals(object obj)
         {
-            if (obj == this) return true;
+            if (obj == this)
+            {
+                return true;
+            }
 
             if (obj == null || GetType() != obj.GetType())
             {
