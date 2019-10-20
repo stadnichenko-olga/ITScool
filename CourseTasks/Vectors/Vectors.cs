@@ -7,14 +7,15 @@ namespace Vectors
         static void Main(string[] args)
         {
             Vector vector1 = new Vector(3);
-            double[] coordinates = { 1, 3, 4, 6.5, 3, 9.9 };
+            Console.WriteLine("Zero vector: " + vector1);
+            double[] coordinates = { 1, 3, 4, 6.5, 3, 9 };
             vector1 = new Vector(coordinates);
-            Console.WriteLine("vector1: " + vector1.ToString());
+            Console.WriteLine("vector1: " + vector1);
             Console.WriteLine($"Dimension = {vector1.GetSize()}");
             Console.WriteLine($"Length = {vector1.GetLength()}");
 
             Vector vector2 = new Vector(vector1);
-            Console.WriteLine("vector2: " + vector2.ToString());
+            Console.WriteLine("vector2: " + vector2);
             if (vector1.Equals(vector2))
             {
                 Console.WriteLine("Vectors are the same.");
@@ -24,11 +25,11 @@ namespace Vectors
                 Console.WriteLine("Vectors are not the same.");
             }
 
-            vector2.GetReverseVector();
-            Console.WriteLine("Reverse vector2: " + vector2.ToString());
-            vector2.GetVectorMultiplicationByScalar(3);
-            Console.WriteLine("Vector2 * 3: "  + vector2.ToString());
-            Console.WriteLine($"Vector2[3] = {vector2.GetVectorCoordinate(3)}");
+            vector2.GetReverse();
+            Console.WriteLine("Reverse vector2: " + vector2);
+            vector2.GetMultiplicationByScalar(3);
+            Console.WriteLine("Vector2 * 3: " + vector2);
+            Console.WriteLine($"Vector2[3] = {vector2.GetCoordinate(3)}");
 
             if (vector1.Equals(vector2))
             {
@@ -39,50 +40,52 @@ namespace Vectors
                 Console.WriteLine("Vectors are not the same.");
             }
 
-            Console.WriteLine($"Vector1*Vector2 = {Vector.GetVectorsMultiplication(vector1, vector2)}");
+            Console.WriteLine($"Vector1*Vector2 = {Vector.GetMultiplication(vector1, vector2)}");
             Console.WriteLine();
 
             Console.WriteLine("Check static and dynamic. Second vector is longer.");
-            vector2 = new Vector(vector1.GetSize() + 2, coordinates);            
-            Console.WriteLine("vector2: " + vector2.ToString());
+            vector1.GetMultiplicationByScalar(2);
+            Console.WriteLine("vector1: " + vector1);
+
+            vector2 = new Vector(vector1.GetSize() + 2, coordinates);
+            Console.WriteLine("vector2: " + vector2);
             Console.WriteLine($"Set {vector1.GetSize() + 1}-th coordinate equal to 10.");
             vector2.SetVectorCoordinate(vector1.GetSize() + 1, 10);
-            Console.WriteLine("vector2: " + vector2.ToString());
-            vector1.GetVectorMultiplicationByScalar(2);
-            Console.WriteLine("vector1: " + vector1.ToString());
-            
-            Vector vector3 = new Vector(vector2);
-            vector2.GetVectorsSum(vector1);
-            Console.WriteLine("Dynamic: vector1 + vector2 = " + vector2.ToString());
-            Console.WriteLine("Static:  vector1 + vector2 = " + Vector.GetVectorsSum(vector3, vector1).ToString());
+            Console.WriteLine("vector2: " + vector2);
 
-            vector2.GetVectorMultiplicationByScalar(2);
+            Vector vector3 = new Vector(vector2);
+            vector2.GetSum(vector1);
+            Console.WriteLine("Dynamic: vector1 + vector2 = " + vector2);
+            Console.WriteLine("Static:  vector1 + vector2 = " + Vector.GetSum(vector3, vector1));
+
+            vector2.GetMultiplicationByScalar(2);
             vector3 = new Vector(vector2);
-            Console.WriteLine("vector2: " + vector2.ToString());
-            Console.WriteLine("vector1: " + vector1.ToString());
-            vector2.GetVectorsDifference(vector1);
-            Console.WriteLine("Dynamic: vector2 - vector1 = " + vector2.ToString());
-            Console.WriteLine("Static:  vector2 - vector1 = " + Vector.GetVectorsDifference(vector3, vector1).ToString());
+            Console.WriteLine("vector2: " + vector2);
+            Console.WriteLine("vector1: " + vector1);
+            vector2.GetDifference(vector1);
+            Console.WriteLine("Dynamic: vector2 - vector1 = " + vector2);
+            Console.WriteLine("Static:  vector2 - vector1 = " + Vector.GetDifference(vector3, vector1));
 
             Console.WriteLine();
             Console.WriteLine("Check static and dynamic. Second vector is shorter.");
+
+            Console.WriteLine("vector1: " + vector1);
             vector2 = new Vector(vector1.GetSize() - 1, coordinates);
-            vector2.GetVectorMultiplicationByScalar(3);
-            Console.WriteLine("vector2: " + vector2.ToString());
-            Console.WriteLine("vector1: " + vector1.ToString());
+            vector2.GetMultiplicationByScalar(3);
+            Console.WriteLine("vector2: " + vector2);
 
             vector3 = new Vector(vector2);
-            vector2.GetVectorsSum(vector1);
-            Console.WriteLine("Dynamic: vector1 + vector2 = " + vector2.ToString());
-            Console.WriteLine("Static:  vector1 + vector2 = " + Vector.GetVectorsSum(vector3, vector1).ToString());
+            vector3.GetSum(vector1);
+            Console.WriteLine("Dynamic: vector1 + vector2 = " + vector3);
+            Console.WriteLine("Static:  vector1 + vector2 = " + Vector.GetSum(vector2, vector1));
 
-            vector2.GetVectorMultiplicationByScalar(2);
+            vector2.GetMultiplicationByScalar(2);
             vector3 = new Vector(vector2);
-            Console.WriteLine("vector2: " + vector2.ToString());
-            Console.WriteLine("vector1: " + vector1.ToString());
-            vector2.GetVectorsDifference(vector1);
-            Console.WriteLine("Dynamic: vector2 - vector1 = " + vector2.ToString());
-            Console.WriteLine("Static:  vector2 - vector1 = " + Vector.GetVectorsDifference(vector3, vector1).ToString());
+            Console.WriteLine("vector2: " + vector2);
+            Console.WriteLine("vector1: " + vector1);
+            vector2.GetDifference(vector1);
+            Console.WriteLine("Dynamic: vector2 - vector1 = " + vector2);
+            Console.WriteLine("Static:  vector2 - vector1 = " + Vector.GetDifference(vector3, vector1));
 
             Console.ReadKey();
         }
