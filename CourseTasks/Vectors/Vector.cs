@@ -177,7 +177,7 @@ namespace Vectors
 
         public override int GetHashCode() => GetLength().GetHashCode() ^ GetHashCode(coordinates);
 
-        public static int GetHashCode(double[] array)
+        private static int GetHashCode(double[] array)
         {
             unchecked
             {
