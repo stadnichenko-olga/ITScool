@@ -22,7 +22,7 @@ namespace Ranges
 
         public bool IsInside(double numberToCheck)
         {
-            return (numberToCheck >= To) && (numberToCheck <= From);
+            return (numberToCheck >= From) && (numberToCheck <= To);
         }
 
         public double GetLength()
@@ -49,32 +49,35 @@ namespace Ranges
         {
             if ((To < range.From) || (range.To < From))
             {
-                return new Range [] { new Range(this), new Range(range) };
+                return new Range[] { new Range(this), new Range(range) };
             }
 
-            return new Range [] { new Range(Math.Min(From, range.From), Math.Max(To, range.To)) };
+            return new Range[] { new Range(Math.Min(From, range.From), Math.Max(To, range.To)) };
         }
 
         public Range[] GetDifference(Range range)
         {
             if (To <= range.From || From >= range.To)
             {
-                return new Range [] { new Range(this) };
+                return new Range[] { new Range(this) };
             }
+
             if (From >= range.From && To <= range.To)
             {
                 return new Range[] { };
             }
+
             if (From < range.From && To <= range.To)
             {
-                return new Range [] { new Range(From, range.From) }; ;
-            }
-            if (From >= range.From && To > range.To)
-            {
-                return new Range [] { new Range(range.To, To) }; ;
+                return new Range[] { new Range(From, range.From) };
             }
 
-            return new Range [] { new Range(From, range.From), new Range(range.To, To) }; 
+            if (From >= range.From && To > range.To)
+            {
+                return new Range[] { new Range(range.To, To) };
+            }
+
+            return new Range[] { new Range(From, range.From), new Range(range.To, To) };
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Ranges
             while (doMore)
             {
                 Console.WriteLine("Add new left boundary");
+
                 if (!double.TryParse(Console.ReadLine(), out double leftBoundary))
                 {
                     Console.WriteLine("Error: not a number");
@@ -25,6 +26,7 @@ namespace Ranges
                     Console.ReadKey();
                     return;
                 }
+
                 Range range = new Range(leftBoundary,rightBoundary);
                 Console.WriteLine(range.ToString());
                 Console.WriteLine($"The length is equal to {range.GetLength()}");
@@ -49,6 +51,7 @@ namespace Ranges
                 Console.WriteLine("Do you want repeat? Y/N");
                 string needMore = Console.ReadLine();
                 needMore = needMore.ToLower();
+
                 if (!needMore.Equals("y"))
                 {
                     doMore = false;
