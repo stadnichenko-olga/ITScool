@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lists
 {
@@ -48,6 +45,11 @@ namespace Lists
             length++;
         }
 
+        public void Add(T data)
+        {
+            AddLast(data);
+        }
+
         public void AddIndex(int index, T data)
         {
             Node<T> node = top;
@@ -58,7 +60,7 @@ namespace Lists
                 throw new ArgumentException($"Invalid value of {nameof(index)}.");
             }
 
-            if (this == null || index == 0)
+            if (IsEmpty() || index == 0)
             {
                 AddFirst(data);
                 return;
@@ -70,7 +72,7 @@ namespace Lists
                 return;
             }
 
-            for (int i = 0; i < index && node != null; i++)
+            for (int i = 0; i < index - 1 && node != null; i++)
             {
                 node = node.Next;
             }
@@ -120,9 +122,9 @@ namespace Lists
             Node<T> current = top;
             Node<T> previous = null;
             int i = 0;
-            T data=current.Data;
+            T data = current.Data;
 
-            if (index < 0 || index > Length()-1)
+            if (index < 0 || index > Length() - 1)
             {
                 throw new ArgumentException($"Invalid value of {nameof(index)}.");
             }
@@ -136,8 +138,8 @@ namespace Lists
                         if (current.Next == null)
                         {
                             bottom = previous;
-                        }                        
-                        previous.Next = current.Next;              
+                        }
+                        previous.Next = current.Next;
                     }
                     else
                     {
@@ -148,37 +150,114 @@ namespace Lists
                         }
                     }
                     length--;
-                    data=current.Data;
+                    data = current.Data;
                 }
 
+                i++;
                 previous = current;
                 current = current.Next;
             }
             return data;
         }
 
-        public bool IsEmpty { get { return length == 0; } }
-        
-        public void Clear()
+        public T RemoveFirst()
         {
-            top = null;
-            bottom = null;
-            length = 0;
-        }
-        
-        public bool Contains(T data)
-        {
-            Node<T> current = top;
-            while (current != null)
-            {
-                if (current.Data.Equals(data))
-                    return true;
-                current = current.Next;
-            }
-            return false;
+            return Remove(0);
         }
 
-        
+        public bool IsEmpty() => Length() == 0;
+
+        public T GetNode(int index)
+        {
+            Node<T> node = top;
+
+            if (index < 0 || index > Length() - 1)
+            {
+                throw new ArgumentException($"Invalid value of {nameof(index)}.");
+            }
+
+            if (IsEmpty())
+            {
+                throw new ArgumentException($"Empty list.");
+            }
+
+            for (int i = 0; i < index && node != null; i++)
+            {
+                node = node.Next;
+            }
+
+            return node.Data;
+        }
+
+        public void SetNode(int index, T dataToSet)
+        {
+            Node<T> node = top;
+
+            if (index < 0 || index > Length() - 1)
+            {
+                throw new ArgumentException($"Invalid value of {nameof(index)}.");
+            }
+
+            if (IsEmpty())
+            {
+                throw new ArgumentException($"Empty list.");
+            }
+
+            for (int i = 0; i < index && node != null; i++)
+            {
+                node = node.Next;
+            }
+
+            node.Data = dataToSet;
+        }
+
+        public LinkedList<T> CopyOf()
+        {
+            LinkedList<T> result = new LinkedList<T>();
+
+            if (IsEmpty())
+            {
+                return result;
+            }
+
+            Node<T> node = top;
+
+            while (node != null)
+            {
+                result.Add(node.Data);
+                node = node.Next;
+            }
+
+            return result;
+        }
+
+        public void Reverse()
+        {
+            if (!IsEmpty())
+            {
+                Node<T> current = top;
+                Node<T> previous = null;
+
+                while (current != null)
+                {
+                    Node<T> temp = current.Next;
+                    current.Next = previous;
+                    previous = current;
+                    top = current;
+                    current = temp;
+                }
+            }
+        }
+
+        public void Print()
+        {
+            foreach (var item in this)
+            {
+                Console.Write(item.ToString() + " ");
+            }
+            Console.WriteLine();
+        }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)this).GetEnumerator();
