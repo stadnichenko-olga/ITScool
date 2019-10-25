@@ -10,7 +10,7 @@ namespace Vectors
         {
             if (n <= 0)
             {
-                throw new ArgumentException($"Value of {nameof(n)} is less than 1");
+                throw new ArgumentException(nameof(n), " is less than 1");
             }
 
             coordinates = new double[n];
@@ -20,7 +20,7 @@ namespace Vectors
         {
             if (coordinatesInit.Length == 0)
             {
-                throw new ArgumentException($"Dimension of {nameof(coordinatesInit)} is less than 1");
+                throw new ArgumentException(nameof(coordinatesInit), " dimension is less than 1");
             }
 
             coordinates = new double[coordinatesInit.Length];
@@ -37,77 +37,59 @@ namespace Vectors
         {
             if (n <= 0)
             {
-                throw new ArgumentException($"Value of {nameof(n)} is less than 1");
-            }
-            else if (coordinatesInit.Length == 0)
-            {
-                throw new ArgumentException($"Dimension of {nameof(coordinatesInit)} is less than 1");
+                throw new ArgumentException(nameof(n), " is less than 1");
             }
 
             coordinates = new double[n];
-            Array.Copy(coordinatesInit, 0, coordinates, 0, Math.Min(n, coordinatesInit.Length));
-        }
-
-        public static double[] ConvertToArray(Vector vector)
-        {            
-            int n = vector.GetSize();
-            double[] array = new double[n];
 
             for (int i = 0; i < n; i++)
             {
-                array[i] = vector.GetCoordinate(i);
+                coordinates[i] = 0;
             }
 
-            return array;
+            if (coordinatesInit.Length != 0)
+            {
+                Array.Copy(coordinatesInit, 0, coordinates, 0, Math.Min(n, coordinatesInit.Length));
+            }
         }
 
+        public double[] ConvertToArray() => (double[])coordinates.Clone();
+        
         public int GetSize() => coordinates.Length;
 
         public override string ToString() => string.Concat("{", string.Join("; ", coordinates), " } ");
 
-        public Vector GetSum(Vector vector2)
+        public Vector GetSum(Vector vector)
         {
-            int n = Math.Min(GetSize(), vector2.GetSize());
+            int n = Math.Max(GetSize(), vector.GetSize());
+            Vector vector1 = new Vector(n, ConvertToArray());
+            Vector vector2 = new Vector(n, vector.ConvertToArray());
+            Array.Resize(ref coordinates, n);
 
             for (int i = 0; i < n; i++)
             {
-                coordinates[i] += vector2.coordinates[i];
-            }
-
-            if (GetSize() < vector2.GetSize())
-            {
-                Array.Resize(ref coordinates, vector2.GetSize());
-                for (int i = GetSize() - 1; i < vector2.GetSize(); i++)
-                {
-                    coordinates[i] = vector2.coordinates[i];
-                }
+                coordinates[i] = vector1.coordinates[i] + vector2.coordinates[i];
             }
 
             return this;
         }
 
-        public Vector GetDifference(Vector vector2)
+        public Vector GetDifference(Vector vector)
         {
-            int n = Math.Min(GetSize(), vector2.GetSize());
+            int n = Math.Max(GetSize(), vector.GetSize());
+            Vector vector1 = new Vector(n, ConvertToArray());
+            Vector vector2 = new Vector(n, vector.ConvertToArray());
+            Array.Resize(ref coordinates, n);
 
             for (int i = 0; i < n; i++)
             {
-                coordinates[i] -= vector2.coordinates[i];
-            }
-
-            if (GetSize() < vector2.GetSize())
-            {
-                Array.Resize(ref coordinates, vector2.GetSize());
-                for (int i = GetSize() - 1; i < vector2.GetSize(); i++)
-                {
-                    coordinates[i] = -vector2.coordinates[i];
-                }
+                coordinates[i] = vector1.coordinates[i] - vector2.coordinates[i];
             }
 
             return this;
         }
 
-        public Vector GetMultiplicationByScalar(double scalar)
+        public Vector MultiplyByScalar(double scalar)
         {
             for (int i = 0; i < GetSize(); i++)
             {
@@ -117,7 +99,7 @@ namespace Vectors
             return this;
         }
 
-        public Vector GetReverse() => GetMultiplicationByScalar(-1);
+        public Vector Revert() => MultiplyByScalar(-1);
 
         public double GetLength()
         {
@@ -202,7 +184,7 @@ namespace Vectors
             return vectorsTemp.GetDifference(vector2);
         }
 
-        public static double GetMultiplication(Vector vector1, Vector vector2)
+        public static double Multiply(Vector vector1, Vector vector2)
         {
             double vectorsMultiplication = 0;
             int n = Math.Min(vector1.GetSize(), vector2.GetSize());

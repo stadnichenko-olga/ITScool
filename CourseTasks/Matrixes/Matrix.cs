@@ -186,7 +186,7 @@ namespace Matrixes
                 throw new ArgumentException($"Value of {nameof(i)} is invalid");
             }
 
-            vectors[i] = new Vector(new Vector(GetSecondDimension(), Vector.ConvertToArray(value)));
+            vectors[i] = new Vector(new Vector(GetSecondDimension(), value.ConvertToArray()));
         }
 
         public Matrix GetTranspanentMatrix()

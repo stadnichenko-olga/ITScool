@@ -25,9 +25,9 @@ namespace Vectors
                 Console.WriteLine("Vectors are not the same.");
             }
 
-            vector2.GetReverse();
+            vector2.Revert();
             Console.WriteLine("Reverse vector2: " + vector2);
-            vector2.GetMultiplicationByScalar(3);
+            vector2.MultiplyByScalar(3);
             Console.WriteLine("Vector2 * 3: " + vector2);
             Console.WriteLine($"Vector2[3] = {vector2.GetCoordinate(3)}");
 
@@ -40,11 +40,11 @@ namespace Vectors
                 Console.WriteLine("Vectors are not the same.");
             }
 
-            Console.WriteLine($"Vector1*Vector2 = {Vector.GetMultiplication(vector1, vector2)}");
+            Console.WriteLine($"Vector1*Vector2 = {Vector.Multiply(vector1, vector2)}");
             Console.WriteLine();
 
             Console.WriteLine("Check static and dynamic. Second vector is longer.");
-            vector1.GetMultiplicationByScalar(2);
+            vector1.MultiplyByScalar(2);
             Console.WriteLine("vector1: " + vector1);
 
             vector2 = new Vector(vector1.GetSize() + 2, coordinates);
@@ -58,7 +58,7 @@ namespace Vectors
             Console.WriteLine("Dynamic: vector1 + vector2 = " + vector2);
             Console.WriteLine("Static:  vector1 + vector2 = " + Vector.GetSum(vector3, vector1));
 
-            vector2.GetMultiplicationByScalar(2);
+            vector2.MultiplyByScalar(2);
             vector3 = new Vector(vector2);
             Console.WriteLine("vector2: " + vector2);
             Console.WriteLine("vector1: " + vector1);
@@ -71,7 +71,7 @@ namespace Vectors
 
             Console.WriteLine("vector1: " + vector1);
             vector2 = new Vector(vector1.GetSize() - 1, coordinates);
-            vector2.GetMultiplicationByScalar(3);
+            vector2.MultiplyByScalar(3);
             Console.WriteLine("vector2: " + vector2);
 
             vector3 = new Vector(vector2);
@@ -79,7 +79,7 @@ namespace Vectors
             Console.WriteLine("Dynamic: vector1 + vector2 = " + vector3);
             Console.WriteLine("Static:  vector1 + vector2 = " + Vector.GetSum(vector2, vector1));
 
-            vector2.GetMultiplicationByScalar(2);
+            vector2.MultiplyByScalar(2);
             vector3 = new Vector(vector2);
             Console.WriteLine("vector2: " + vector2);
             Console.WriteLine("vector1: " + vector1);
