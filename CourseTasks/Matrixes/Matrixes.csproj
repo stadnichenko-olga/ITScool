@@ -51,6 +51,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RangeComplex\RangeComplex.csproj">
+      <Project>{1f028795-aeca-470e-8eb9-39328b1ebdaf}</Project>
+      <Name>RangeComplex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ranges\Ranges.csproj">
+      <Project>{3cce0fa0-fd39-4e6f-af75-c5adaf230e65}</Project>
+      <Name>Ranges</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vectors\Vectors.csproj">
       <Project>{72c2045d-227e-4f10-a345-4785a358c8dd}</Project>
       <Name>Vectors</Name>

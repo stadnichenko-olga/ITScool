@@ -7,31 +7,22 @@ namespace Matrixes
     {
         static void Main(string[] args)
         {
-            double[,] initMatrix = new double[3, 3];
-            initMatrix[0, 0] = 1;
-            initMatrix[0, 1] = 2;
-            initMatrix[0, 2] = 3;
-            initMatrix[1, 0] = 4;
-            initMatrix[1, 1] = 5;
-            initMatrix[1, 2] = 6;
-            initMatrix[2, 0] = 7;
-            initMatrix[2, 1] = 8;
-            initMatrix[2, 2] = 9;
+            Matrix matrix1 = new Matrix(new double[,]
+            {
+                {1, 2, 3 },
+                {4, 5, 6 },
+                {7, 8, 9 }
+            });
 
-            Matrix matrix1 = new Matrix(initMatrix);
             Console.WriteLine("Matrix 1 = " + Environment.NewLine + matrix1);
 
-            initMatrix[0, 0] = 1;
-            initMatrix[0, 1] = 3;
-            initMatrix[0, 2] = 5;
-            initMatrix[1, 0] = 1;
-            initMatrix[1, 1] = 3;
-            initMatrix[1, 2] = 2;
-            initMatrix[2, 0] = 0;
-            initMatrix[2, 1] = 1;
-            initMatrix[2, 2] = 2;
+            Matrix matrix2 = new Matrix(new double[,]
+            {
+                {1, 3, 5 },
+                {1, 3, 2 },
+                {0, 1, 2 }
+            });
 
-            Matrix matrix2 = new Matrix(initMatrix);
             Console.WriteLine("Matrix 2 = " + Environment.NewLine + matrix2);
 
             Vector[] initVector = new Vector[2];
@@ -51,32 +42,32 @@ namespace Matrixes
             Console.WriteLine("Matrix 4 = " + Environment.NewLine + matrix4);
 
             Console.WriteLine();
-            Console.WriteLine($"Matrix 4 sizes are: {matrix4.GetFirstDimension()} X {matrix4.GetSecondDimension()}");
+            Console.WriteLine($"Matrix 4 sizes are: {matrix4.GetStringsNumber()} X {matrix4.GetColumnsNumber()}");
 
             Console.WriteLine("(Matrix 1)*2 = " + Environment.NewLine + matrix1.MultiplyByScalar(2));
             matrix1.MultiplyByScalar(0.5);
 
             Console.WriteLine();
-            Console.WriteLine("Matrix2 transperented = " + Environment.NewLine + matrix2.GetTranspanentMatrix());
-            matrix2.GetTranspanentMatrix();
+            Console.WriteLine("Matrix2 transperented = " + Environment.NewLine + matrix2.Transpose());
+            matrix2.Transpose();
 
-            Console.WriteLine("Matrix3 transperented = " + Environment.NewLine + matrix3.GetTranspanentMatrix());
-            matrix3.GetTranspanentMatrix();
+            Console.WriteLine("Matrix3 transperented = " + Environment.NewLine + matrix3.Transpose());
+            matrix3.Transpose();
 
             Console.WriteLine();
             Vector vector = new Vector(new double[] { 1, 2, 3, 4, 5 });
             Console.WriteLine("Matrix3 * Vector " + vector + Environment.NewLine + matrix3.MultiplyByVector(vector));
 
-            Console.WriteLine("(Matrix 4) 1 vector = " + matrix4.GetVectorIndex(1));
-            Console.WriteLine("(Matrix 4) 2 column = " + matrix4.GetColumnIndex(1));
+            Console.WriteLine("(Matrix 4) 1 vector = " + matrix4.GetString(1));
+            Console.WriteLine("(Matrix 4) 2 column = " + matrix4.GetColumn(1));
 
             Console.WriteLine("Set 2 vector in Matrix 4 = " + vector);
-            matrix4.SetVectorIndex(2, vector);
+            matrix4.SetString(2, vector);
             Console.WriteLine("Matrix 4 = " + Environment.NewLine + matrix4);
 
             Console.WriteLine();
-            Console.WriteLine("matrix1 + matrix2 = " + Environment.NewLine + Matrix.GetSum(matrix1, matrix2));
-            Console.WriteLine("matrix1 - matrix2 = " + Environment.NewLine + Matrix.GetDifference(matrix1, matrix2));
+            Console.WriteLine("matrix1 + matrix2 = " + Environment.NewLine + Matrix.Append(matrix1, matrix2));
+            Console.WriteLine("matrix1 - matrix2 = " + Environment.NewLine + Matrix.Deduct(matrix1, matrix2));
             Console.WriteLine("matrix1 * matrix2 = " + Environment.NewLine + Matrix.GetMultiplication(matrix1, matrix2));
 
             Console.WriteLine();
@@ -84,8 +75,8 @@ namespace Matrixes
             Console.WriteLine("Matrix 4 = " + Environment.NewLine + matrix4);
 
             Console.WriteLine();
-            Console.WriteLine("matrix3 + matrix4 = " + Environment.NewLine + Matrix.GetSum(matrix3, matrix4));
-            Console.WriteLine("matrix3 - matrix4 = " + Environment.NewLine + Matrix.GetDifference(matrix3, matrix4));
+            Console.WriteLine("matrix3 + matrix4 = " + Environment.NewLine + Matrix.Append(matrix3, matrix4));
+            Console.WriteLine("matrix3 - matrix4 = " + Environment.NewLine + Matrix.Deduct(matrix3, matrix4));
             Console.WriteLine("matrix3 * matrix4 = " + Environment.NewLine + Matrix.GetMultiplication(matrix3, matrix4));
 
             Console.WriteLine();
@@ -96,13 +87,13 @@ namespace Matrixes
 
             matrix3 = new Matrix(initVector);
             Console.WriteLine("Matrix 2X2 = " + Environment.NewLine + matrix3);
-            Console.WriteLine($"Determinant of matrix 2X2 = {Matrix.GetDeterminant(matrix3)}");
+            Console.WriteLine($"Determinant of matrix 2X2 = {matrix3.GetDeterminant()}");
 
             Console.WriteLine("Matrix 1 = " + Environment.NewLine + matrix1);
-            Console.WriteLine($"Determinant of matrix 1 = {Matrix.GetDeterminant(matrix1)}");
+            Console.WriteLine($"Determinant of matrix 1 = {matrix1.GetDeterminant()}");
 
             Console.WriteLine("Matrix 2 = " + Environment.NewLine + matrix2);
-            Console.WriteLine($"Determinant of matrix 1 = {Matrix.GetDeterminant(matrix2)}");
+            Console.WriteLine($"Determinant of matrix 1 = {matrix2.GetDeterminant()}");
 
             Console.ReadKey();
         }

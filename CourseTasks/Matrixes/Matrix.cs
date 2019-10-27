@@ -1,29 +1,31 @@
-﻿using System;
+﻿using Ranges;
+using System;
+using System.Text;
 using Vectors;
 
 namespace Matrixes
 {
     public class Matrix
     {
-        private Vector[] vectors;
+        private Vector[] strings;
 
-        public Matrix(int m, int n)
+        public Matrix(int stringsNumber, int columnsNumber)
         {
-            if (n <= 0)
+            if (columnsNumber <= 0)
             {
-                throw new ArgumentException($"Dimension {nameof(n)} is less than 1");
+                throw new ArgumentException(nameof(columnsNumber), "dimension is less than 1");
             }
 
-            else if (m <= 0)
+            if (stringsNumber <= 0)
             {
-                throw new ArgumentException($"Dimension {nameof(m)} is less than 1");
+                throw new ArgumentException(nameof(stringsNumber), "dimension is less than 1");
             }
 
-            vectors = new Vector[m];
+            strings = new Vector[stringsNumber];
 
-            for (int i = 0; i < m; i++)
+            for (int i = 0; i < stringsNumber; i++)
             {
-                vectors[i] = new Vector(n);
+                strings[i] = new Vector(columnsNumber);
             }
         }
 
@@ -31,21 +33,21 @@ namespace Matrixes
         {
             if (array.Length == 0)
             {
-                throw new ArgumentException($"Dimensions of {nameof(array)} is less than 1");
+                throw new ArgumentException(nameof(array), "dimension is less than 1");
             }
 
-            int m = array.GetUpperBound(0) + 1;
-            int n = array.GetUpperBound(1) + 1;
-            vectors = new Vector[m];
+            int stringsNumber = array.GetLength(0);
+            int columnsNumber = array.GetUpperBound(1) + 1;
+            strings = new Vector[stringsNumber];
 
-            for (int i = 0; i < m; i++)
+            for (int i = 0; i < stringsNumber; i++)
             {
-                double[] vector = new double[n];
-                for (int j = 0; j < n; j++)
+                double[] stringArray = new double[columnsNumber];
+                for (int j = 0; j < columnsNumber; j++)
                 {
-                    vector[j] = array[i, j];
+                    stringArray[j] = array[i, j];
                 }
-                vectors[i] = new Vector(vector);
+                strings[i] = new Vector(stringArray);
             }
         }
 
@@ -53,124 +55,141 @@ namespace Matrixes
         {
             if (array.Length == 0)
             {
-                throw new ArgumentException($"Dimensions of {nameof(array)} is less than 1");
+                throw new ArgumentException(nameof(array), "dimension is less than 1");
             }
 
-            vectors = new Vector[array.Length];
+            strings = new Vector[array.Length];
             int i = 0;
 
             foreach (Vector vector in array)
             {
-                vectors[i] = new Vector(vector);
+                strings[i] = new Vector(vector);
                 i++;
             }
         }
 
-        public Matrix(Matrix vectorsToCopy)
+        public Matrix(Matrix matrix)
         {
-            vectors = new Vector[vectorsToCopy.GetFirstDimension()];
+            strings = new Vector[matrix.GetStringsNumber()];
             int i = 0;
 
-            foreach (Vector line in vectorsToCopy.vectors)
+            foreach (Vector line in matrix.strings)
             {
-                vectors[i] = new Vector(line);
+                strings[i] = new Vector(line);
                 i++;
             }
         }
 
-        public int GetFirstDimension()
-        {
-            return vectors.Length;
-        }
+        public int GetStringsNumber() => strings.Length;
+        
+        public int GetColumnsNumber() => strings[0].GetSize();
 
-        public int GetSecondDimension()
-        {
-            return vectors[0].GetSize();
-        }
+        private bool IsEmpty()=> strings.Length == 0;
 
-        public Matrix MultiplyByScalar(double scalar)
+        private double[][] ToArray()
         {
-            Matrix result = new Matrix(GetFirstDimension(), GetSecondDimension());
+            double[][] result = new double[GetStringsNumber()][];
 
-            for (int i = 0; i < GetFirstDimension(); i++)
+            int stringsNumber = GetStringsNumber();
+
+            for (int i = 0; i < stringsNumber; i++)
             {
-                result.vectors[i] = vectors[i].GetMultiplicationByScalar(scalar);
+                result[i] = new double[GetColumnsNumber()];
+                Array.Copy(strings[i].ConvertToArray(), result[i], GetColumnsNumber());
             }
 
             return result;
         }
 
+        private void AddString(Vector newString)
+        {
+            Array.Resize(ref strings, GetStringsNumber() + 1);
+            strings[GetStringsNumber() - 1] = new Vector(newString);
+        }
+
+        public Matrix MultiplyByScalar(double scalar)
+        {
+            Matrix result = new Matrix(GetStringsNumber(), GetColumnsNumber());
+
+            for (int i = 0; i < GetStringsNumber(); i++)
+            {
+                strings[i].MultiplyByScalar(scalar);
+            }
+
+            return this;
+        }
+
         public Vector MultiplyByVector(Vector vectorToMultiplicate)
         {
-            double[] result = new double[GetFirstDimension()];
+            double[] result = new double[GetStringsNumber()];
 
-            for (int i = 0; i < GetFirstDimension(); i++)
+            for (int i = 0; i < GetStringsNumber(); i++)
             {
-                result[i] = Vector.GetMultiplication(vectors[i], vectorToMultiplicate);
+                result[i] = Vector.Multiply(strings[i], vectorToMultiplicate);
             }
 
             return new Vector(result);
         }
 
-        public Matrix GetSum(Matrix matrix2)
+        public Matrix Append(Matrix matrix2)
         {
-            int m = Math.Max(GetFirstDimension(), matrix2.GetFirstDimension());
-            int n = Math.Max(GetSecondDimension(), matrix2.GetSecondDimension());
-            Matrix result = new Matrix(m, n);
-
-            int mMin = Math.Min(GetFirstDimension(), matrix2.GetFirstDimension());
+            int mMin = Math.Min(GetStringsNumber(), matrix2.GetStringsNumber());
 
             for (int i = 0; i < mMin; i++)
             {
-                result.vectors[i] = vectors[i].GetSum(matrix2.vectors[i]);
+                strings[i].GetSum(matrix2.strings[i]);
             }
 
-            if (GetFirstDimension() != matrix2.GetFirstDimension())
+            for (int i = mMin; i < matrix2.GetStringsNumber(); i++)
             {
-                for (int i = mMin; i < GetFirstDimension(); i++)
-                {
-                    Vector zero = new Vector(n);
-                    result.vectors[i] = vectors[i].GetSum(zero);
-                }
-
-                for (int i = mMin; i < matrix2.GetFirstDimension(); i++)
-                {
-                    Vector zero = new Vector(n);
-                    result.vectors[i] = matrix2.vectors[i].GetSum(zero);
-                }
+                AddString(matrix2.strings[i]);
             }
 
-            return result;
+            return this;
         }
 
-        public Matrix GetDifference(Matrix matrix2)
+        public Matrix Deduct(Matrix matrix2)
         {
-            Matrix matrixTemp = new Matrix(matrix2);
-            return GetSum(matrixTemp.MultiplyByScalar(-1));
-        }
+            int mMin = Math.Min(GetStringsNumber(), matrix2.GetStringsNumber());
 
-        public Vector GetVectorIndex(int i)
-        {
-            if (i < 0 || i >= GetFirstDimension())
+            for (int i = 0; i < mMin; i++)
             {
-                throw new ArgumentException($"Index of vector {nameof(i)} is invalid");
+                strings[i].GetDifference(matrix2.strings[i]);
             }
 
-            return new Vector(vectors[i]);
-        }
-
-        public Vector GetColumnIndex(int i)
-        {
-            if (i < 0 || i >= GetSecondDimension())
+            for (int i = mMin; i < matrix2.GetStringsNumber(); i++)
             {
-                throw new ArgumentException($"Index of column {nameof(i)} is invalid");
+                AddString(matrix2.strings[i].MultiplyByScalar(-1));
             }
 
+            return this;
+        }
 
-            double[] column = new double[GetFirstDimension()];
+        public Vector GetString(int i)
+        {
+            Range validIndexRange = new Range(0, GetStringsNumber());
+
+            if (!validIndexRange.IsInside(i))
+            {
+                throw new ArgumentException(nameof(i) + "value is out of" + validIndexRange.ToString());
+            }
+
+            return new Vector(strings[i]);
+        }
+
+        public Vector GetColumn(int i)
+        {
+            Range validIndexRange = new Range(0, GetColumnsNumber());
+
+            if (!validIndexRange.IsInside(i))
+            {
+                throw new ArgumentException(nameof(i) + "value is out of" + validIndexRange.ToString());
+            }
+
+            double[] column = new double[GetStringsNumber()];
             int j = 0;
 
-            foreach (Vector line in vectors)
+            foreach (Vector line in strings)
             {
                 column[j] = line.GetCoordinate(i);
                 j++;
@@ -179,74 +198,91 @@ namespace Matrixes
             return new Vector(column);
         }
 
-        public void SetVectorIndex(int i, Vector value)
+        public void SetString(int i, Vector row)
         {
-            if (i < 0 || i >= GetFirstDimension())
+            Range validIndexRange = new Range(0, GetStringsNumber());
+
+            if (!validIndexRange.IsInside(i))
             {
-                throw new ArgumentException($"Value of {nameof(i)} is invalid");
+                throw new ArgumentException(nameof(i) + "value is out of" + validIndexRange.ToString());
             }
 
-            vectors[i] = new Vector(new Vector(GetSecondDimension(), value.ConvertToArray()));
+            strings[i] = new Vector(new Vector(GetColumnsNumber(), row.ConvertToArray()));
         }
 
-        public Matrix GetTranspanentMatrix()
+        public Matrix Transpose()
         {
-            Matrix result = new Matrix(GetSecondDimension(), GetFirstDimension());
+            int stringsNumber = GetStringsNumber();
+            int columnsNumber = GetColumnsNumber();
+            double[][] matrixArray = ToArray();
+            Vector temp = new Vector(stringsNumber);
+            Array.Resize(ref strings, columnsNumber);
 
-            for (int i = 0; i < GetSecondDimension(); i++)
+            for (int i = 0; i < columnsNumber; i++)
             {
-                result.vectors[i] = new Vector(GetColumnIndex(i));
+                for (int j = 0; j < stringsNumber; j++)
+                {
+                    temp.SetVectorCoordinate(j, matrixArray[j][i]);
+                }
+                strings[i] = new Vector(temp);
+            }
+
+            return this;
+        }
+
+        private Matrix GetMatrixStringDeleted(int index)
+        {
+            Range validIndexRange = new Range(0, GetStringsNumber());
+
+            if (!validIndexRange.IsInside(index))
+            {
+                throw new ArgumentException(nameof(index) + "value is out of" + validIndexRange.ToString());
+            }
+
+            Matrix result = new Matrix(GetStringsNumber() - 1, GetColumnsNumber());
+
+            for (int i = 0; i < index; i++)
+            {
+                result.strings[i] = new Vector(strings[i]);
+            }
+
+            for (int i = index; i < GetStringsNumber() - 1; i++)
+            {
+                result.strings[i] = new Vector(strings[i + 1]);
             }
 
             return result;
         }
 
-        private Matrix ExtractVectorFromMatrix(int i)
+        private Matrix GetMatrixColumnDeleted(int index)
         {
-            if (i < 0 || i >= GetFirstDimension())
+            Range validIndexRange = new Range(0, GetColumnsNumber());
+
+            if (!validIndexRange.IsInside(index))
             {
-                throw new ArgumentException($"Index of extracted column {nameof(i)} is invalid");
+                throw new ArgumentException(nameof(index) + "value is out of" + validIndexRange.ToString());
             }
 
-            Matrix result = new Matrix(GetFirstDimension() - 1, GetSecondDimension());
-
-            for (int j = 0; j < i; j++)
-            {
-                result.vectors[j] = new Vector(vectors[j]);
-            }
-            for (int j = i; j < GetFirstDimension() - 1; j++)
-            {
-                result.vectors[j] = new Vector(vectors[j + 1]);
-            }
-
-            return result;
-        }
-
-        private Matrix ExtractColumnFromMatrix(int i)
-        {
-            if (i < 0 || i >= GetSecondDimension())
-            {
-                throw new ArgumentException($"Index of extracted column {nameof(i)} is invalid");
-            }
-
-            Matrix result = new Matrix(GetTranspanentMatrix().ExtractVectorFromMatrix(i));
-            return result.GetTranspanentMatrix();
+            Matrix result = new Matrix(Transpose().GetMatrixStringDeleted(index));
+            return result.Transpose();
         }
 
         public override string ToString()
         {
-            string result = "{ ";
+            StringBuilder result = new StringBuilder();
+            result.Append("{ ");
 
-            foreach (Vector line in vectors)
+            foreach (Vector row in strings)
             {
-                result += string.Join("; ", line);
+                result.Append(string.Join("; ", row));
             }
 
-            return result + " }";
+            result.Append(" }");
+            return result.ToString();
         }
 
-        public override int GetHashCode() => GetFirstDimension().GetHashCode() ^ GetSecondDimension().GetHashCode()
-                                             ^ GetHashCode(vectors);
+        public override int GetHashCode() => GetStringsNumber().GetHashCode() ^ GetColumnsNumber().GetHashCode()
+                                             ^ GetHashCode(strings);
 
         private static int GetHashCode(Vector[] array)
         {
@@ -275,26 +311,26 @@ namespace Matrixes
 
             Matrix matrix2 = (Matrix)obj;
 
-            return EqualVectors(this, matrix2);
+            return Equals(this, matrix2);
         }
 
-        private static bool EqualVectors(Matrix matrix1, Matrix matrix2)
+        private static bool Equals(Matrix matrix1, Matrix matrix2)
         {
-            if (matrix1.GetFirstDimension() != matrix2.GetFirstDimension())
+            if (matrix1.GetStringsNumber() != matrix2.GetStringsNumber())
             {
                 return false;
             }
 
-            if (matrix1.GetSecondDimension() != matrix2.GetSecondDimension())
+            if (matrix1.GetColumnsNumber() != matrix2.GetColumnsNumber())
             {
                 return false;
             }
 
-            int n = matrix1.GetFirstDimension();
+            int n = matrix1.GetStringsNumber();
 
             for (int i = 0; i < n; i++)
             {
-                if (!matrix1.vectors[i].Equals(matrix2.vectors[i]))
+                if (!matrix1.strings[i].Equals(matrix2.strings[i]))
                 {
                     return false;
                 }
@@ -303,57 +339,79 @@ namespace Matrixes
             return true;
         }
 
-        public static Matrix GetSum(Matrix matrix1, Matrix matrix2)
+        public static Matrix Append(Matrix matrix1, Matrix matrix2)
         {
-            Matrix matrixTemp = new Matrix(matrix1);
-            return matrixTemp.GetSum(matrix2);
+            Matrix tempMatrix = new Matrix(matrix1);
+            return tempMatrix.Append(matrix2);
         }
 
-        public static Matrix GetDifference(Matrix matrix1, Matrix matrix2)
+        public static Matrix Deduct(Matrix matrix1, Matrix matrix2)
         {
-            Matrix matrixTemp = new Matrix(matrix1);
-            return matrixTemp.GetDifference(matrix2);
+            Matrix tempMatrix = new Matrix(matrix1);
+            return tempMatrix.Deduct(matrix2);
         }
 
         public static Matrix GetMultiplication(Matrix matrix1, Matrix matrix2)
         {
-            int m = matrix1.GetFirstDimension();
-            int n = matrix2.GetSecondDimension();
-            double[,] result = new double[m, n];
-
-            for (int i = 0; i < m; i++)
+            if (matrix1.IsEmpty())
             {
-                for (int j = 0; j < n; j++)
+                throw new ArgumentException(nameof(matrix1), " is empty");
+            }
+
+            if (matrix2.IsEmpty())
+            {
+                throw new ArgumentException(nameof(matrix2), " is empty");
+            }
+
+            int stringsNumber = matrix1.GetStringsNumber();
+            int columnsNumber = matrix2.GetColumnsNumber();
+
+            double[,] result = new double[stringsNumber, columnsNumber];
+
+            for (int i = 0; i < stringsNumber; i++)
+            {
+                for (int j = 0; j < columnsNumber; j++)
                 {
-                    result[i, j] = Vector.GetMultiplication(matrix1.GetVectorIndex(i), matrix2.GetColumnIndex(j));
+                    result[i, j] = Vector.Multiply(matrix1.GetString(i), matrix2.GetColumn(j));
                 }
             }
 
             return new Matrix(result);
         }
 
-        public static double GetDeterminant(Matrix matrix)
+        public double GetDeterminant()
         {
-            Matrix matrixD = new Matrix(matrix);
-
-            if (matrixD.GetFirstDimension() != matrixD.GetSecondDimension())
+            if (IsEmpty())
             {
-                throw new ArgumentException($"{nameof(matrixD)} is not squared");
+                throw new ArgumentException("Matrix is empty");
             }
-            int n = matrixD.GetFirstDimension();
+
+            if (GetStringsNumber() != GetColumnsNumber())
+            {
+                throw new ArgumentException(" Matrix is not squared");
+            }
+
+            Matrix matrixD = new Matrix(this);
+
+            int n = matrixD.GetStringsNumber();
+
+            if (n == 1)
+            {
+                return matrixD.strings[0].GetCoordinate(0);
+            }
 
             if (n == 2)
             {
-                return matrixD.vectors[0].GetCoordinate(0) * matrixD.vectors[1].GetCoordinate(1) -
-                       matrixD.vectors[1].GetCoordinate(0) * matrixD.vectors[0].GetCoordinate(1);
+                return matrixD.strings[0].GetCoordinate(0) * matrixD.strings[1].GetCoordinate(1) -
+                       matrixD.strings[1].GetCoordinate(0) * matrixD.strings[0].GetCoordinate(1);
             }
 
             double result = 0;
 
             for (var j = 0; j < n; j++)
             {
-                result += Math.Pow(-1, j + 1) * matrixD.vectors[1].GetCoordinate(j) *
-                    GetDeterminant(matrixD.ExtractColumnFromMatrix(j).ExtractVectorFromMatrix(1));
+                result += Math.Pow(-1, j + 1) * matrixD.strings[1].GetCoordinate(j) *
+                    matrixD.GetMatrixColumnDeleted(j).GetMatrixStringDeleted(1).GetDeterminant();
             }
 
             return result;
