@@ -6,29 +6,32 @@ namespace ArrayListHome
 {
     class FileReader
     {
-        public static List<string> FileStringReder(string filePath)
+        public static List<string> ReadStringsFromFile(string filePath)
         {
+            List<string> result = new List<string>();
+
             try
             {
-                List<string> result = new List<string>();
-
                 using (StreamReader reader = new StreamReader(filePath))
                 {
                     while (true)
                     {
                         string temp = reader.ReadLine();
-                        if (temp == null) break;
+                        if (temp == null)
+                        {
+                            break;
+                        }
                         result.Add(temp);
                     }
                 }
 
-                return result;
             }
-            catch (FileNotFoundException)
+            catch (FileNotFoundException e)
             {
-                Console.WriteLine("File not found.");
-                throw;
+                Console.WriteLine(e.Message);
             }
+
+            return result;            
         }
     }
 }

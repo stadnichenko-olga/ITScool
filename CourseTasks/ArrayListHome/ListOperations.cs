@@ -5,33 +5,25 @@ namespace ArrayListHome
     class ListOperations
     {
         public static bool RemoveEven(ref List<int> list)
-        {
-            if (list.Count == 0)
-            {
-                return false;
-            }
+        {    
+            bool hasEven = false;
 
-            int n = list.Count;
-            bool result = false;
-
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i <list.Count; i++)
             {
                 if (list[i] % 2 == 0)
                 {
                     list.RemoveAt(i);
-                    result = true;
-                    n--;
+                    hasEven = true;
                     i--;
                 }
             }
 
-            return result;
+            return hasEven;
         }
 
-        public static List<int> RemoveAlliteration(List<int> list)
+        public static List<int> GetListWithoutRepeat(List<int> list)
         {
-            List<int> result = new List<int>();
-            result.Capacity = list.Count;
+            List<int> result = new List<int>(list.Count);
 
             foreach (int item in list)
             {
