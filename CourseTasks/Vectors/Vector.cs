@@ -10,7 +10,7 @@ namespace Vectors
         {
             if (n <= 0)
             {
-                throw new ArgumentException(nameof(n), " is less than 1");
+                throw new ArgumentException("Number of coordinates is less than 1", nameof(n));
             }
 
             coordinates = new double[n];
@@ -20,7 +20,7 @@ namespace Vectors
         {
             if (coordinatesInit.Length == 0)
             {
-                throw new ArgumentException(nameof(coordinatesInit), " dimension is less than 1");
+                throw new ArgumentException("Dimension of coordinates array is less than 1", nameof(coordinatesInit));
             }
 
             coordinates = new double[coordinatesInit.Length];
@@ -37,7 +37,7 @@ namespace Vectors
         {
             if (n <= 0)
             {
-                throw new ArgumentException(nameof(n), " is less than 1");
+                throw new ArgumentException("Number of coordinates is less than 1", nameof(n));
             }
 
             coordinates = new double[n];
@@ -61,14 +61,12 @@ namespace Vectors
 
         public Vector GetSum(Vector vector)
         {
-            int n = Math.Max(GetSize(), vector.GetSize());
-            Vector vector1 = new Vector(n, ConvertToArray());
-            Vector vector2 = new Vector(n, vector.ConvertToArray());
-            Array.Resize(ref coordinates, n);
+            int n = Math.Min(GetSize(), vector.GetSize());            
+            Array.Resize(ref coordinates, Math.Max(GetSize(), vector.GetSize()));
 
             for (int i = 0; i < n; i++)
             {
-                coordinates[i] = vector1.coordinates[i] + vector2.coordinates[i];
+                coordinates[i] += vector.coordinates[i];
             }
 
             return this;
@@ -76,14 +74,12 @@ namespace Vectors
 
         public Vector GetDifference(Vector vector)
         {
-            int n = Math.Max(GetSize(), vector.GetSize());
-            Vector vector1 = new Vector(n, ConvertToArray());
-            Vector vector2 = new Vector(n, vector.ConvertToArray());
-            Array.Resize(ref coordinates, n);
+            int n = Math.Min(GetSize(), vector.GetSize());
+            Array.Resize(ref coordinates, Math.Max(GetSize(), vector.GetSize()));
 
             for (int i = 0; i < n; i++)
             {
-                coordinates[i] = vector1.coordinates[i] - vector2.coordinates[i];
+                coordinates[i] -= vector.coordinates[i];
             }
 
             return this;
@@ -115,7 +111,7 @@ namespace Vectors
 
         public double GetCoordinate(int i) => coordinates[i];
 
-        public void SetVectorCoordinate(int i, double value)
+        public void SetCoordinate(int i, double value) 
         {
             coordinates[i] = value;
         }

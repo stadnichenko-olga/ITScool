@@ -222,7 +222,7 @@ namespace Matrixes
             {
                 for (int j = 0; j < stringsNumber; j++)
                 {
-                    temp.SetVectorCoordinate(j, matrixArray[j][i]);
+                    temp.SetCoordinate(j, matrixArray[j][i]);
                 }
                 strings[i] = new Vector(temp);
             }

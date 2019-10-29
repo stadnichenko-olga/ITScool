@@ -50,7 +50,7 @@ namespace Vectors
             vector2 = new Vector(vector1.GetSize() + 2, coordinates);
             Console.WriteLine("vector2: " + vector2);
             Console.WriteLine($"Set {vector1.GetSize() + 1}-th coordinate equal to 10.");
-            vector2.SetVectorCoordinate(vector1.GetSize() + 1, 10);
+            vector2.SetCoordinate(vector1.GetSize() + 1, 10);
             Console.WriteLine("vector2: " + vector2);
 
             Vector vector3 = new Vector(vector2);

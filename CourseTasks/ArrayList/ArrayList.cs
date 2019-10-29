@@ -64,7 +64,7 @@ namespace ArrayList
         {
             T[] old = items;
             items = new T[old.Length - 1];
-            Array.Copy(old, 0, items, 0, old.Length-1);
+            Array.Copy(old, 0, items, 0, old.Length - 1);
         }
 
         private void IncreaseCapacity()
@@ -82,7 +82,7 @@ namespace ArrayList
                 length++;
                 return length - 1;
             }
-            
+
             return -1;
         }
 
@@ -90,7 +90,7 @@ namespace ArrayList
         {
             CheckIndex(index);
             IncreaseCapacityByOne();
-            
+
             for (int i = Count - 1; i > index; i--)
             {
                 items[i] = items[i - 1];
@@ -125,12 +125,7 @@ namespace ArrayList
         public void RemoveAt(int index)
         {
             CheckIndex(index);
-
-            for (int i = index; i < Count - 1; i++)
-            {
-                items[i] = items[i + 1];
-            }
-
+            Array.Copy(items, index + 1, items, index, length - index - 1);
             DecreaseCapacityByOne();
             length--;
         }
