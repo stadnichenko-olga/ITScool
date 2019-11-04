@@ -24,14 +24,13 @@ namespace ArrayListHome
                         result.Add(temp);
                     }
                 }
-
             }
             catch (FileNotFoundException e)
             {
                 Console.WriteLine(e.Message);
             }
 
-            return result;            
+            return result;
         }
     }
 }

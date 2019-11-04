@@ -4,11 +4,11 @@ namespace ArrayListHome
 {
     class ListOperations
     {
-        public static bool RemoveEven(ref List<int> list)
-        {    
+        public static bool RemoveEven(List<int> list)
+        {
             bool hasEven = false;
 
-            for (int i = 0; i <list.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
                 if (list[i] % 2 == 0)
                 {
@@ -21,7 +21,7 @@ namespace ArrayListHome
             return hasEven;
         }
 
-        public static List<int> GetListWithoutRepeat(List<int> list)
+        public static List<int> GetListWithoutRepeats(List<int> list)
         {
             List<int> result = new List<int>(list.Count);
 
