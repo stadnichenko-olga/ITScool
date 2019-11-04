@@ -8,7 +8,7 @@ namespace Lists
     {
         private Node<T> head;
 
-        private bool hasChanged;
+        private bool hasChanged = true;
 
         public int Length()
         {
