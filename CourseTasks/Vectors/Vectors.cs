@@ -54,7 +54,7 @@ namespace Vectors
             Console.WriteLine("vector2: " + vector2);
 
             Vector vector3 = new Vector(vector2);
-            vector2.GetSum(vector1);
+            vector2.Add(vector1);
             Console.WriteLine("Dynamic: vector1 + vector2 = " + vector2);
             Console.WriteLine("Static:  vector1 + vector2 = " + Vector.GetSum(vector3, vector1));
 
@@ -62,7 +62,7 @@ namespace Vectors
             vector3 = new Vector(vector2);
             Console.WriteLine("vector2: " + vector2);
             Console.WriteLine("vector1: " + vector1);
-            vector2.GetDifference(vector1);
+            vector2.Subtract(vector1);
             Console.WriteLine("Dynamic: vector2 - vector1 = " + vector2);
             Console.WriteLine("Static:  vector2 - vector1 = " + Vector.GetDifference(vector3, vector1));
 
@@ -75,7 +75,7 @@ namespace Vectors
             Console.WriteLine("vector2: " + vector2);
 
             vector3 = new Vector(vector2);
-            vector3.GetSum(vector1);
+            vector3.Add(vector1);
             Console.WriteLine("Dynamic: vector1 + vector2 = " + vector3);
             Console.WriteLine("Static:  vector1 + vector2 = " + Vector.GetSum(vector2, vector1));
 
@@ -83,7 +83,7 @@ namespace Vectors
             vector3 = new Vector(vector2);
             Console.WriteLine("vector2: " + vector2);
             Console.WriteLine("vector1: " + vector1);
-            vector2.GetDifference(vector1);
+            vector2.Subtract(vector1);
             Console.WriteLine("Dynamic: vector2 - vector1 = " + vector2);
             Console.WriteLine("Static:  vector2 - vector1 = " + Vector.GetDifference(vector3, vector1));
 

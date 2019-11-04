@@ -16,15 +16,15 @@ namespace Vectors
             coordinates = new double[n];
         }
 
-        public Vector(double[] coordinatesInit)
+        public Vector(double[] initialCoordinates)
         {
-            if (coordinatesInit.Length == 0)
+            if (initialCoordinates.Length == 0)
             {
-                throw new ArgumentException("Dimension of coordinates array is less than 1", nameof(coordinatesInit));
+                throw new ArgumentException("Dimension of coordinates array is less than 1", nameof(initialCoordinates));
             }
 
-            coordinates = new double[coordinatesInit.Length];
-            coordinatesInit.CopyTo(coordinates, 0);
+            coordinates = new double[initialCoordinates.Length];
+            initialCoordinates.CopyTo(coordinates, 0);
         }
 
         public Vector(Vector vector)
@@ -33,7 +33,7 @@ namespace Vectors
             vector.coordinates.CopyTo(coordinates, 0);
         }
 
-        public Vector(int n, double[] coordinatesInit)
+        public Vector(int n, double[] initialCoordinates)
         {
             if (n <= 0)
             {
@@ -47,9 +47,9 @@ namespace Vectors
                 coordinates[i] = 0;
             }
 
-            if (coordinatesInit.Length != 0)
+            if (initialCoordinates.Length != 0)
             {
-                Array.Copy(coordinatesInit, 0, coordinates, 0, Math.Min(n, coordinatesInit.Length));
+                Array.Copy(initialCoordinates, 0, coordinates, 0, Math.Min(n, initialCoordinates.Length));
             }
         }
 
@@ -59,7 +59,7 @@ namespace Vectors
 
         public override string ToString() => string.Concat("{", string.Join("; ", coordinates), " } ");
 
-        public Vector GetSum(Vector vector)
+        public Vector Add(Vector vector)
         {
             int n = Math.Min(GetSize(), vector.GetSize());            
             Array.Resize(ref coordinates, Math.Max(GetSize(), vector.GetSize()));
@@ -69,15 +69,25 @@ namespace Vectors
                 coordinates[i] += vector.coordinates[i];
             }
 
+            for (int i=n; i < vector.GetSize(); i++)
+            {
+                coordinates[i] += vector.coordinates[i];
+            }
+
             return this;
         }
 
-        public Vector GetDifference(Vector vector)
+        public Vector Subtract(Vector vector)
         {
             int n = Math.Min(GetSize(), vector.GetSize());
             Array.Resize(ref coordinates, Math.Max(GetSize(), vector.GetSize()));
 
             for (int i = 0; i < n; i++)
+            {
+                coordinates[i] -= vector.coordinates[i];
+            }
+
+            for (int i = n; i < vector.GetSize(); i++)
             {
                 coordinates[i] -= vector.coordinates[i];
             }
@@ -109,11 +119,11 @@ namespace Vectors
             return Math.Sqrt(length);
         }
 
-        public double GetCoordinate(int i) => coordinates[i];
+        public double GetCoordinate(int index) => coordinates[index];
 
-        public void SetCoordinate(int i, double value) 
+        public void SetCoordinate(int index, double value) 
         {
-            coordinates[i] = value;
+            coordinates[index] = value;
         }
 
         public override bool Equals(object obj)
@@ -171,13 +181,13 @@ namespace Vectors
         public static Vector GetSum(Vector vector1, Vector vector2)
         {
             Vector vectorsTemp = new Vector(vector1);
-            return vectorsTemp.GetSum(vector2);
+            return vectorsTemp.Add(vector2);
         }
 
         public static Vector GetDifference(Vector vector1, Vector vector2)
         {
             Vector vectorsTemp = new Vector(vector1);
-            return vectorsTemp.GetDifference(vector2);
+            return vectorsTemp.Subtract(vector2);
         }
 
         public static double Multiply(Vector vector1, Vector vector2)

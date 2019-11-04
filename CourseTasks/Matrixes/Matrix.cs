@@ -137,7 +137,7 @@ namespace Matrixes
 
             for (int i = 0; i < mMin; i++)
             {
-                strings[i].GetSum(matrix2.strings[i]);
+                strings[i].Add(matrix2.strings[i]);
             }
 
             for (int i = mMin; i < matrix2.GetStringsNumber(); i++)
@@ -154,7 +154,7 @@ namespace Matrixes
 
             for (int i = 0; i < mMin; i++)
             {
-                strings[i].GetDifference(matrix2.strings[i]);
+                strings[i].Subtract(matrix2.strings[i]);
             }
 
             for (int i = mMin; i < matrix2.GetStringsNumber(); i++)

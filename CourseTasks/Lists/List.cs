@@ -6,43 +6,53 @@ namespace Lists
 {
     public class LinkedList<T> : IEnumerable<T>
     {
-        Node<T> top;
-        Node<T> bottom;
-        int length;
+        private Node<T> head;
 
-        public int Length() => length;
+        public int Length()
+        {
+            int count = 0;
 
-        public T GetFirst() => top.Data;
+            if (head != null)
+            {
+                count++;
+                while (head.Next != null)
+                {
+                    count++;
+                    head = head.Next;
+                }
+            }
+            else
+            {
+                return 0;
+            }
+            return count;
+        }
+
+        public T GetFirst() => head.Data;
 
         public void AddFirst(T data)
         {
             Node<T> node = new Node<T>(data);
-            node.Next = top;
-            top = node;
-
-            if (length == 0)
-            {
-                bottom = top;
-            }
-
-            length++;
+            node.Next = head;
+            head = node;
         }
 
         public void AddLast(T data)
         {
             Node<T> node = new Node<T>(data);
 
-            if (top == null)
+            if (head == null)
             {
-                top = node;
+                head = node;
             }
             else
-            {
-                bottom.Next = node;
+            {               
+                while (head.Next != null)
+                {
+                    head = head.Next;
+                }
+                head.Next = node;
             }
-
-            bottom = node;
-            length++;
         }
 
         public void Add(T data)
@@ -50,15 +60,20 @@ namespace Lists
             AddLast(data);
         }
 
-        public void AddIndex(int index, T data)
+        private void CheckIndex(int index)
         {
-            Node<T> node = top;
-            Node<T> nodeAdd = new Node<T>(data);
-
             if (index < 0 || index > Length() + 1)
             {
-                throw new ArgumentException($"Invalid value of {nameof(index)}.");
+                throw new ArgumentException($"Invalid value of ", nameof(index));
             }
+        }
+
+        public void AddIndex(int index, T data)
+        {
+            Node<T> node = head;
+            Node<T> nodeAdd = new Node<T>(data);
+
+            CheckIndex(index);
 
             if (IsEmpty() || index == 0)
             {
@@ -83,80 +98,60 @@ namespace Lists
 
         public bool Remove(T data)
         {
-            Node<T> current = top;
+            Node<T> current = head;
             Node<T> previous = null;
+
+            if (current.Data.Equals(data))
+            {
+                head = current.Next;
+                current = null;
+                return true;
+            }
+
 
             while (current != null)
             {
-                if (current.Data.Equals(data))
+                while (!current.Data.Equals(data))
                 {
-                    if (previous != null)
-                    {
-                        previous.Next = current.Next;
-
-                        if (current.Next == null)
-                        {
-                            bottom = previous;
-                        }
-                    }
-                    else
-                    {
-                        top = top.Next;
-                        if (top == null)
-                        {
-                            bottom = null;
-                        }
-                    }
-                    length--;
-                    return true;
+                    previous = current;
+                    current = current.Next;
                 }
 
-                previous = current;
-                current = current.Next;
+                previous.Next = current.Next;
+                data = current.Data;
+                current = null;
+                return true;
             }
+
             return false;
         }
 
         public T Remove(int index)
         {
-            Node<T> current = top;
+            Node<T> current = head;
             Node<T> previous = null;
             int i = 0;
             T data = current.Data;
 
-            if (index < 0 || index > Length() - 1)
+            CheckIndex(index);
+
+            if (index == 0)
             {
-                throw new ArgumentException($"Invalid value of {nameof(index)}.");
+                head = current.Next;
+                current = null;
+                return data;
             }
 
-            while (current != null)
+            while (i < index)
             {
-                if (i == index)
-                {
-                    if (previous != null)
-                    {
-                        if (current.Next == null)
-                        {
-                            bottom = previous;
-                        }
-                        previous.Next = current.Next;
-                    }
-                    else
-                    {
-                        top = top.Next;
-                        if (top == null)
-                        {
-                            bottom = null;
-                        }
-                    }
-                    length--;
-                    data = current.Data;
-                }
-
-                i++;
                 previous = current;
-                current = current.Next;
+                current=current.Next;
+                i++;
             }
+            
+            previous.Next = current.Next;
+            data = current.Data;
+            current = null;
             return data;
         }
 
@@ -169,7 +164,7 @@ namespace Lists
 
         public T GetNode(int index)
         {
-            Node<T> node = top;
+            Node<T> node = head;
 
             if (index < 0 || index > Length() - 1)
             {
@@ -191,7 +186,7 @@ namespace Lists
 
         public void SetNode(int index, T dataToSet)
         {
-            Node<T> node = top;
+            Node<T> node = head;
 
             if (index < 0 || index > Length() - 1)
             {
@@ -220,7 +215,7 @@ namespace Lists
                 return result;
             }
 
-            Node<T> node = top;
+            Node<T> node = head;
 
             while (node != null)
             {
@@ -235,7 +230,7 @@ namespace Lists
         {
             if (!IsEmpty())
             {
-                Node<T> current = top;
+                Node<T> current = head;
                 Node<T> previous = null;
 
                 while (current != null)
@@ -243,7 +238,7 @@ namespace Lists
                     Node<T> temp = current.Next;
                     current.Next = previous;
                     previous = current;
-                    top = current;
+                    head = current;
                     current = temp;
                 }
             }
@@ -265,7 +260,7 @@ namespace Lists
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            Node<T> current = top;
+            Node<T> current = head;
             while (current != null)
             {
                 yield return current.Data;
