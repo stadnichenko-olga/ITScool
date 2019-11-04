@@ -8,92 +8,112 @@ namespace Lists
     {
         private Node<T> head;
 
+        private bool hasChanged;
+
         public int Length()
         {
-            int count = 0;
-
-            if (head != null)
-            {
-                count++;
-                while (head.Next != null)
-                {
-                    count++;
-                    head = head.Next;
-                }
-            }
-            else
+            if (head == null)
             {
                 return 0;
             }
+
+            int count = 1;
+            Node<T> node = head;
+
+            while (node.Next != null)
+            {
+                node = node.Next;
+                count++;
+            }
+
             return count;
         }
 
         public T GetFirst() => head.Data;
 
+        private bool HasChanged() => hasChanged;
+
         public void AddFirst(T data)
         {
-            Node<T> node = new Node<T>(data);
+            var node = new Node<T>
+            {
+                Data = data
+            };
+
             node.Next = head;
             head = node;
-        }
 
-        public void AddLast(T data)
-        {
-            Node<T> node = new Node<T>(data);
-
-            if (head == null)
-            {
-                head = node;
-            }
-            else
-            {               
-                while (head.Next != null)
-                {
-                    head = head.Next;
-                }
-                head.Next = node;
-            }
+            hasChanged = !hasChanged;
         }
 
         public void Add(T data)
         {
-            AddLast(data);
+            var nodeAdd = new Node<T>
+            {
+                Data = data
+            };
+
+            Node<T> node = head;
+
+            if (head == null)
+            {
+                head = nodeAdd;
+            }
+            else
+            {
+                while (node.Next != null)
+                {
+                    node = node.Next;
+                }
+                node.Next = nodeAdd;
+            }
+
+            hasChanged = !hasChanged;
         }
 
         private void CheckIndex(int index)
         {
-            if (index < 0 || index > Length() + 1)
+            if (index < 0 || index >= Length())
             {
                 throw new ArgumentException($"Invalid value of ", nameof(index));
             }
         }
 
-        public void AddIndex(int index, T data)
+        private Node<T> this[int index]
         {
-            Node<T> node = head;
-            Node<T> nodeAdd = new Node<T>(data);
+            get
+            {
+                Node<T> node = head;
 
+                for (int i = 0; i < index - 1 && node != null; i++)
+                {
+                    node = node.Next;
+                }
+
+                return node;
+            }
+        }
+
+        public void AddByIndex(int index, T data)
+        {
             CheckIndex(index);
 
-            if (IsEmpty() || index == 0)
+            var nodeAdd = new Node<T>
             {
-                AddFirst(data);
-                return;
-            }
+                Data = data
+            };
 
             if (index == Length() + 1)
             {
-                AddLast(data);
+                Add(data);
                 return;
             }
 
-            for (int i = 0; i < index - 1 && node != null; i++)
-            {
-                node = node.Next;
-            }
-
+            Node<T> node = this[index - 1];
             nodeAdd.Next = node.Next;
             node.Next = nodeAdd;
+
+            hasChanged = !hasChanged;
         }
 
         public bool Remove(T data)
@@ -105,9 +125,9 @@ namespace Lists
             {
                 head = current.Next;
                 current = null;
+
                 return true;
             }
-
 
             while (current != null)
             {
@@ -120,43 +140,35 @@ namespace Lists
                 previous.Next = current.Next;
                 data = current.Data;
                 current = null;
+
                 return true;
             }
+
+            hasChanged = !hasChanged;
 
             return false;
         }
 
         public T Remove(int index)
         {
-            Node<T> current = head;
-            Node<T> previous = null;
-            int i = 0;
-            T data = current.Data;
-
             CheckIndex(index);
 
-            if (index == 0)
-            {
-                head = current.Next;
-                current = null;
-                return data;
-            }
+            Node<T> previous = this[index - 1];
+            Node<T> current = this[index];
 
-            while (i < index)
-            {
-                previous = current;
-                current=current.Next;
-                i++;
-            }
-            
             previous.Next = current.Next;
-            data = current.Data;
+            T data = current.Data;
             current = null;
+
+            hasChanged = !hasChanged;
+
             return data;
         }
 
         public T RemoveFirst()
         {
+            hasChanged = !hasChanged;
+
             return Remove(0);
         }
 
@@ -164,46 +176,22 @@ namespace Lists
 
         public T GetNode(int index)
         {
-            Node<T> node = head;
+            CheckIndex(index);
 
-            if (index < 0 || index > Length() - 1)
-            {
-                throw new ArgumentException($"Invalid value of {nameof(index)}.");
-            }
-
-            if (IsEmpty())
-            {
-                throw new ArgumentException($"Empty list.");
-            }
-
-            for (int i = 0; i < index && node != null; i++)
-            {
-                node = node.Next;
-            }
+            Node<T> node = this[index];
 
             return node.Data;
         }
 
         public void SetNode(int index, T dataToSet)
         {
-            Node<T> node = head;
+            CheckIndex(index);
 
-            if (index < 0 || index > Length() - 1)
-            {
-                throw new ArgumentException($"Invalid value of {nameof(index)}.");
-            }
-
-            if (IsEmpty())
-            {
-                throw new ArgumentException($"Empty list.");
-            }
-
-            for (int i = 0; i < index && node != null; i++)
-            {
-                node = node.Next;
-            }
+            Node<T> node = this[index];
 
             node.Data = dataToSet;
+
+            hasChanged = !hasChanged;
         }
 
         public LinkedList<T> CopyOf()
@@ -226,7 +214,7 @@ namespace Lists
             return result;
         }
 
-        public void Reverse()
+        public void Revert()
         {
             if (!IsEmpty())
             {
@@ -242,29 +230,35 @@ namespace Lists
                     current = temp;
                 }
             }
+
+            hasChanged = !hasChanged;
         }
 
         public void Print()
         {
             foreach (var item in this)
             {
-                Console.Write(item.ToString() + " ");
+                Console.Write(item + " ");
             }
+
             Console.WriteLine();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable)this).GetEnumerator();
+            return ((IEnumerable<T>)this).GetEnumerator();
         }
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            Node<T> current = head;
-            while (current != null)
+            Node<T> node = head;
+
+            bool hasChangedInitial = HasChanged();
+
+            while (node != null && hasChangedInitial == HasChanged())
             {
-                yield return current.Data;
-                current = current.Next;
+                yield return node.Data;
+                node = node.Next;
             }
         }
     }
