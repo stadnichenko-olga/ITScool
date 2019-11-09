@@ -54,22 +54,16 @@ namespace Vectors
         }
 
         public double[] ConvertToArray() => (double[])coordinates.Clone();
-        
+
         public int GetSize() => coordinates.Length;
 
         public override string ToString() => string.Concat("{", string.Join("; ", coordinates), " } ");
 
         public Vector Add(Vector vector)
         {
-            int n = Math.Min(GetSize(), vector.GetSize());            
             Array.Resize(ref coordinates, Math.Max(GetSize(), vector.GetSize()));
 
-            for (int i = 0; i < n; i++)
-            {
-                coordinates[i] += vector.coordinates[i];
-            }
-
-            for (int i=n; i < vector.GetSize(); i++)
+            for (int i = 0; i < vector.GetSize(); i++)
             {
                 coordinates[i] += vector.coordinates[i];
             }
@@ -79,15 +73,9 @@ namespace Vectors
 
         public Vector Subtract(Vector vector)
         {
-            int n = Math.Min(GetSize(), vector.GetSize());
             Array.Resize(ref coordinates, Math.Max(GetSize(), vector.GetSize()));
 
-            for (int i = 0; i < n; i++)
-            {
-                coordinates[i] -= vector.coordinates[i];
-            }
-
-            for (int i = n; i < vector.GetSize(); i++)
+            for (int i = 0; i < vector.GetSize(); i++)
             {
                 coordinates[i] -= vector.coordinates[i];
             }
@@ -121,7 +109,7 @@ namespace Vectors
 
         public double GetCoordinate(int index) => coordinates[index];
 
-        public void SetCoordinate(int index, double value) 
+        public void SetCoordinate(int index, double value)
         {
             coordinates[index] = value;
         }

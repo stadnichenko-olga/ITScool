@@ -8,6 +8,7 @@ namespace Vectors
         {
             Vector vector1 = new Vector(3);
             Console.WriteLine("Zero vector: " + vector1);
+
             double[] coordinates = { 1, 3, 4, 6.5, 3, 9 };
             vector1 = new Vector(coordinates);
             Console.WriteLine("vector1: " + vector1);
@@ -16,6 +17,7 @@ namespace Vectors
 
             Vector vector2 = new Vector(vector1);
             Console.WriteLine("vector2: " + vector2);
+
             if (vector1.Equals(vector2))
             {
                 Console.WriteLine("Vectors are the same.");
