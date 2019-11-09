@@ -10,48 +10,36 @@ namespace Lists
 
         private bool hasChanged = true;
 
-        public int Length()
-        {
-            if (head == null)
-            {
-                return 0;
-            }
+        private int length { get; set; }
 
-            int count = 1;
-            Node<T> node = head;
-
-            while (node.Next != null)
-            {
-                node = node.Next;
-                count++;
-            }
-
-            return count;
-        }
-
-        public T GetFirst() => head.Data;
+        public int Length() => length;
 
         private bool HasChanged() => hasChanged;
 
+        public T GetFirst()
+        {
+            if (length == 0)
+            {
+                throw new ArgumentException("Empty list", nameof(length));
+            }
+
+            return head.Data;
+        }
+
         public void AddFirst(T data)
         {
-            var node = new Node<T>
-            {
-                Data = data
-            };
+            var node = new Node<T>(data);
 
             node.Next = head;
             head = node;
 
             hasChanged = !hasChanged;
+            length++;
         }
 
         public void Add(T data)
         {
-            var nodeAdd = new Node<T>
-            {
-                Data = data
-            };
+            var nodeAdd = new Node<T>(data);
 
             Node<T> node = head;
 
@@ -61,21 +49,18 @@ namespace Lists
             }
             else
             {
-                while (node.Next != null)
-                {
-                    node = node.Next;
-                }
-                node.Next = nodeAdd;
+                this[length - 1].Next = nodeAdd;
             }
 
             hasChanged = !hasChanged;
+            length++;
         }
 
         private void CheckIndex(int index)
         {
             if (index < 0 || index >= Length())
             {
-                throw new ArgumentException($"Invalid value of ", nameof(index));
+                throw new ArgumentOutOfRangeException("Invalid value of index", nameof(index));
             }
         }
 
@@ -85,7 +70,7 @@ namespace Lists
             {
                 Node<T> node = head;
 
-                for (int i = 0; i < index - 1 && node != null; i++)
+                for (int i = 0; i < index && node != null; i++)
                 {
                     node = node.Next;
                 }
@@ -96,24 +81,22 @@ namespace Lists
 
         public void AddByIndex(int index, T data)
         {
-            CheckIndex(index);
-
-            var nodeAdd = new Node<T>
-            {
-                Data = data
-            };
-
-            if (index == Length() + 1)
+            if (index == length)
             {
                 Add(data);
                 return;
             }
+
+            CheckIndex(index);
+
+            var nodeAdd = new Node<T>(data);
 
             Node<T> node = this[index - 1];
             nodeAdd.Next = node.Next;
             node.Next = nodeAdd;
 
             hasChanged = !hasChanged;
+            length++;
         }
 
         public bool Remove(T data)
@@ -121,30 +104,29 @@ namespace Lists
             Node<T> current = head;
             Node<T> previous = null;
 
-            if (current.Data.Equals(data))
-            {
-                head = current.Next;
-                current = null;
-
-                return true;
-            }
-
             while (current != null)
             {
-                while (!current.Data.Equals(data))
+                if (current.Data.Equals(data))
                 {
-                    previous = current;
-                    current = current.Next;
+                    if (previous != null)
+                    {
+                        previous.Next = current.Next;
+                        current = null;
+                    }
+                    else
+                    {
+                        head = head.Next;
+                    }
+
+                    length--;
+                    hasChanged = !hasChanged;
+
+                    return true;
                 }
 
-                previous.Next = current.Next;
-                data = current.Data;
-                current = null;
-
-                return true;
+                previous = current;
+                current = current.Next;
             }
-
-            hasChanged = !hasChanged;
 
             return false;
         }
@@ -153,62 +135,52 @@ namespace Lists
         {
             CheckIndex(index);
 
-            Node<T> previous = this[index - 1];
-            Node<T> current = this[index];
-
-            previous.Next = current.Next;
-            T data = current.Data;
-            current = null;
-
-            hasChanged = !hasChanged;
+            T data = this[index].Data;
+            Remove(data);
 
             return data;
         }
 
         public T RemoveFirst()
         {
-            hasChanged = !hasChanged;
+            if (length == 0)
+            {
+                throw new ArgumentException("Empty list", nameof(length));
+            }
 
             return Remove(0);
         }
 
         public bool IsEmpty() => Length() == 0;
 
-        public T GetNode(int index)
+        public T GetValue(int index)
         {
             CheckIndex(index);
 
-            Node<T> node = this[index];
-
-            return node.Data;
+            return this[index].Data;
         }
 
-        public void SetNode(int index, T dataToSet)
+        public void SetValue(int index, T dataToSet)
         {
             CheckIndex(index);
 
             Node<T> node = this[index];
-
             node.Data = dataToSet;
-
             hasChanged = !hasChanged;
         }
 
-        public LinkedList<T> CopyOf()
+        public LinkedList<T> Copy()
         {
-            LinkedList<T> result = new LinkedList<T>();
-
             if (IsEmpty())
             {
-                return result;
+                return this;
             }
 
-            Node<T> node = head;
+            LinkedList<T> result = new LinkedList<T>();
 
-            while (node != null)
+            for (int i = 0; i < length; i++)
             {
-                result.Add(node.Data);
-                node = node.Next;
+                result.Add(GetValue(i));
             }
 
             return result;

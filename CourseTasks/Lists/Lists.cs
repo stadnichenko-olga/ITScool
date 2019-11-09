@@ -35,10 +35,11 @@ namespace Lists
             linkedList.Print();
             Console.WriteLine($"List length = {linkedList.Length()}.");
 
-            Console.WriteLine($"Element index 4 = {linkedList.GetNode(4).ToString()}");
+            Console.WriteLine($"Element index 4 = {linkedList.GetValue(4).ToString()}");
             linkedList.Remove(4);
             Console.WriteLine("Remove element index 4");
             linkedList.Print();
+            Console.WriteLine($"List length = {linkedList.Length()}.");
 
             linkedList.RemoveFirst();
             Console.WriteLine("Remove first element");
@@ -46,7 +47,7 @@ namespace Lists
             Console.WriteLine($"List length = {linkedList.Length()}.");
 
             Console.WriteLine("Make a copy of the List");
-            LinkedList<string> linkedListCopy = linkedList.CopyOf();
+            LinkedList<string> linkedListCopy = linkedList.Copy();
             linkedListCopy.Print();
 
             Console.ReadKey();
