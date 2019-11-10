@@ -8,13 +8,13 @@ namespace Lists
     {
         private Node<T> head;
 
-        private bool hasChanged = true;
+        private int changesCount = 0;
 
         private int length { get; set; }
 
         public int Length() => length;
 
-        private bool HasChanged() => hasChanged;
+        private int ChangesCount() => changesCount;
 
         public T GetFirst()
         {
@@ -33,7 +33,7 @@ namespace Lists
             node.Next = head;
             head = node;
 
-            hasChanged = !hasChanged;
+            changesCount++;
             length++;
         }
 
@@ -52,7 +52,7 @@ namespace Lists
                 this[length - 1].Next = nodeAdd;
             }
 
-            hasChanged = !hasChanged;
+            changesCount++;
             length++;
         }
 
@@ -95,12 +95,17 @@ namespace Lists
             nodeAdd.Next = node.Next;
             node.Next = nodeAdd;
 
-            hasChanged = !hasChanged;
+            changesCount++;
             length++;
         }
 
         public bool Remove(T data)
         {
+            if (data == null)
+            {
+                return true;
+            }
+
             Node<T> current = head;
             Node<T> previous = null;
 
@@ -119,7 +124,7 @@ namespace Lists
                     }
 
                     length--;
-                    hasChanged = !hasChanged;
+                    changesCount++;
 
                     return true;
                 }
@@ -166,21 +171,22 @@ namespace Lists
 
             Node<T> node = this[index];
             node.Data = dataToSet;
-            hasChanged = !hasChanged;
+            changesCount++;
         }
 
         public LinkedList<T> Copy()
         {
-            if (IsEmpty())
+            if (head == null)
             {
-                return this;
+                return null;
             }
 
             LinkedList<T> result = new LinkedList<T>();
+            IEnumerator<T> iterator = GetEnumerator();
 
-            for (int i = 0; i < length; i++)
+            while (iterator.MoveNext())
             {
-                result.Add(GetValue(i));
+                result.Add(iterator.Current);
             }
 
             return result;
@@ -203,7 +209,7 @@ namespace Lists
                 }
             }
 
-            hasChanged = !hasChanged;
+            changesCount++;
         }
 
         public void Print()
@@ -215,19 +221,27 @@ namespace Lists
 
             Console.WriteLine();
         }
+        
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int i = 0; i < length; i++)
+            {
+                yield return this[i].Data;
+            }
+        }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<T>)this).GetEnumerator();
+            return GetEnumerator();
         }
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             Node<T> node = head;
 
-            bool hasChangedInitial = HasChanged();
+            int changesCountInitial = changesCount;
 
-            while (node != null && hasChangedInitial == HasChanged())
+            while (node != null && changesCountInitial == ChangesCount())
             {
                 yield return node.Data;
                 node = node.Next;
