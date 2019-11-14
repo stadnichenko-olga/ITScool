@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArrayListHome", "ArrayListH
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArrayList", "ArrayList\ArrayList.csproj", "{C9479811-1F3D-488B-8489-7023DFFF23A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persons", "Persons\Persons.csproj", "{03D255CE-448F-4E86-9A70-170809E86AF3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyambda", "Persons\Lyambda.csproj", "{03D255CE-448F-4E86-9A70-170809E86AF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

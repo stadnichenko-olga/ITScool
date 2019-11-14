@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Persons
+namespace Lyambda
 {
     class Persons
     {

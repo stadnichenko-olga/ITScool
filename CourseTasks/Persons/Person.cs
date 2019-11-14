@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Persons
+namespace Lyambda
 {
     class Person
     {
