@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace ArrayList
 {
-
-    public class ArrayList<T> : IList
+    public class ArrayList<T> : IList<T>
     {
         private T[] items = new T[10];
         private int length;
@@ -26,7 +26,7 @@ namespace ArrayList
         {
             if ((index < 0) || (index >= Count))
             {
-                throw new ArgumentException(nameof(index), " value is invalid.");
+                throw new ArgumentOutOfRangeException("Invalid value of index", nameof(index));
             }
         }
 
@@ -36,9 +36,9 @@ namespace ArrayList
         {
             get { return length; }
             private set => length = value;
-        }
+        }            
 
-        public T this[int index]
+        T IList<T>.this[int index]
         {
             get
             {
@@ -115,14 +115,14 @@ namespace ArrayList
         {
             items = new T[0];
             length = 0;
-        }
-
-        void Remove(T value)
+        }        
+        
+        void IList<T>.Insert(int index, T item)
         {
-            RemoveAt(IndexOf(value));
+            throw new NotImplementedException();
         }
 
-        public void RemoveAt(int index)
+        void IList<T>.RemoveAt(int index)
         {
             CheckIndex(index);
             Array.Copy(items, index + 1, items, index, length - index - 1);
@@ -130,7 +130,7 @@ namespace ArrayList
             length--;
         }
 
-        public int IndexOf(T value)
+        int IList<T>.IndexOf(T value)
         {
             int i = 0;
 
@@ -146,6 +146,19 @@ namespace ArrayList
             return -1;
         }
 
-        void TrimExcess() => Array.Resize(ref items, Count);
+        void IList<T>.TrimExcess() => Array.Resize(ref items, Count);
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int i = 0; i < length; i++)
+            {
+                yield return this[i];
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

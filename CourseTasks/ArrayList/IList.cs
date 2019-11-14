@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,23 +7,15 @@ using System.Threading.Tasks;
 
 namespace ArrayList
 {
-    interface IList
-    {
-        bool IsEmpty();
+    public interface IList<T>: IEnumerable
+    {        
+        void Insert(int index, T item);
 
-        int Add();
+        void RemoveAt(int index);
 
-        bool Contains();
+        T this[int index] { get; set; }
 
-        void Clear();
-
-        void Insert();
-
-        void Remove();
-
-        void RemoveAt();
-
-        int IndexOf();
+        int IndexOf(T item);
 
         void TrimExcess();
     }
