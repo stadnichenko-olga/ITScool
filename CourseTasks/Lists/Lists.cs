@@ -18,37 +18,37 @@ namespace Lists
             linkedList.Add("H");
             linkedList.Add("I");
 
-            linkedList.Print();
-            Console.WriteLine($"List length = {linkedList.Length()}.");
+            Console.WriteLine(linkedList);
+            Console.WriteLine($"List length = {linkedList.Count()}.");
 
             linkedList.Revert();
             Console.WriteLine("Reverse List:");
-            linkedList.Print();
+            Console.WriteLine(linkedList);
 
             linkedList.AddByIndex(3, "M");
             Console.WriteLine("Add new element M index 3");
-            linkedList.Print();
-            Console.WriteLine($"List length = {linkedList.Length()}.");
+            Console.WriteLine(linkedList);
+            Console.WriteLine($"List length = {linkedList.Count()}.");
 
             linkedList.Remove("M");
             Console.WriteLine("Remove element M");
-            linkedList.Print();
-            Console.WriteLine($"List length = {linkedList.Length()}.");
+            Console.WriteLine(linkedList);
+            Console.WriteLine($"List length = {linkedList.Count()}.");
 
             Console.WriteLine($"Element index 4 = {linkedList.GetValue(4).ToString()}");
-            linkedList.Remove(4);
+            linkedList.RemoveAt(4);
             Console.WriteLine("Remove element index 4");
-            linkedList.Print();
-            Console.WriteLine($"List length = {linkedList.Length()}.");
+            Console.WriteLine(linkedList);
+            Console.WriteLine($"List length = {linkedList.Count()}.");
 
             linkedList.RemoveFirst();
             Console.WriteLine("Remove first element");
-            linkedList.Print();
-            Console.WriteLine($"List length = {linkedList.Length()}.");
+            Console.WriteLine(linkedList);
+            Console.WriteLine($"List length = {linkedList.Count()}.");
 
             Console.WriteLine("Make a copy of the List");
             LinkedList<string> linkedListCopy = linkedList.Copy();
-            linkedListCopy.Print();
+            Console.WriteLine(linkedListCopy);
 
             Console.ReadKey();
         }

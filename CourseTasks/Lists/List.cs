@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Lists
 {
@@ -10,17 +11,15 @@ namespace Lists
 
         private int changesCount = 0;
 
-        private int length { get; set; }
+        private int Length { get; set; }
 
-        public int Length() => length;
-
-        private int ChangesCount() => changesCount;
+        public int Count() => Length;
 
         public T GetFirst()
         {
-            if (length == 0)
+            if (Length == 0)
             {
-                throw new ArgumentException("Empty list", nameof(length));
+                throw new InvalidOperationException("Empty list");
             }
 
             return head.Data;
@@ -34,33 +33,31 @@ namespace Lists
             head = node;
 
             changesCount++;
-            length++;
+            Length++;
         }
 
         public void Add(T data)
         {
-            var nodeAdd = new Node<T>(data);
-
-            Node<T> node = head;
+            var newNode = new Node<T>(data);
 
             if (head == null)
             {
-                head = nodeAdd;
+                head = newNode;
             }
             else
             {
-                this[length - 1].Next = nodeAdd;
+                this[Length - 1].Next = newNode;
             }
 
             changesCount++;
-            length++;
+            Length++;
         }
 
         private void CheckIndex(int index)
         {
-            if (index < 0 || index >= Length())
+            if (index < 0 || index >= Length)
             {
-                throw new ArgumentOutOfRangeException("Invalid value of index", nameof(index));
+                throw new IndexOutOfRangeException($"Index value {index} is out of range [0,{Length - 1}]");
             }
         }
 
@@ -68,9 +65,11 @@ namespace Lists
         {
             get
             {
+                CheckIndex(index);
+
                 Node<T> node = head;
 
-                for (int i = 0; i < index && node != null; i++)
+                for (int i = 0; i < index; i++)
                 {
                     node = node.Next;
                 }
@@ -81,7 +80,7 @@ namespace Lists
 
         public void AddByIndex(int index, T data)
         {
-            if (index == length)
+            if (index == Length)
             {
                 Add(data);
                 return;
@@ -89,23 +88,18 @@ namespace Lists
 
             CheckIndex(index);
 
-            var nodeAdd = new Node<T>(data);
+            var newNode = new Node<T>(data);
 
             Node<T> node = this[index - 1];
-            nodeAdd.Next = node.Next;
-            node.Next = nodeAdd;
+            newNode.Next = node.Next;
+            node.Next = newNode;
 
             changesCount++;
-            length++;
+            Length++;
         }
 
         public bool Remove(T data)
         {
-            if (data == null)
-            {
-                return true;
-            }
-
             Node<T> current = head;
             Node<T> previous = null;
 
@@ -116,14 +110,13 @@ namespace Lists
                     if (previous != null)
                     {
                         previous.Next = current.Next;
-                        current = null;
                     }
                     else
                     {
                         head = head.Next;
                     }
 
-                    length--;
+                    Length--;
                     changesCount++;
 
                     return true;
@@ -136,27 +129,40 @@ namespace Lists
             return false;
         }
 
-        public T Remove(int index)
+        public T RemoveAt(int index)
         {
             CheckIndex(index);
 
-            T data = this[index].Data;
-            Remove(data);
+            if (index == 0)
+            {
+                return RemoveFirst();
+            }
+
+            var data = this[index].Data;
+            this[index - 1].Next = this[index].Next;
+
+            Length--;
+            changesCount++;
 
             return data;
         }
 
         public T RemoveFirst()
         {
-            if (length == 0)
+            if (Length == 0)
             {
-                throw new ArgumentException("Empty list", nameof(length));
+                throw new InvalidOperationException("Empty list");
             }
 
-            return Remove(0);
+            var data = head.Data;
+            head = head.Next;
+            Length--;
+            changesCount++;
+
+            return data;
         }
 
-        public bool IsEmpty() => Length() == 0;
+        public bool IsEmpty() => Length == 0;
 
         public T GetValue(int index)
         {
@@ -165,12 +171,12 @@ namespace Lists
             return this[index].Data;
         }
 
-        public void SetValue(int index, T dataToSet)
+        public void SetValue(int index, T data)
         {
             CheckIndex(index);
 
             Node<T> node = this[index];
-            node.Data = dataToSet;
+            node.Data = data;
             changesCount++;
         }
 
@@ -178,74 +184,156 @@ namespace Lists
         {
             if (head == null)
             {
-                return null;
+                return new LinkedList<T>();
             }
 
             LinkedList<T> result = new LinkedList<T>();
-            IEnumerator<T> iterator = GetEnumerator();
+            Node<T> current = head;
+            Node<T> previous = null;
+            int i = 0;
 
-            while (iterator.MoveNext())
+            while (current != null) 
             {
-                result.Add(iterator.Current);
+                Node<T> node = new Node<T>(current.Data);
+                result.Add(current.Data);
+
+                if (i==0)
+                {
+                    result.head = node;
+                    previous = node;
+                }
+                else
+                {
+                    previous.Next = node;
+                    previous = node;
+                }
+
+                current = current.Next;
+                i++;
             }
+
+            previous.Next = null; 
 
             return result;
         }
 
-        public void Revert()
+    public void Revert()
+    {
+        if (head == null)
         {
-            if (!IsEmpty())
-            {
-                Node<T> current = head;
-                Node<T> previous = null;
-
-                while (current != null)
-                {
-                    Node<T> temp = current.Next;
-                    current.Next = previous;
-                    previous = current;
-                    head = current;
-                    current = temp;
-                }
-            }
-
             changesCount++;
+            return;
         }
 
-        public void Print()
+        Node<T> current = head;
+        Node<T> previous = null;
+
+        while (current != null)
         {
-            foreach (var item in this)
+            Node<T> temp = current.Next;
+            current.Next = previous;
+            previous = current;
+            head = current;
+            current = temp;
+        }
+
+        changesCount++;
+    }
+
+    public override string ToString()
+    {
+        StringBuilder result = new StringBuilder();
+
+        foreach (var item in this)
+        {
+            result.Append(string.Join(" ", item));
+        }
+
+        return result.ToString();
+    }
+
+    public override int GetHashCode()
+    {
+        int result = 17;
+        int initialChangesCount = changesCount;
+
+        foreach (var item in this)
+        {
+            if (initialChangesCount != changesCount)
             {
-                Console.Write(item + " ");
+                throw new InvalidOperationException("The object was changed while iterations");
             }
 
-            Console.WriteLine();
+            result = result * 31 + (item == null ? 0 : item.GetHashCode());
         }
-        
-        public IEnumerator<T> GetEnumerator()
+        return result;
+    }
+
+    public override bool Equals(Object obj)
+    {
+        if (ReferenceEquals(this, obj))
         {
-            for (int i = 0; i < length; i++)
+            return true;
+        }
+
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        LinkedList<T> linkedList = (LinkedList<T>)obj;
+
+        if (Length != linkedList.Length)
+        {
+            return false;
+        }
+
+        Node<T> node1 = head;
+        Node<T> node2 = linkedList.head;
+
+        while (node1 != null)
+        {
+            if (!node1.Data.Equals(node2.Data))
             {
-                yield return this[i].Data;
+                return false;
             }
+
+            node1 = node1.Next;
+            node2 = node2.Next;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        return true;
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        for (int i = 0; i < Length; i++)
         {
-            return GetEnumerator();
-        }
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            Node<T> node = head;
-
-            int changesCountInitial = changesCount;
-
-            while (node != null && changesCountInitial == ChangesCount())
-            {
-                yield return node.Data;
-                node = node.Next;
-            }
+            yield return this[i].Data;
         }
     }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    IEnumerator<T> IEnumerable<T>.GetEnumerator()
+    {
+        Node<T> node = head;
+
+        int initialChangesCount = changesCount;
+
+        while (node != null)
+        {
+            if (initialChangesCount != changesCount)
+            {
+                throw new InvalidOperationException("The object was changed while iterations");
+            }
+
+            yield return node.Data;
+            node = node.Next;
+        }
+    }
+}
 }
