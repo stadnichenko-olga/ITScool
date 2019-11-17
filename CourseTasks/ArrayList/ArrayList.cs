@@ -1,42 +1,89 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ArrayList
 {
     public class ArrayList<T> : IList<T>
     {
-        private T[] items = new T[10];
-        private int length;
+        private const int defaultCapacity = 10;
+
+        private T[] items = new T[defaultCapacity];
+        private int Length { get; set; }
+        private int changesCount = 0;        
 
         public ArrayList(int capacity)
         {
+            if (capacity < 0)
+            {
+                throw new ArgumentOutOfRangeException("Capacity value is negative");
+            }
+
             items = new T[capacity];
+            Length = 0;
         }
 
-        public int Count
+        public virtual int Count
         {
-            get { return length; }
+            get
+            {
+                return Length;
+            }
         }
 
         private void CheckIndex(int index)
         {
-            if ((index < 0) || (index >= Count))
+            if (index < 0 || index >= Capacity)
             {
-                throw new ArgumentOutOfRangeException("Invalid value of index", nameof(index));
+                throw new IndexOutOfRangeException($"Index value {index} is out of range [0,{Length - 1}]");
             }
         }
 
-        public bool IsEmpty() => length == 0;
+        public bool IsEmpty() => Length == 0;
 
         public virtual int Capacity
         {
-            get { return length; }
-            private set => length = value;
-        }            
+            get { return items.Length; }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException("Capacity value is negative");
+                }
+
+                if (value < items.Length)
+                {
+                    throw new ArgumentOutOfRangeException($"Capacity value is less then initial capacity = {Length}");
+                }
+
+                if (value != items.Length)
+                {
+                    if (value > 0)
+                    {
+                        var newItems = new T[value];
+                        if (Length > 0)
+                        {
+                            Array.Copy(items, 0, newItems, 0, Length);
+                        }
+                        items = newItems;
+                    }
+                    else
+                    {
+                        items = new T[defaultCapacity];
+                    }
+                }
+            }
+        }
+
+        public ArrayList<T> SubList<T>(ArrayList<T> data, int index, int length)
+        {
+            CheckIndex(index);
+            CheckIndex(index+length);
+
+            var result = new ArrayList<T>(data.Capacity);
+            Array.Copy(data.items, index, result.items, 0, length);
+            return result;
+        }
 
         T IList<T>.this[int index]
         {
@@ -50,21 +97,8 @@ namespace ArrayList
             {
                 CheckIndex(index);
                 items[index] = value;
+                changesCount++;
             }
-        }
-
-        private void IncreaseCapacityByOne()
-        {
-            T[] old = items;
-            items = new T[old.Length + 1];
-            Array.Copy(old, 0, items, 0, old.Length);
-        }
-
-        private void DecreaseCapacityByOne()
-        {
-            T[] old = items;
-            items = new T[old.Length - 1];
-            Array.Copy(old, 0, items, 0, old.Length - 1);
         }
 
         private void IncreaseCapacity()
@@ -72,30 +106,54 @@ namespace ArrayList
             T[] old = items;
             items = new T[old.Length * 2];
             Array.Copy(old, 0, items, 0, old.Length);
+            changesCount++;
+        }
+
+        private void EnsureCapacity(int min)
+        {
+            if (items.Length < min)
+            {
+                int newCapacity = (items.Length == 0) ? defaultCapacity : (items.Length * 2);
+                
+                if (newCapacity < min)
+                {
+                    newCapacity = min;
+                }
+                
+                Capacity = newCapacity;
+                changesCount++;
+            }
         }
 
         public int Add(T value)
         {
-            if (length < items.Length)
+            if (Length == Capacity) EnsureCapacity(Length + 1);
+
+            if (Length < Capacity)
             {
-                items[length] = value;
-                length++;
-                return length - 1;
+                items[Length] = value;
+                Length++;
+                changesCount++;
+                return Length - 1;
             }
 
             return -1;
         }
 
-        void InsertAt(T value, int index)
+        void IList<T>.Insert(int index, T value)
         {
             CheckIndex(index);
-            IncreaseCapacityByOne();
 
-            for (int i = Count - 1; i > index; i--)
+            if (Length == Capacity) EnsureCapacity(Length + 1);
+
+            for (int i = Capacity - 1; i > index; i--)
             {
                 items[i] = items[i - 1];
             }
+
             items[index] = value;
+            Length++;
+            changesCount++;
         }
 
         public bool Contains(T value)
@@ -113,21 +171,21 @@ namespace ArrayList
 
         public void Clear()
         {
-            items = new T[0];
-            length = 0;
-        }        
-        
-        void IList<T>.Insert(int index, T item)
-        {
-            throw new NotImplementedException();
+            if (Length != 0)
+            {
+                Array.Clear(items, 0, Length);
+                Length = 0;
+            }
+
+            changesCount++;
         }
 
         void IList<T>.RemoveAt(int index)
         {
             CheckIndex(index);
-            Array.Copy(items, index + 1, items, index, length - index - 1);
-            DecreaseCapacityByOne();
-            length--;
+            Array.Copy(items, index + 1, items, index, Length - index - 1);
+            changesCount++;
+            Length--;
         }
 
         int IList<T>.IndexOf(T value)
@@ -146,13 +204,13 @@ namespace ArrayList
             return -1;
         }
 
-        void IList<T>.TrimExcess() => Array.Resize(ref items, Count);
+        void IList<T>.TrimExcess() => Array.Resize(ref items, Capacity);
 
-        public IEnumerator<T> GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < Length; i++)
             {
-                yield return this[i];
+                yield return items[i];
             }
         }
 

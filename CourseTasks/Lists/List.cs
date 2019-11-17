@@ -192,12 +192,12 @@ namespace Lists
             Node<T> previous = null;
             int i = 0;
 
-            while (current != null) 
+            while (current != null)
             {
                 Node<T> node = new Node<T>(current.Data);
                 result.Add(current.Data);
 
-                if (i==0)
+                if (i == 0)
                 {
                     result.head = node;
                     previous = node;
@@ -212,128 +212,128 @@ namespace Lists
                 i++;
             }
 
-            previous.Next = null; 
+            previous.Next = null;
 
             return result;
         }
 
-    public void Revert()
-    {
-        if (head == null)
+        public void Revert()
         {
-            changesCount++;
-            return;
-        }
-
-        Node<T> current = head;
-        Node<T> previous = null;
-
-        while (current != null)
-        {
-            Node<T> temp = current.Next;
-            current.Next = previous;
-            previous = current;
-            head = current;
-            current = temp;
-        }
-
-        changesCount++;
-    }
-
-    public override string ToString()
-    {
-        StringBuilder result = new StringBuilder();
-
-        foreach (var item in this)
-        {
-            result.Append(string.Join(" ", item));
-        }
-
-        return result.ToString();
-    }
-
-    public override int GetHashCode()
-    {
-        int result = 17;
-        int initialChangesCount = changesCount;
-
-        foreach (var item in this)
-        {
-            if (initialChangesCount != changesCount)
+            if (head == null)
             {
-                throw new InvalidOperationException("The object was changed while iterations");
+                changesCount++;
+                return;
             }
 
-            result = result * 31 + (item == null ? 0 : item.GetHashCode());
-        }
-        return result;
-    }
+            Node<T> current = head;
+            Node<T> previous = null;
 
-    public override bool Equals(Object obj)
-    {
-        if (ReferenceEquals(this, obj))
-        {
-            return true;
-        }
+            while (current != null)
+            {
+                Node<T> temp = current.Next;
+                current.Next = previous;
+                previous = current;
+                head = current;
+                current = temp;
+            }
 
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
+            changesCount++;
         }
 
-        LinkedList<T> linkedList = (LinkedList<T>)obj;
-
-        if (Length != linkedList.Length)
+        public override string ToString()
         {
-            return false;
+            StringBuilder result = new StringBuilder();
+
+            foreach (var item in this)
+            {
+                result.Append(string.Join(" ", item));
+            }
+
+            return result.ToString();
         }
 
-        Node<T> node1 = head;
-        Node<T> node2 = linkedList.head;
-
-        while (node1 != null)
+        public override int GetHashCode()
         {
-            if (!node1.Data.Equals(node2.Data))
+            int result = 17;
+            int initialChangesCount = changesCount;
+
+            foreach (var item in this)
+            {
+                if (initialChangesCount != changesCount)
+                {
+                    throw new InvalidOperationException("The object was changed while iterations");
+                }
+
+                result = result * 31 + (item == null ? 0 : item.GetHashCode());
+            }
+            return result;
+        }
+
+        public override bool Equals(Object obj)
+        {
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
 
-            node1 = node1.Next;
-            node2 = node2.Next;
-        }
+            LinkedList<T> linkedList = (LinkedList<T>)obj;
 
-        return true;
-    }
-
-    public IEnumerator<T> GetEnumerator()
-    {
-        for (int i = 0; i < Length; i++)
-        {
-            yield return this[i].Data;
-        }
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    IEnumerator<T> IEnumerable<T>.GetEnumerator()
-    {
-        Node<T> node = head;
-
-        int initialChangesCount = changesCount;
-
-        while (node != null)
-        {
-            if (initialChangesCount != changesCount)
+            if (Length != linkedList.Length)
             {
-                throw new InvalidOperationException("The object was changed while iterations");
+                return false;
             }
 
-            yield return node.Data;
-            node = node.Next;
+            Node<T> node1 = head;
+            Node<T> node2 = linkedList.head;
+
+            while (node1 != null)
+            {
+                if (!node1.Data.Equals(node2.Data))
+                {
+                    return false;
+                }
+
+                node1 = node1.Next;
+                node2 = node2.Next;
+            }
+
+            return true;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int i = 0; i < Length; i++)
+            {
+                yield return this[i].Data;
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            Node<T> node = head;
+
+            int initialChangesCount = changesCount;
+
+            while (node != null)
+            {
+                if (initialChangesCount != changesCount)
+                {
+                    throw new InvalidOperationException("The object was changed while iterations");
+                }
+
+                yield return node.Data;
+                node = node.Next;
+            }
         }
     }
-}
 }
