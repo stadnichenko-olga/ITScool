@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace ArrayList
 {
-    public interface IList<T>: IEnumerable
+    using System.Collections;
+
+    public interface IListMy<T> : IEnumerable
     {        
         void Insert(int index, T item);
 
         void RemoveAt(int index);
+
+        void Remove(T item);
 
         T this[int index] { get; set; }
 

@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace ArrayList
 {
-    public class ArrayList<T> : IList<T>
+    public class ArrayList<T> : IListMy<T>
     {
-        private const int defaultCapacity = 10;
+        private const int defaultCapacity = 8;
 
         private T[] items = new T[defaultCapacity];
         private int Length { get; set; }
-        private int changesCount = 0;        
+        private int changesCount = 0;
 
         public ArrayList(int capacity)
         {
@@ -39,7 +38,7 @@ namespace ArrayList
             }
         }
 
-        public bool IsEmpty() => Length == 0;
+        public virtual bool IsEmpty() => Length == 0;
 
         public virtual int Capacity
         {
@@ -75,17 +74,17 @@ namespace ArrayList
             }
         }
 
-        public ArrayList<T> SubList<T>(ArrayList<T> data, int index, int length)
+        public virtual ArrayList<T> SubList<T>(ArrayList<T> data, int index, int length)
         {
             CheckIndex(index);
-            CheckIndex(index+length);
+            CheckIndex(index + length);
 
             var result = new ArrayList<T>(data.Capacity);
             Array.Copy(data.items, index, result.items, 0, length);
             return result;
         }
 
-        T IList<T>.this[int index]
+        T IListMy<T>.this[int index]
         {
             get
             {
@@ -114,18 +113,18 @@ namespace ArrayList
             if (items.Length < min)
             {
                 int newCapacity = (items.Length == 0) ? defaultCapacity : (items.Length * 2);
-                
+
                 if (newCapacity < min)
                 {
                     newCapacity = min;
                 }
-                
+
                 Capacity = newCapacity;
                 changesCount++;
             }
         }
 
-        public int Add(T value)
+        public virtual int Add(T value)
         {
             if (Length == Capacity) EnsureCapacity(Length + 1);
 
@@ -140,7 +139,12 @@ namespace ArrayList
             return -1;
         }
 
-        void IList<T>.Insert(int index, T value)
+        public virtual bool IsReadOnly
+        {
+            get { return false; }
+        }
+
+        void IListMy<T>.Insert(int index, T value)
         {
             CheckIndex(index);
 
@@ -180,7 +184,7 @@ namespace ArrayList
             changesCount++;
         }
 
-        void IList<T>.RemoveAt(int index)
+        void IListMy<T>.RemoveAt(int index)
         {
             CheckIndex(index);
             Array.Copy(items, index + 1, items, index, Length - index - 1);
@@ -188,7 +192,13 @@ namespace ArrayList
             Length--;
         }
 
-        int IList<T>.IndexOf(T value)
+        public void Remove(T item)
+        {
+
+            int index = IndexOf(item);
+        }
+        
+        int IListMy<T>.IndexOf(T value)
         {
             int i = 0;
 
@@ -204,7 +214,7 @@ namespace ArrayList
             return -1;
         }
 
-        void IList<T>.TrimExcess() => Array.Resize(ref items, Capacity);
+        void IListMy<T>.TrimExcess() => Array.Resize(ref items, Capacity);
 
         public IEnumerator GetEnumerator()
         {
@@ -217,6 +227,6 @@ namespace ArrayList
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
+        }       
     }
 }
