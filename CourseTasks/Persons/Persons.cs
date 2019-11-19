@@ -8,7 +8,7 @@ namespace Lyambda
     {
         static void Main(string[] args)
         {
-            List<Person> personsList = new List<Person>
+            var personsList = new List<Person>
             {
                 new Person("Andrew", 20),
                 new Person("Ann Brown", 16),
@@ -29,24 +29,33 @@ namespace Lyambda
             Console.WriteLine(string.Join(Environment.NewLine, personsList));
             Console.WriteLine();
 
-            var uniqueNamesList = personsList.Select(x => x.Name).Distinct();
+            var uniqueNamesList = personsList
+                .Select(x => x.Name)
+                .Distinct();
             Console.WriteLine("Names: " + string.Join(", ", uniqueNamesList) + ".");
             Console.WriteLine();
 
-            var youngPeopleNamesList = personsList.Where(x => x.Age < 18).Select(x => x.Name);
-            double averageAgeOfYoung = (double)personsList.Where(x => x.Age < 18).Select(x => x.Age).Sum() / youngPeopleNamesList.Count();
+            var youngPeopleNamesList = personsList.Where(x => x.Age < 18)
+                .Select(x => x.Name);
+            var averageAgeOfYoung = personsList.Where(x => x.Age < 18)
+                .Select(x => x.Age)
+                .Average();
             Console.WriteLine("Names of young people: " + string.Join(", ", youngPeopleNamesList) + ".");
             Console.WriteLine($"Average age of them = {averageAgeOfYoung}");
             Console.WriteLine();
 
-            var middleAgedPeopleList = personsList.Where(x => (x.Age <= 45 && x.Age >= 20)).OrderBy(x => x, new AgeComparer()).Select(x => x);
+            var middleAgedPeopleList = personsList.Where(x => x.Age <= 45 && x.Age >= 20)
+                .OrderBy(x => x.Age)
+                .Select(x => x);
             Console.WriteLine("Middle aged people:");
             Console.WriteLine(string.Join(Environment.NewLine, middleAgedPeopleList));
             Console.WriteLine();
 
-            var namesGroupList = personsList.GroupBy(x => x.Name, x => x.Age).Select(x => new Person(x.Key, x.Sum() / x.Count()));
+            var namesGroupDictionary = personsList
+                .GroupBy(x => x.Name, x => x.Age)
+                .ToDictionary(x => x.Key, x => x.Average());     
             Console.WriteLine("Grouped persons:");
-            Console.WriteLine(string.Join(Environment.NewLine, namesGroupList));
+            Console.WriteLine(string.Join(Environment.NewLine, namesGroupDictionary.Select(x => x.Key + ": " + x.Value.ToString())));
 
             Console.ReadLine();
         }
