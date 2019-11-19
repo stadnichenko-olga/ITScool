@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace ArrayList
 {
-    public class ArrayList<T> : IListMy<T>
+    public class ArrayList<T> : IList<T>
     {
         private const int defaultCapacity = 8;
 
@@ -36,6 +37,95 @@ namespace ArrayList
             {
                 throw new IndexOutOfRangeException($"Index value {index} is out of range [0,{Length - 1}]");
             }
+        }
+
+        void IList<T>.Remove(T item)
+        {
+
+            int index = IndexOf(item);
+
+            if (index >= 0)
+            {
+                RemoveAt(index);
+            }
+        }
+
+        int IList<T>.IndexOf(T value)
+        {
+            int i = 0;
+
+            foreach (var item in items)
+            {
+                if (item.Equals(value))
+                {
+                    return i;
+                }
+                i++;
+            }
+
+            return -1;
+        }
+
+        T IList<T>.this[int index]
+        {
+            get
+            {
+                CheckIndex(index);
+                return items[index];
+            }
+
+            set
+            {
+                CheckIndex(index);
+                items[index] = value;
+                changesCount++;
+            }
+        }
+
+        void IList<T>.Insert(int index, T value)
+        {
+            CheckIndex(index);
+
+            if (Length == Capacity) EnsureCapacity(Length + 1);
+
+            for (int i = Capacity - 1; i > index; i--)
+            {
+                items[i] = items[i - 1];
+            }
+
+            items[index] = value;
+            Length++;
+            changesCount++;
+        }
+
+        void IList<T>.TrimExcess() => Array.Resize(ref items, Capacity);
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            int initialChangesCount = changesCount;
+
+            for (int i = 0; i < Length; i++)
+            {
+                if (initialChangesCount != changesCount)
+                {
+                    throw new InvalidOperationException("The object was changed while iterations");
+                }
+
+                yield return items[i];
+            }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            for (int i = 0; i < Length; i++)
+            {
+                yield return items[i];
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         public virtual bool IsEmpty() => Length == 0;
@@ -84,22 +174,6 @@ namespace ArrayList
             return result;
         }
 
-        T IListMy<T>.this[int index]
-        {
-            get
-            {
-                CheckIndex(index);
-                return items[index];
-            }
-
-            set
-            {
-                CheckIndex(index);
-                items[index] = value;
-                changesCount++;
-            }
-        }
-
         private void IncreaseCapacity()
         {
             T[] old = items;
@@ -144,22 +218,7 @@ namespace ArrayList
             get { return false; }
         }
 
-        void IListMy<T>.Insert(int index, T value)
-        {
-            CheckIndex(index);
-
-            if (Length == Capacity) EnsureCapacity(Length + 1);
-
-            for (int i = Capacity - 1; i > index; i--)
-            {
-                items[i] = items[i - 1];
-            }
-
-            items[index] = value;
-            Length++;
-            changesCount++;
-        }
-
+        
         public bool Contains(T value)
         {
             foreach (var item in items)
@@ -182,51 +241,6 @@ namespace ArrayList
             }
 
             changesCount++;
-        }
-
-        void IListMy<T>.RemoveAt(int index)
-        {
-            CheckIndex(index);
-            Array.Copy(items, index + 1, items, index, Length - index - 1);
-            changesCount++;
-            Length--;
-        }
-
-        public void Remove(T item)
-        {
-
-            int index = IndexOf(item);
-        }
-        
-        int IListMy<T>.IndexOf(T value)
-        {
-            int i = 0;
-
-            foreach (var item in items)
-            {
-                if (item.Equals(value))
-                {
-                    return i;
-                }
-                i++;
-            }
-
-            return -1;
-        }
-
-        void IListMy<T>.TrimExcess() => Array.Resize(ref items, Capacity);
-
-        public IEnumerator GetEnumerator()
-        {
-            for (int i = 0; i < Length; i++)
-            {
-                yield return items[i];
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }       
     }
 }

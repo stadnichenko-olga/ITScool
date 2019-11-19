@@ -12,7 +12,7 @@ namespace ArrayList
             Console.WriteLine("Before adding: " + $"Count = {items.Count}; Capacity = {items.Capacity}");
 
             items.Add("Ann"); 
-            items.Insert(0, "Bill"); // insert the value at index 0
+            items.Insert(0, "Bill"); 
 
 
             Console.WriteLine("After adding two elements to items: " + $"Count = {items.Count}; Capacity = {items.Capacity}");

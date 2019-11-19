@@ -1,9 +1,8 @@
-﻿
-namespace ArrayList
+﻿namespace ArrayList
 {
-    using System.Collections;
+    using System.Collections.Generic;
 
-    public interface IListMy<T> : IEnumerable
+    public interface IList<T> : IEnumerable<T>
     {        
         void Insert(int index, T item);
 
