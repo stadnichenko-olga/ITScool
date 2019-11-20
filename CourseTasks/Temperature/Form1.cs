@@ -19,18 +19,63 @@ namespace Temperature
         {
             double temperatureInitial;
 
-            var scaleInitial = comboBox1.SelectedIndex;
-            var scaleResult = comboBox2.SelectedIndex;
-
             if (double.TryParse(textBox1.Text, out temperatureInitial))
             {
-                textBox2.Text = $"{TemperatureConverter(temperatureInitial, scaleInitial, scaleResult)}";
+                var scaleInitial = comboBox1.SelectedIndex;
+                var scaleResult = comboBox2.SelectedIndex;
+                string format = "##.###;##.###";
+
+                textBox2.Text = TemperatureConverter(temperatureInitial, scaleInitial, scaleResult).ToString(format);
             }
             else
             {
                 MessageBox.Show("Invalid value of temperature.");
                 textBox2.Text = "";
             }
+        }
+
+        private double TemperatureConverter(double temperatureInitial, int scaleInitial, int scaleResult)
+        {
+            if (scaleInitial == 0)
+            {
+                if (scaleResult == 1)
+                {
+                    return temperatureInitial * 9 / 5 + 32;
+                }
+
+                if (scaleResult == 2)
+                {
+                    return temperatureInitial + 273.15;
+                }
+            }
+
+            if (scaleInitial == 1)
+            {
+                if (scaleResult == 0)
+                {
+                    return (temperatureInitial - 32) * 5 / 9;
+                }
+
+                if (scaleResult == 2)
+                {
+                    return (temperatureInitial + 459.67) * 5 / 9;
+                }
+            }
+
+            if (scaleInitial == 2)
+            {
+                if (scaleResult == 0)
+                {
+                    return temperatureInitial - 273.15;
+                }
+
+                if (scaleResult == 1)
+                {
+                    return temperatureInitial * 9 / 5 - 459.67;
+                }
+            }
+
+            return temperatureInitial;
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -45,49 +90,6 @@ namespace Temperature
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
-        }
-
-        private double TemperatureConverter(double temperatureInitial, int scaleInitial, int scaleResult)
-        {
-
-
-
-            if (scaleInitial == 0)
-            {
-                if (scaleResult == 1)
-                {
-                    return temperatureInitial * 9 / 5 + 32;
-                }
-                if (scaleResult == 2)
-                {
-                    return temperatureInitial + 273.15;
-                }
-            }
-            if (scaleInitial == 1)
-            {
-                if (scaleResult == 0)
-                {
-                    return (temperatureInitial - 32) * 5 / 9;
-                }
-                if (scaleResult == 2)
-                {
-                    return (temperatureInitial + 459.67) * 5 / 9;
-                }
-            }
-            if (scaleInitial == 2)
-            {
-                if (scaleResult == 0)
-                {
-                    return temperatureInitial - 273.15;
-                }
-                if (scaleResult == 1)
-                {
-                    return temperatureInitial * 9 / 5 - 459.67;
-                }
-            }
-
-            return temperatureInitial;
 
         }
     }
