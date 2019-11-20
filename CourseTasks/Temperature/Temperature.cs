@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Temperature
 {
-    static class Program
+    static class Temperature
     {
         /// <summary>
         /// The main entry point for the application.

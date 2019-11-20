@@ -66,6 +66,7 @@
             this.button1.TabIndex = 2;
             this.button1.Text = "Convert";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // comboBox1
             // 
@@ -78,6 +79,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(176, 21);
             this.comboBox1.TabIndex = 3;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -108,18 +110,21 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(176, 21);
             this.comboBox2.TabIndex = 6;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(37, 35);
-            this.textBox1.Name = "textBox1";
+            this.textBox1.Name = "temperatureInitial";
             this.textBox1.Size = new System.Drawing.Size(176, 20);
             this.textBox1.TabIndex = 7;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(37, 242);
-            this.textBox2.Name = "textBox2";
+            this.textBox2.Name = "temperatureResult";
+            this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(176, 20);
             this.textBox2.TabIndex = 8;
             // 
@@ -138,7 +143,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Temperature converter";
             this.ResumeLayout(false);
             this.PerformLayout();
 
