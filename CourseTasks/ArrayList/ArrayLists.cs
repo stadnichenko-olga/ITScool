@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace ArrayList
 {
@@ -9,76 +8,53 @@ namespace ArrayList
         {
             var items = new ArrayList<string>(8);
 
-            Console.WriteLine("Before adding: " + $"Count = {items.Count}; Capacity = {items.Capacity}");
+            Console.WriteLine("Before adding: " + $"Count = {items.Count()}; Capacity = {items.Capacity}");
 
             items.Add("Ann"); 
-            items.Insert(0, "Bill"); 
+            items.Insert(0, "Bill");
 
+            Console.WriteLine();
+            Console.WriteLine(string.Join("; ", items));
+            Console.WriteLine("After adding two elements to items: " + $"Count = {items.Count()}; Capacity = {items.Capacity}");
+            
+            items.Add("Mary");            
+            items.Insert(2, "John");
 
-            Console.WriteLine("After adding two elements to items: " + $"Count = {items.Count}; Capacity = {items.Capacity}");
+            Console.WriteLine();
+            Console.WriteLine(string.Join("; ", items));
+            Console.WriteLine("After adding two more elements to items: " + $"Count = {items.Count()}; Capacity = {items.Capacity}");
 
-            Console.Write("\nDisplay list contents with counter-controlled loop:");
-            for (var i = 0; i < items.Count; i++)
-            {
-                Console.Write($" {items[i]}");
-            }
+            items.Add("Jack");
+            items.Add("Andrew");
+            items.Add("Natali");
+            items.Add("Brian");
+            items.Add("Oscar");
+            items.Add("Kate");
 
-            Console.Write("\nDisplay list contents with foreach statement:");
-            foreach (var item in items)
-            {
-                Console.Write($" {item}");
-            }
+            Console.WriteLine();
+            Console.WriteLine(string.Join("; ", items));
+            Console.WriteLine("After adding six more elements to items: " + $"Count = {items.Count()}; Capacity = {items.Capacity}");
 
-            items.Add("green"); // add "green" to the end of the List
-            items.Add("yellow"); // add "yellow" to the end of the List
+            Console.WriteLine();
+            Console.WriteLine("Remove item: John");
+            items.Remove("John");
+            Console.WriteLine(string.Join("; ", items));
 
-            // display List's Count and Capacity after adding two more elements
-            Console.WriteLine("\n\nAfter adding two more elements to items: " + $"Count = {items.Count}; Capacity = {items.Capacity}");
+            Console.WriteLine();
+            Console.WriteLine("Remove item #3");
+            items.RemoveAt(3);
+            Console.WriteLine(string.Join("; ", items));
+            Console.WriteLine("After removing two elements from items: " + $"Count = {items.Count()}; Capacity = {items.Capacity}");
 
-            Console.Write("List with two new elements:");
-            foreach (var item in items)
-            {
-                Console.Write($" {item}");
-            }
+            Console.WriteLine();
+            Console.WriteLine($"Index of item Mary {items.IndexOf("Mary")}");
 
-            items.Remove("yellow"); // remove the first "yellow"
+            Console.WriteLine();
+            Console.WriteLine("Make sublist from index 2 of 4 items");
+            var subItems=items.SubList(2,4);
+            Console.WriteLine(string.Join("; ", subItems));
 
-            // display the List
-            Console.Write("\n\nRemove first instance of yellow:");
-            foreach (var item in items)
-            {
-                Console.Write($" {item}");
-            }
-
-            items.RemoveAt(1); // remove item at index 1
-
-            // display the List
-            Console.Write("\nRemove second list element (green):");
-            foreach (var item in items)
-            {
-                Console.Write($" {item}");
-            }
-
-            // display List's Count and Capacity after removing two elements
-            Console.WriteLine("\nAfter removing two elements from items: " + $"Count = {items.Count}; Capacity = {items.Capacity}");
-
-            // check if a value is in the List
-            Console.WriteLine("\n\"red\" is " + $"{(items.Contains("red") ? string.Empty : "not ")}in the list");
-
-            items.Add("orange"); // add "orange" to the end of the List
-            items.Add("violet"); // add "violet" to the end of the List
-            items.Add("blue"); // add "blue" to the end of the List
-
-            // display List's Count and Capacity after adding three elements
-            Console.WriteLine("\nAfter adding three more elements to items: " + $"Count = {items.Count}; Capacity = {items.Capacity}");
-
-            // display the List
-            Console.Write("List with three new elements:");
-
-            foreach (var item in items)
-            {
-                Console.Write($" {item}");
-            }
+            Console.ReadLine();
         }
     }
 }
