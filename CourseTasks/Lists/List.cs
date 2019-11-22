@@ -11,13 +11,13 @@ namespace Lists
 
         private int changesCount = 0;
 
-        private int Length { get; set; }
+        public int Count { get; set; }
 
-        public int Count() => Length;
+        public bool IsEmpty => Count == 0;
 
         public T GetFirst()
         {
-            if (Length == 0)
+            if (Count == 0)
             {
                 throw new InvalidOperationException("Empty list");
             }
@@ -33,7 +33,7 @@ namespace Lists
             head = node;
 
             changesCount++;
-            Length++;
+            Count++;
         }
 
         public void Add(T data)
@@ -46,18 +46,18 @@ namespace Lists
             }
             else
             {
-                this[Length - 1].Next = newNode;
+                this[Count - 1].Next = newNode;
             }
 
             changesCount++;
-            Length++;
+            Count++;
         }
 
         private void CheckIndex(int index)
         {
-            if (index < 0 || index >= Length)
+            if (index < 0 || index >= Count)
             {
-                throw new IndexOutOfRangeException($"Index value {index} is out of range [0,{Length - 1}]");
+                throw new IndexOutOfRangeException($"Index value {index} is out of range [0,{Count - 1}]");
             }
         }
 
@@ -80,9 +80,10 @@ namespace Lists
 
         public void AddByIndex(int index, T data)
         {
-            if (index == Length)
+            if (index == Count)
             {
                 Add(data);
+
                 return;
             }
 
@@ -95,15 +96,16 @@ namespace Lists
             node.Next = newNode;
 
             changesCount++;
-            Length++;
+            Count++;
         }
 
         public bool Remove(T data)
         {
             Node<T> current = head;
             Node<T> previous = null;
+            int count = 0;
 
-            while (current != null)
+            while (count < Count)
             {
                 if (current.Data.Equals(data))
                 {
@@ -116,7 +118,7 @@ namespace Lists
                         head = head.Next;
                     }
 
-                    Length--;
+                    Count--;
                     changesCount++;
 
                     return true;
@@ -124,6 +126,7 @@ namespace Lists
 
                 previous = current;
                 current = current.Next;
+                count++;
             }
 
             return false;
@@ -138,31 +141,51 @@ namespace Lists
                 return RemoveFirst();
             }
 
-            var data = this[index].Data;
-            this[index - 1].Next = this[index].Next;
+            Node<T> current = head;
+            Node<T> previous = null;
+            Node<T> deletedNode = null;
+            int count = 0;
 
-            Length--;
+            while (count < Count)
+            {
+                if (count == index)
+                {
+                    deletedNode = current;
+                    if (previous != null)
+                    {
+                        previous.Next = current.Next;
+                    }
+                    else
+                    {
+                        head = head.Next;
+                    }                    
+                }
+
+                previous = current;
+                current = current.Next;
+                count++;
+            }
+
+            Count--;
             changesCount++;
 
-            return data;
+            return deletedNode.Data;
         }
 
         public T RemoveFirst()
         {
-            if (Length == 0)
+            if (Count == 0)
             {
                 throw new InvalidOperationException("Empty list");
             }
 
             var data = head.Data;
             head = head.Next;
-            Length--;
+            Count--;
             changesCount++;
 
             return data;
         }
-
-        public bool IsEmpty() => Length == 0;
 
         public T GetValue(int index)
         {
@@ -177,6 +200,7 @@ namespace Lists
 
             Node<T> node = this[index];
             node.Data = data;
+
             changesCount++;
         }
 
@@ -189,30 +213,14 @@ namespace Lists
 
             LinkedList<T> result = new LinkedList<T>();
             Node<T> current = head;
-            Node<T> previous = null;
-            int i = 0;
+            int count = 0;
 
-            while (current != null)
+            while (count < Count)
             {
-                Node<T> node = new Node<T>(current.Data);
                 result.Add(current.Data);
-
-                if (i == 0)
-                {
-                    result.head = node;
-                    previous = node;
-                }
-                else
-                {
-                    previous.Next = node;
-                    previous = node;
-                }
-
                 current = current.Next;
-                i++;
+                count++;
             }
-
-            previous.Next = null;
 
             return result;
         }
@@ -227,14 +235,16 @@ namespace Lists
 
             Node<T> current = head;
             Node<T> previous = null;
+            int count = 0;
 
-            while (current != null)
+            while (count < Count)
             {
                 Node<T> temp = current.Next;
                 current.Next = previous;
                 previous = current;
                 head = current;
                 current = temp;
+                count++;
             }
 
             changesCount++;
@@ -242,6 +252,11 @@ namespace Lists
 
         public override string ToString()
         {
+            if (Count == 1)
+            {
+                return head.Data.ToString();
+            }
+
             StringBuilder result = new StringBuilder();
 
             foreach (var item in this)
@@ -259,17 +274,13 @@ namespace Lists
 
             foreach (var item in this)
             {
-                if (initialChangesCount != changesCount)
-                {
-                    throw new InvalidOperationException("The object was changed while iterations");
-                }
-
                 result = result * 31 + (item == null ? 0 : item.GetHashCode());
             }
+
             return result;
         }
 
-        public override bool Equals(Object obj)
+        public override bool Equals(object obj)
         {
             if (ReferenceEquals(this, obj))
             {
@@ -283,15 +294,16 @@ namespace Lists
 
             LinkedList<T> linkedList = (LinkedList<T>)obj;
 
-            if (Length != linkedList.Length)
+            if (Count != linkedList.Count)
             {
                 return false;
             }
 
             Node<T> node1 = head;
             Node<T> node2 = linkedList.head;
+            int count = 0;
 
-            while (node1 != null)
+            while (count < Count)
             {
                 if (!node1.Data.Equals(node2.Data))
                 {
@@ -300,6 +312,7 @@ namespace Lists
 
                 node1 = node1.Next;
                 node2 = node2.Next;
+                count++;
             }
 
             return true;
@@ -307,8 +320,15 @@ namespace Lists
 
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < Length; i++)
+            int initialChangesCount = changesCount;
+
+            for (int i = 0; i < Count; i++)
             {
+                if (initialChangesCount != changesCount)
+                {
+                    throw new InvalidOperationException("The object was changed while iterations");
+                }
+
                 yield return this[i].Data;
             }
         }
@@ -316,24 +336,6 @@ namespace Lists
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
-        {
-            Node<T> node = head;
-
-            int initialChangesCount = changesCount;
-
-            while (node != null)
-            {
-                if (initialChangesCount != changesCount)
-                {
-                    throw new InvalidOperationException("The object was changed while iterations");
-                }
-
-                yield return node.Data;
-                node = node.Next;
-            }
         }
     }
 }
