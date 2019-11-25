@@ -38,15 +38,13 @@ namespace Lyambda
             var youngPeopleNamesList = personsList.Where(x => x.Age < 18)
                 .Select(x => x.Name);
             var averageAgeOfYoung = personsList.Where(x => x.Age < 18)
-                .Select(x => x.Age)
-                .Average();
+                .Average(x => x.Age);
             Console.WriteLine("Names of young people: " + string.Join(", ", youngPeopleNamesList) + ".");
             Console.WriteLine($"Average age of them = {averageAgeOfYoung}");
             Console.WriteLine();
 
             var middleAgedPeopleList = personsList.Where(x => x.Age <= 45 && x.Age >= 20)
-                .OrderBy(x => x.Age)
-                .Select(x => x);
+                .OrderByDescending(x => x.Age);
             Console.WriteLine("Middle aged people:");
             Console.WriteLine(string.Join(Environment.NewLine, middleAgedPeopleList));
             Console.WriteLine();
@@ -59,6 +57,5 @@ namespace Lyambda
 
             Console.ReadLine();
         }
-
     }
 }
