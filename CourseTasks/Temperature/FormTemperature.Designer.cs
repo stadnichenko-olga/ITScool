@@ -44,7 +44,7 @@
             // labelInitialTemperature
             // 
             this.labelInitialTemperature.AutoSize = true;
-            this.labelInitialTemperature.Location = new System.Drawing.Point(3, 0);
+            this.labelInitialTemperature.Location = new System.Drawing.Point(23, 20);
             this.labelInitialTemperature.Name = "labelInitialTemperature";
             this.labelInitialTemperature.Size = new System.Drawing.Size(93, 13);
             this.labelInitialTemperature.TabIndex = 0;
@@ -53,7 +53,7 @@
             // labelResultTemperature
             // 
             this.labelResultTemperature.AutoSize = true;
-            this.labelResultTemperature.Location = new System.Drawing.Point(3, 49);
+            this.labelResultTemperature.Location = new System.Drawing.Point(23, 67);
             this.labelResultTemperature.Name = "labelResultTemperature";
             this.labelResultTemperature.Size = new System.Drawing.Size(95, 13);
             this.labelResultTemperature.TabIndex = 1;
@@ -62,7 +62,7 @@
             // buttonConvert
             // 
             this.buttonConvert.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonConvert.Location = new System.Drawing.Point(3, 101);
+            this.buttonConvert.Location = new System.Drawing.Point(23, 117);
             this.buttonConvert.Name = "buttonConvert";
             this.buttonConvert.Size = new System.Drawing.Size(75, 23);
             this.buttonConvert.TabIndex = 2;
@@ -72,19 +72,19 @@
             // 
             // comboBoxInitialScale
             // 
+            this.comboBoxInitialScale.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxInitialScale.FormattingEnabled = true;
-            this.comboBoxInitialScale.Items.AddRange(new object[] {});
-            this.comboBoxInitialScale.Location = new System.Drawing.Point(423, 3);
+            this.comboBoxInitialScale.Location = new System.Drawing.Point(443, 23);
             this.comboBoxInitialScale.Name = "comboBoxInitialScale";
             this.comboBoxInitialScale.Size = new System.Drawing.Size(136, 21);
             this.comboBoxInitialScale.TabIndex = 3;
-            this.comboBoxInitialScale.DropDown += new System.EventHandler(comboBoxInitialScale_DropDown);
+            this.comboBoxInitialScale.DropDown += new System.EventHandler(this.comboBoxInitialScale_DropDown);
             this.comboBoxInitialScale.SelectedIndexChanged += new System.EventHandler(this.comboBoxInitialScale_SelectedIndexChanged);
             // 
             // labelInitialScale
             // 
             this.labelInitialScale.AutoSize = true;
-            this.labelInitialScale.Location = new System.Drawing.Point(283, 0);
+            this.labelInitialScale.Location = new System.Drawing.Point(303, 20);
             this.labelInitialScale.Name = "labelInitialScale";
             this.labelInitialScale.Size = new System.Drawing.Size(60, 13);
             this.labelInitialScale.TabIndex = 4;
@@ -93,7 +93,7 @@
             // labelResultScale
             // 
             this.labelResultScale.AutoSize = true;
-            this.labelResultScale.Location = new System.Drawing.Point(283, 49);
+            this.labelResultScale.Location = new System.Drawing.Point(303, 67);
             this.labelResultScale.Name = "labelResultScale";
             this.labelResultScale.Size = new System.Drawing.Size(62, 13);
             this.labelResultScale.TabIndex = 5;
@@ -101,18 +101,18 @@
             // 
             // comboBoxResultScale
             // 
+            this.comboBoxResultScale.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxResultScale.FormattingEnabled = true;
-            this.comboBoxResultScale.Items.AddRange(new object[] {});
-            this.comboBoxResultScale.Location = new System.Drawing.Point(423, 52);
+            this.comboBoxResultScale.Location = new System.Drawing.Point(443, 70);
             this.comboBoxResultScale.Name = "comboBoxResultScale";
             this.comboBoxResultScale.Size = new System.Drawing.Size(136, 21);
             this.comboBoxResultScale.TabIndex = 6;
-            this.comboBoxResultScale.DropDown += new System.EventHandler(comboBoxResultScale_DropDown);
+            this.comboBoxResultScale.DropDown += new System.EventHandler(this.comboBoxResultScale_DropDown);
             this.comboBoxResultScale.SelectedIndexChanged += new System.EventHandler(this.comboBoxResultScale_SelectedIndexChanged);
             // 
             // boxInitialTemperature
             // 
-            this.boxInitialTemperature.Location = new System.Drawing.Point(143, 3);
+            this.boxInitialTemperature.Location = new System.Drawing.Point(163, 23);
             this.boxInitialTemperature.Name = "boxInitialTemperature";
             this.boxInitialTemperature.Size = new System.Drawing.Size(134, 20);
             this.boxInitialTemperature.TabIndex = 7;
@@ -120,7 +120,7 @@
             // 
             // boxResultTemperature
             // 
-            this.boxResultTemperature.Location = new System.Drawing.Point(143, 52);
+            this.boxResultTemperature.Location = new System.Drawing.Point(163, 70);
             this.boxResultTemperature.Name = "boxResultTemperature";
             this.boxResultTemperature.ReadOnly = true;
             this.boxResultTemperature.Size = new System.Drawing.Size(134, 20);
@@ -147,18 +147,19 @@
             this.tableLayoutTemperature.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.tableLayoutTemperature.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutTemperature.Name = "tableLayoutTemperature";
+            this.tableLayoutTemperature.Padding = new System.Windows.Forms.Padding(20);
             this.tableLayoutTemperature.RowCount = 3;
             this.tableLayoutTemperature.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutTemperature.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutTemperature.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutTemperature.Size = new System.Drawing.Size(562, 128);
+            this.tableLayoutTemperature.Size = new System.Drawing.Size(602, 163);
             this.tableLayoutTemperature.TabIndex = 9;
             // 
             // FormTemperature
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(562, 128);
+            this.ClientSize = new System.Drawing.Size(602, 163);
             this.Controls.Add(this.tableLayoutTemperature);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
