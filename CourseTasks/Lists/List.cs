@@ -11,7 +11,7 @@ namespace Lists
 
         private int changesCount = 0;
 
-        public int Count { get; set; }
+        public int Count { get; private set; }
 
         public bool IsEmpty => Count == 0;
 
@@ -40,7 +40,7 @@ namespace Lists
         {
             var newNode = new Node<T>(data);
 
-            if (head == null)
+            if (Equals(head, null))
             {
                 head = newNode;
             }
@@ -101,17 +101,22 @@ namespace Lists
 
         public bool Remove(T data)
         {
+            if (Equals(data, null))
+            {
+                return true;
+            }
+
             Node<T> current = head;
             Node<T> previous = null;
-            int count = 0;
 
-            while (count < Count)
+            while (!Equals(current, null))
             {
                 if (current.Data.Equals(data))
                 {
-                    if (previous != null)
+                    if (!Equals(previous, null))
                     {
                         previous.Next = current.Next;
+                        current = null;
                     }
                     else
                     {
@@ -123,10 +128,8 @@ namespace Lists
 
                     return true;
                 }
-
                 previous = current;
                 current = current.Next;
-                count++;
             }
 
             return false;
@@ -143,33 +146,24 @@ namespace Lists
 
             Node<T> current = head;
             Node<T> previous = null;
-            Node<T> deletedNode = null;
-            int count = 0;
+            int i = 0;
 
-            while (count < Count)
+            while (i < index)
             {
-                if (count == index)
-                {
-                    deletedNode = current;
-                    if (previous != null)
-                    {
-                        previous.Next = current.Next;
-                    }
-                    else
-                    {
-                        head = head.Next;
-                    }                    
-                }
-
                 previous = current;
                 current = current.Next;
-                count++;
+                i++;
             }
+
+            var data = current.Data;
+
+            previous.Next = current.Next;
+            current = null;
 
             Count--;
             changesCount++;
 
-            return deletedNode.Data;
+            return data;
         }
 
         public T RemoveFirst()
@@ -206,28 +200,30 @@ namespace Lists
 
         public LinkedList<T> Copy()
         {
-            if (head == null)
+            if (Equals(head, null))
             {
                 return new LinkedList<T>();
             }
 
             LinkedList<T> result = new LinkedList<T>();
             Node<T> current = head;
-            int count = 0;
+            int i = 0;
 
-            while (count < Count)
+            while (i < Count)
             {
-                result.Add(current.Data);
+                result.AddFirst(current.Data);
                 current = current.Next;
-                count++;
+                i++;
             }
+
+            result.Revert();
 
             return result;
         }
 
         public void Revert()
         {
-            if (head == null)
+            if (Equals(head, null))
             {
                 changesCount++;
                 return;
@@ -235,16 +231,16 @@ namespace Lists
 
             Node<T> current = head;
             Node<T> previous = null;
-            int count = 0;
+            int i = 0;
 
-            while (count < Count)
+            while (i < Count)
             {
                 Node<T> temp = current.Next;
                 current.Next = previous;
                 previous = current;
                 head = current;
                 current = temp;
-                count++;
+                i++;
             }
 
             changesCount++;
@@ -261,7 +257,7 @@ namespace Lists
 
             foreach (var item in this)
             {
-                result.Append(string.Join(" ", item));
+                result.Append(item + " ");
             }
 
             return result.ToString();
@@ -270,7 +266,6 @@ namespace Lists
         public override int GetHashCode()
         {
             int result = 17;
-            int initialChangesCount = changesCount;
 
             foreach (var item in this)
             {
@@ -287,7 +282,7 @@ namespace Lists
                 return true;
             }
 
-            if (obj == null || GetType() != obj.GetType())
+            if (Equals(obj, null) || GetType() != obj.GetType())
             {
                 return false;
             }
@@ -301,9 +296,9 @@ namespace Lists
 
             Node<T> node1 = head;
             Node<T> node2 = linkedList.head;
-            int count = 0;
+            int i = 0;
 
-            while (count < Count)
+            while (i < Count)
             {
                 if (!node1.Data.Equals(node2.Data))
                 {
@@ -312,7 +307,7 @@ namespace Lists
 
                 node1 = node1.Next;
                 node2 = node2.Next;
-                count++;
+                i++;
             }
 
             return true;
