@@ -43,26 +43,35 @@
             // 
             // labelInitialTemperature
             // 
+            this.labelInitialTemperature.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelInitialTemperature.AutoSize = true;
-            this.labelInitialTemperature.Location = new System.Drawing.Point(23, 20);
+            this.labelInitialTemperature.BackColor = System.Drawing.SystemColors.Control;
+            this.labelInitialTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelInitialTemperature.ImageAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelInitialTemperature.Location = new System.Drawing.Point(36, 20);
             this.labelInitialTemperature.Name = "labelInitialTemperature";
-            this.labelInitialTemperature.Size = new System.Drawing.Size(93, 13);
+            this.labelInitialTemperature.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.labelInitialTemperature.Size = new System.Drawing.Size(121, 17);
             this.labelInitialTemperature.TabIndex = 0;
-            this.labelInitialTemperature.Text = "Temperature initial";
+            this.labelInitialTemperature.Text = "Initial temperature";
+            this.labelInitialTemperature.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // labelResultTemperature
             // 
+            this.labelResultTemperature.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelResultTemperature.AutoSize = true;
-            this.labelResultTemperature.Location = new System.Drawing.Point(23, 67);
+            this.labelResultTemperature.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelResultTemperature.Location = new System.Drawing.Point(28, 67);
             this.labelResultTemperature.Name = "labelResultTemperature";
-            this.labelResultTemperature.Size = new System.Drawing.Size(95, 13);
+            this.labelResultTemperature.Size = new System.Drawing.Size(129, 17);
             this.labelResultTemperature.TabIndex = 1;
-            this.labelResultTemperature.Text = "Temperature result";
+            this.labelResultTemperature.Text = "Result temperature";
             // 
             // buttonConvert
             // 
+            this.buttonConvert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonConvert.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonConvert.Location = new System.Drawing.Point(23, 117);
+            this.buttonConvert.Location = new System.Drawing.Point(504, 117);
             this.buttonConvert.Name = "buttonConvert";
             this.buttonConvert.Size = new System.Drawing.Size(75, 23);
             this.buttonConvert.TabIndex = 2;
@@ -83,21 +92,25 @@
             // 
             // labelInitialScale
             // 
+            this.labelInitialScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelInitialScale.AutoSize = true;
-            this.labelInitialScale.Location = new System.Drawing.Point(303, 20);
+            this.labelInitialScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelInitialScale.Location = new System.Drawing.Point(360, 20);
             this.labelInitialScale.Name = "labelInitialScale";
-            this.labelInitialScale.Size = new System.Drawing.Size(60, 13);
+            this.labelInitialScale.Size = new System.Drawing.Size(77, 17);
             this.labelInitialScale.TabIndex = 4;
-            this.labelInitialScale.Text = "Scale initial";
+            this.labelInitialScale.Text = "Initial scale";
             // 
             // labelResultScale
             // 
+            this.labelResultScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelResultScale.AutoSize = true;
-            this.labelResultScale.Location = new System.Drawing.Point(303, 67);
+            this.labelResultScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelResultScale.Location = new System.Drawing.Point(352, 67);
             this.labelResultScale.Name = "labelResultScale";
-            this.labelResultScale.Size = new System.Drawing.Size(62, 13);
+            this.labelResultScale.Size = new System.Drawing.Size(85, 17);
             this.labelResultScale.TabIndex = 5;
-            this.labelResultScale.Text = "Scale result";
+            this.labelResultScale.Text = "Result scale";
             // 
             // comboBoxResultScale
             // 
@@ -135,14 +148,14 @@
             this.tableLayoutTemperature.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutTemperature.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutTemperature.Controls.Add(this.labelInitialTemperature, 0, 0);
-            this.tableLayoutTemperature.Controls.Add(this.buttonConvert, 0, 2);
             this.tableLayoutTemperature.Controls.Add(this.comboBoxResultScale, 3, 1);
             this.tableLayoutTemperature.Controls.Add(this.boxResultTemperature, 1, 1);
             this.tableLayoutTemperature.Controls.Add(this.labelResultScale, 2, 1);
             this.tableLayoutTemperature.Controls.Add(this.boxInitialTemperature, 1, 0);
             this.tableLayoutTemperature.Controls.Add(this.comboBoxInitialScale, 3, 0);
-            this.tableLayoutTemperature.Controls.Add(this.labelInitialScale, 2, 0);
             this.tableLayoutTemperature.Controls.Add(this.labelResultTemperature, 0, 1);
+            this.tableLayoutTemperature.Controls.Add(this.labelInitialScale, 2, 0);
+            this.tableLayoutTemperature.Controls.Add(this.buttonConvert, 3, 2);
             this.tableLayoutTemperature.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutTemperature.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.tableLayoutTemperature.Location = new System.Drawing.Point(0, 0);

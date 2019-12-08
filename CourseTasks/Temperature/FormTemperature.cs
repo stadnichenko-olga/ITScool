@@ -5,11 +5,11 @@ namespace Temperature
 {
     public partial class FormTemperature : Form
     {
-        private double initialT;
+        private double initialTemperature;
 
-        private int initalScale;
+        private int initalScale = 0;
 
-        private int resultScale;
+        private int resultScale = 0;
 
         private TemperatureModel temperatureModel = new TemperatureModel();
 
@@ -31,12 +31,18 @@ namespace Temperature
             {
                 MessageBox.Show(inputErrors);
                 boxResultTemperature.Text = "";
-                inputErrors = "";
             }
             else
             {
-                boxResultTemperature.Text = new TemperatureModel(initialT, initalScale, resultScale).resultT.ToString("F3");
+                boxResultTemperature.Text = TemperatureModel.ConvertTemperature(initialTemperature, initalScale - 1, resultScale - 1).ToString("F3");
+
             }
+
+            inputErrors = "";
+            initalScale = 0;
+            resultScale = 0;
+            comboBoxInitialScale.Items.Clear();
+            comboBoxResultScale.Items.Clear();
         }
 
         private void comboBoxInitialScale_SelectedIndexChanged(object sender, EventArgs e)
@@ -63,7 +69,8 @@ namespace Temperature
 
         private void boxInitialTemperature_TextChanged(object sender, EventArgs e)
         {
-            if (!double.TryParse(boxInitialTemperature.Text, out initialT))
+            inputErrors = "";
+            if (!double.TryParse(boxInitialTemperature.Text, out initialTemperature))
             {
                 inputErrors += "Invalid value of temperature. \n";
             }

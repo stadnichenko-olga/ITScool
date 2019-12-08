@@ -1,39 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Temperature
+﻿namespace Temperature
 {
     class TemperatureModel
     {
-        public double initialT;
+        private object[] temperatureScalesList { get; }
 
-        public double resultT;
-
-        public int initalScale;
-
-        public int resultScale;
-
-        public readonly object[] TemperatureScalesList;
-
-        public TemperatureModel() => TemperatureScalesList = new object[] { "Celsius", "Fahrenheit", "Kelvin" };
-
-        public TemperatureModel(double initialValue, int initialScaleValue, int resultScaleValue)
+        public object[] TemperatureScalesList
         {
-            initialT = initialValue;
-            initalScale = initialScaleValue;
-            resultScale = resultScaleValue;
-            resultT = TemperatureConverterFromCelsius(TemperatureConverterToCelsius(initialValue)[initialScaleValue])[resultScaleValue];
+            get => temperatureScalesList;
         }
 
-        private double[] TemperatureConverterFromCelsius(double temperatureInitial) => new double[]{temperatureInitial,
-                                                                                                  temperatureInitial * 9 / 5 + 32,
-                                                                                                  temperatureInitial + 273.15};
+        public TemperatureModel() => temperatureScalesList = new object[] { "Celsius", "Fahrenheit", "Kelvin" };
 
-        private double[] TemperatureConverterToCelsius(double temperatureInitial) => new double[]{temperatureInitial,
-                                                                                                  (temperatureInitial - 32) * 5 / 9,
-                                                                                                  temperatureInitial - 273.15 };
+        public static double ConvertTemperature(double initialValue, int initialScaleValue, int resultScaleValue) => TemperatureConverterFromCelsius(TemperatureConverterToCelsius(initialValue)[initialScaleValue])[resultScaleValue];
+        
+        private static double[] TemperatureConverterFromCelsius(double initialTemperature) => new double[]{initialTemperature,
+                                                                                                  initialTemperature * 9 / 5 + 32,
+                                                                                                  initialTemperature + 273.15};
+
+        private static double[] TemperatureConverterToCelsius(double initialTemperature) => new double[]{initialTemperature,
+                                                                                                  (initialTemperature - 32) * 5 / 9,
+                                                                                                  initialTemperature - 273.15 };
     }
 }
