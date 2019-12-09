@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Temperature
@@ -15,16 +16,28 @@ namespace Temperature
 
         private string inputErrors = "";
 
+        private bool[] inputErrorsCheckList = new bool[3];
+
         public FormTemperature()
         {
             InitializeComponent();
         }
 
         private void buttonConvert_Click(object sender, EventArgs e)
-        {
-            if (initalScale * resultScale == 0)
+        {           
+            if (inputErrorsCheckList[0] == false)
             {
-                inputErrors += "Invalid temperature scale.";
+                inputErrors += "Invalid temperature value.";
+            }
+
+            if (inputErrorsCheckList[1] == false)
+            {
+                inputErrors += "Invalid initial temperature scale.";
+            }
+
+            if (inputErrorsCheckList[2] == false)
+            {
+                inputErrors += "Invalid result temperature scale.";
             }
 
             if (inputErrors.Length != 0)
@@ -35,45 +48,48 @@ namespace Temperature
             else
             {
                 boxResultTemperature.Text = TemperatureModel.ConvertTemperature(initialTemperature, initalScale - 1, resultScale - 1).ToString("F3");
-
             }
 
             inputErrors = "";
-            initalScale = 0;
-            resultScale = 0;
-            comboBoxInitialScale.Items.Clear();
-            comboBoxResultScale.Items.Clear();
         }
 
         private void comboBoxInitialScale_SelectedIndexChanged(object sender, EventArgs e)
         {
             initalScale = comboBoxInitialScale.SelectedIndex + 1;
+
+            if (initalScale != 0)
+            {
+                inputErrorsCheckList[1] = true;
+            }
         }
 
         private void comboBoxInitialScale_DropDown(object sender, EventArgs e)
         {
             comboBoxInitialScale.Items.Clear();
             comboBoxInitialScale.Items.AddRange(temperatureModel.TemperatureScalesList);
+            inputErrorsCheckList[1] = false;
         }
 
         private void comboBoxResultScale_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        {            
             resultScale = comboBoxResultScale.SelectedIndex + 1;
+
+            if (resultScale != 0)
+            {
+                inputErrorsCheckList[2] = true;
+            }
         }
 
         private void comboBoxResultScale_DropDown(object sender, EventArgs e)
         {
             comboBoxResultScale.Items.Clear();
             comboBoxResultScale.Items.AddRange(temperatureModel.TemperatureScalesList);
+            inputErrorsCheckList[2] = false;
         }
 
         private void boxInitialTemperature_TextChanged(object sender, EventArgs e)
         {
-            inputErrors = "";
-            if (!double.TryParse(boxInitialTemperature.Text, out initialTemperature))
-            {
-                inputErrors += "Invalid value of temperature. \n";
-            }
+            inputErrorsCheckList[0] = double.TryParse(boxInitialTemperature.Text, out initialTemperature);
         }
     }
 }
