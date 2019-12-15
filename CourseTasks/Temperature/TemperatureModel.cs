@@ -1,24 +1,32 @@
-﻿namespace Temperature
+﻿using System.Linq;
+using Temperature.ScalesClasses;
+
+namespace Temperature
 {
     class TemperatureModel
     {
-        private object[] temperatureScalesList { get; }
+        internal IScales[] temperatureScalesList { get; }
 
-        public object[] TemperatureScalesList
+        public TemperatureModel(double initialTemperature) => temperatureScalesList = new IScales[] 
+            { 
+                new Celsius(initialTemperature), 
+                new Farenheit(initialTemperature), 
+                new Kelvin(initialTemperature) 
+            };
+
+        public object[] ScalesNames() => temperatureScalesList.Select(x => x.ScaleName()).ToArray();
+
+        public double ConvertTemperature(int initialScaleValue, int resultScaleValue)
         {
-            get => temperatureScalesList;
+            return ConverterFromCelsius(ConverterToCelsius()[initialScaleValue])[resultScaleValue];
         }
 
-        public TemperatureModel() => temperatureScalesList = new object[] { "Celsius", "Fahrenheit", "Kelvin" };
+        private double[] ConverterFromCelsius(double initialTemperature)
+        {
+            TemperatureModel temperatureArray = new TemperatureModel(initialTemperature);
+            return temperatureArray.temperatureScalesList.Select(x => x.TemperatureConverterFromCelsius()).ToArray(); 
+        }
 
-        public static double ConvertTemperature(double initialValue, int initialScaleValue, int resultScaleValue) => TemperatureConverterFromCelsius(TemperatureConverterToCelsius(initialValue)[initialScaleValue])[resultScaleValue];
-        
-        private static double[] TemperatureConverterFromCelsius(double initialTemperature) => new double[]{initialTemperature,
-                                                                                                  initialTemperature * 9 / 5 + 32,
-                                                                                                  initialTemperature + 273.15};
-
-        private static double[] TemperatureConverterToCelsius(double initialTemperature) => new double[]{initialTemperature,
-                                                                                                  (initialTemperature - 32) * 5 / 9,
-                                                                                                  initialTemperature - 273.15 };
+        private double[] ConverterToCelsius() => temperatureScalesList.Select(x => x.TemperatureConverterToCelsius()).ToArray();
     }
 }

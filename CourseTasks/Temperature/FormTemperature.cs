@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Temperature
@@ -12,7 +11,7 @@ namespace Temperature
 
         private int resultScale = 0;
 
-        private TemperatureModel temperatureModel = new TemperatureModel();
+        private TemperatureModel temperatureModel = new TemperatureModel(0);
 
         private string inputErrors = "";
 
@@ -47,7 +46,7 @@ namespace Temperature
             }
             else
             {
-                boxResultTemperature.Text = TemperatureModel.ConvertTemperature(initialTemperature, initalScale - 1, resultScale - 1).ToString("F3");
+                boxResultTemperature.Text = temperatureModel.ConvertTemperature(initalScale - 1, resultScale - 1).ToString("F3");
             }
 
             inputErrors = "";
@@ -66,7 +65,7 @@ namespace Temperature
         private void comboBoxInitialScale_DropDown(object sender, EventArgs e)
         {
             comboBoxInitialScale.Items.Clear();
-            comboBoxInitialScale.Items.AddRange(temperatureModel.TemperatureScalesList);
+            comboBoxInitialScale.Items.AddRange(temperatureModel.ScalesNames());
             inputErrorsCheckList[1] = false;
         }
 
@@ -83,13 +82,14 @@ namespace Temperature
         private void comboBoxResultScale_DropDown(object sender, EventArgs e)
         {
             comboBoxResultScale.Items.Clear();
-            comboBoxResultScale.Items.AddRange(temperatureModel.TemperatureScalesList);
+            comboBoxResultScale.Items.AddRange(temperatureModel.ScalesNames());
             inputErrorsCheckList[2] = false;
         }
 
         private void boxInitialTemperature_TextChanged(object sender, EventArgs e)
         {
             inputErrorsCheckList[0] = double.TryParse(boxInitialTemperature.Text, out initialTemperature);
+            temperatureModel = new TemperatureModel(initialTemperature);
         }
     }
 }
