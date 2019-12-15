@@ -17,6 +17,7 @@ namespace Lists
             linkedList.Add("G");
             linkedList.Add("H");
             linkedList.Add("I");
+            linkedList.Add(null);
 
             Console.WriteLine(linkedList);
             Console.WriteLine($"List length = {linkedList.Count}.");
@@ -32,6 +33,12 @@ namespace Lists
             linkedList.Remove("M");
             Console.WriteLine("Remove element M");
             Console.WriteLine(linkedList);
+
+            if (linkedList.Remove(null))
+            {
+                Console.WriteLine("Remove element null");
+                Console.WriteLine(linkedList);
+            }
 
             Console.WriteLine($"Element index 4 = {linkedList.GetValue(4).ToString()}");
             linkedList.RemoveAt(4);

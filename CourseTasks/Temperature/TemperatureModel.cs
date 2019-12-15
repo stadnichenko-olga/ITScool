@@ -7,11 +7,11 @@ namespace Temperature
     {
         internal IScales[] temperatureScalesList { get; }
 
-        public TemperatureModel(double initialTemperature) => temperatureScalesList = new IScales[] 
-            { 
-                new Celsius(initialTemperature), 
-                new Farenheit(initialTemperature), 
-                new Kelvin(initialTemperature) 
+        public TemperatureModel(double initialTemperature) => temperatureScalesList = new IScales[]
+            {
+                new Celsius(initialTemperature),
+                new Farenheit(initialTemperature),
+                new Kelvin(initialTemperature)
             };
 
         public object[] ScalesNames() => temperatureScalesList.Select(x => x.ScaleName()).ToArray();
@@ -24,7 +24,7 @@ namespace Temperature
         private double[] ConverterFromCelsius(double initialTemperature)
         {
             TemperatureModel temperatureArray = new TemperatureModel(initialTemperature);
-            return temperatureArray.temperatureScalesList.Select(x => x.TemperatureConverterFromCelsius()).ToArray(); 
+            return temperatureArray.temperatureScalesList.Select(x => x.TemperatureConverterFromCelsius()).ToArray();
         }
 
         private double[] ConverterToCelsius() => temperatureScalesList.Select(x => x.TemperatureConverterToCelsius()).ToArray();

@@ -9,7 +9,7 @@ namespace Lists
     {
         private Node<T> head;
 
-        private int changesCount = 0;
+        private int changesCount;
 
         public int Count { get; private set; }
 
@@ -40,7 +40,7 @@ namespace Lists
         {
             var newNode = new Node<T>(data);
 
-            if (Equals(head, null))
+            if (head == null)
             {
                 head = newNode;
             }
@@ -109,14 +109,13 @@ namespace Lists
             Node<T> current = head;
             Node<T> previous = null;
 
-            while (!Equals(current, null))
+            while (current != null)
             {
-                if (current.Data.Equals(data))
+                if (Equals(current.Data, data))
                 {
                     if (!Equals(previous, null))
                     {
                         previous.Next = current.Next;
-                        current = null;
                     }
                     else
                     {
@@ -158,7 +157,6 @@ namespace Lists
             var data = current.Data;
 
             previous.Next = current.Next;
-            current = null;
 
             Count--;
             changesCount++;
@@ -200,32 +198,40 @@ namespace Lists
 
         public LinkedList<T> Copy()
         {
-            if (Equals(head, null))
+            if (head == null)
             {
                 return new LinkedList<T>();
             }
 
-            LinkedList<T> result = new LinkedList<T>();
-            Node<T> current = head;
-            int i = 0;
+            LinkedList<T> result = new LinkedList<T>();  
+            
+            Node<T> current = head;            
+            result.head = new Node<T>(head.Data);
 
-            while (i < Count)
+            int i = 0;
+            
+            Node<T> previous = result.head;
+
+            while (current.Next != null)
             {
-                result.AddFirst(current.Data);
-                current = current.Next;
+                var node = new Node<T>(current.Next.Data);
+
+                node.Next = result.head;
+                result.head = node;
+                
+                current = current.Next;                         
                 i++;
             }
 
-            result.Revert();
+            
 
             return result;
         }
 
         public void Revert()
         {
-            if (Equals(head, null))
+            if (head == null)
             {
-                changesCount++;
                 return;
             }
 
@@ -257,7 +263,8 @@ namespace Lists
 
             foreach (var item in this)
             {
-                result.Append(item + " ");
+                result.Append(item);
+                result.Append(" ");
             }
 
             return result.ToString();
@@ -300,7 +307,7 @@ namespace Lists
 
             while (i < Count)
             {
-                if (!node1.Data.Equals(node2.Data))
+                if (!Equals(node1.Data, node2.Data))
                 {
                     return false;
                 }
@@ -316,6 +323,7 @@ namespace Lists
         public IEnumerator<T> GetEnumerator()
         {
             int initialChangesCount = changesCount;
+            Node<T> current = head;
 
             for (int i = 0; i < Count; i++)
             {
@@ -324,7 +332,8 @@ namespace Lists
                     throw new InvalidOperationException("The object was changed while iterations");
                 }
 
-                yield return this[i].Data;
+                yield return current.Data;
+                current = current.Next;
             }
         }
 

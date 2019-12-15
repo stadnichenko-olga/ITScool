@@ -11,5 +11,11 @@
             Data = data;
             Next = null;
         }
+
+        public Node(T data, Node<T> nodeNext)
+        {
+            Data = data;
+            Next = nodeNext;
+        }
     }
 }
