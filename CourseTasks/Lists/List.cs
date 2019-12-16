@@ -203,27 +203,19 @@ namespace Lists
                 return new LinkedList<T>();
             }
 
-            LinkedList<T> result = new LinkedList<T>();  
-            
-            Node<T> current = head;            
-            result.head = new Node<T>(head.Data);
+            LinkedList<T> result = new LinkedList<T>();
+            Node<T> current = head;
 
-            int i = 0;
-            
-            Node<T> previous = result.head;
-
-            while (current.Next != null)
+            while (current != null)
             {
-                var node = new Node<T>(current.Next.Data);
-
+                var node = new Node<T>(current.Data);
                 node.Next = result.head;
                 result.head = node;
-                
-                current = current.Next;                         
-                i++;
+                result.Count++;
+                current = current.Next;
             }
 
-            
+            result.Revert();
 
             return result;
         }
