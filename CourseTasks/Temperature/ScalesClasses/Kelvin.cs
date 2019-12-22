@@ -1,6 +1,6 @@
 ﻿namespace Temperature.ScalesClasses
 {
-    class Kelvin : IScales
+    class Kelvin : IScale
     {
         private readonly double temperature;
 
@@ -9,10 +9,10 @@
             temperature = initialTemperature;
         }
 
-        public double TemperatureConverterFromCelsius() => temperature + 273.15;
+        public double ConvertTemperatureFromCelsius() => temperature + 273.15;
 
-        public double TemperatureConverterToCelsius() => temperature - 273.15;
+        public double ConvertTemperatureToCelsius() => temperature - 273.15;
 
-        public object ScaleName() => "Kelvin";
+        public string PrintScaleName() => "Kelvin";
     }
 }

@@ -5,28 +5,29 @@ namespace Temperature
 {
     class TemperatureModel
     {
-        internal IScales[] temperatureScalesList { get; }
+        internal IScale[] TemperatureScalesList { get; }
 
-        public TemperatureModel(double initialTemperature) => temperatureScalesList = new IScales[]
+        public TemperatureModel(double initialTemperature) => TemperatureScalesList = new IScale[]
             {
                 new Celsius(initialTemperature),
                 new Farenheit(initialTemperature),
                 new Kelvin(initialTemperature)
             };
 
-        public object[] ScalesNames() => temperatureScalesList.Select(x => x.ScaleName()).ToArray();
+        public string[] ScalesNames() => TemperatureScalesList.Select(x => x.PrintScaleName()).ToArray();
 
         public double ConvertTemperature(int initialScaleValue, int resultScaleValue)
         {
-            return ConverterFromCelsius(ConverterToCelsius()[initialScaleValue])[resultScaleValue];
+            return ConverterFromCelsius(ConverterToCelsius(initialScaleValue), resultScaleValue);
         }
 
-        private double[] ConverterFromCelsius(double initialTemperature)
+        private double ConverterFromCelsius(double initialTemperature, int resultScaleValue)
         {
             TemperatureModel temperatureArray = new TemperatureModel(initialTemperature);
-            return temperatureArray.temperatureScalesList.Select(x => x.TemperatureConverterFromCelsius()).ToArray();
+            return temperatureArray.TemperatureScalesList.Select(x => x.ConvertTemperatureFromCelsius()).ToArray()[resultScaleValue];
         }
 
-        private double[] ConverterToCelsius() => temperatureScalesList.Select(x => x.TemperatureConverterToCelsius()).ToArray();
+        private double ConverterToCelsius(int initialScaleValue) =>
+            TemperatureScalesList.Select(x => x.ConvertTemperatureToCelsius()).ToArray()[initialScaleValue];
     }
 }

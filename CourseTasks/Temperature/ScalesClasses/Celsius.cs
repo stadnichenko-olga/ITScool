@@ -1,8 +1,6 @@
-﻿
-
-namespace Temperature
+﻿namespace Temperature.ScalesClasses
 {
-    class Celsius : IScales
+    class Celsius : IScale
     {
         private readonly double temperature;
 
@@ -11,10 +9,10 @@ namespace Temperature
             temperature = initialTemperature;
         }
 
-        public double TemperatureConverterFromCelsius() => temperature;
+        public double ConvertTemperatureFromCelsius() => temperature;
 
-        public double TemperatureConverterToCelsius() => temperature;
+        public double ConvertTemperatureToCelsius() => temperature;
 
-        public object ScaleName() => "Celsius";
+        public string PrintScaleName() => "Celsius";
     }
 }

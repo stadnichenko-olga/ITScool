@@ -1,11 +1,11 @@
-﻿namespace Temperature
+﻿namespace Temperature.ScalesClasses
 {
-    public interface IScales
+    public interface IScale
     {
-        double TemperatureConverterFromCelsius();
+        double ConvertTemperatureFromCelsius();
 
-        double TemperatureConverterToCelsius();
+        double ConvertTemperatureToCelsius();
 
-        object ScaleName();
+        string PrintScaleName();
     }
 }
