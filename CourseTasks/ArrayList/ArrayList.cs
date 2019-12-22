@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,13 +6,21 @@ namespace ArrayList
 {
     public class ArrayList<T> : IList<T>
     {
-        private const int defaultCapacity = 8;
+        private const int DefaultCapacity = 8;
 
-        private T[] items = new T[defaultCapacity];
+        private T[] items;
 
         private int Length { get; set; }
 
-        private int changesCount = 0;
+        private int changesCount;
+
+        private bool isReadOnly { get; set; }
+
+        public ArrayList()
+        {
+            items = new T[DefaultCapacity];
+            Length = 0;
+        }
 
         public ArrayList(int capacity)
         {
@@ -25,7 +33,6 @@ namespace ArrayList
             Length = 0;
         }
 
-        public int Count() => Length;
 
         private void CheckIndex(int index)
         {
@@ -35,24 +42,38 @@ namespace ArrayList
             }
         }
 
-        public void Remove(T item)
+        public bool Remove(T item)
         {
+            if (IsReadOnly)
+            {
+                throw new AccessViolationException("Modification of a read-only value attempted.");
+            }
+
             int index = IndexOf(item);
 
             if (index >= 0)
             {
                 RemoveAt(index);
+                return true;
             }
+
+            return false;
         }
 
         public void RemoveAt(int index)
         {
+            if (IsReadOnly)
+            {
+                throw new AccessViolationException("Modification of a read-only value attempted.");
+            }
+
             CheckIndex(index);
 
-            for (int i = index; i < Length; i++)
-            {
-                items[i] = items[i + 1];
-            }
+            Array itemsNew = Array.CreateInstance(typeof(T), items.Length);
+            Array.Copy(items, itemsNew, items.Length);
+            int itemsLeft = items.Length - index;
+
+            Array.Copy(itemsNew, index + 1, items, index, itemsLeft);
 
             Length--;
             changesCount++;
@@ -92,19 +113,44 @@ namespace ArrayList
 
         public void Insert(int index, T value)
         {
+            if (IsReadOnly)
+            {
+                throw new AccessViolationException("Modification of a read-only value attempted.");
+            }
+
             CheckIndex(index);
 
             if (Length == Capacity) EnsureCapacity(Length + 1);
 
-            for (int i = Capacity - 1; i > index; i--)
+            Array itemsNew = Array.CreateInstance(typeof(T), items.Length);
+            Array.Copy(items, itemsNew, Count());
+            int itemsLeft = Count() - index;
+
+            if (itemsLeft > 0)
             {
-                items[i] = items[i - 1];
+                Array.Copy(itemsNew, index, items, index + 1, itemsLeft);
             }
 
             items[index] = value;
             Length++;
             changesCount++;
         }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            if (IsReadOnly)
+            {
+                throw new AccessViolationException("Modification of a read-only value attempted.");
+            }
+
+            int arrayLength = array.Length;
+
+            for (int i = 0; i < arrayLength; i++)
+            {
+                Insert(arrayIndex + i, array[i]);
+            }
+        }
+
         public void TrimExcess() => Array.Resize(ref items, Capacity);
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
@@ -163,11 +209,17 @@ namespace ArrayList
                     }
                     else
                     {
-                        items = new T[defaultCapacity];
+                        items = new T[DefaultCapacity];
                     }
                 }
             }
         }
+
+        public bool IsReadOnly => isReadOnly;
+
+        int ICollection<T>.Count => Length;
+
+        public int Count() => Length;
 
         public ArrayList<T> SubList(int index, int length)
         {
@@ -176,7 +228,7 @@ namespace ArrayList
 
             var result = new ArrayList<T>(Capacity);
 
-            for (int i=index; i<index+length; i++)
+            for (int i = index; i < index + length; i++)
             {
                 result.Add(items[i]);
             }
@@ -196,7 +248,7 @@ namespace ArrayList
         {
             if (items.Length < min)
             {
-                int newCapacity = (items.Length == 0) ? defaultCapacity : (items.Length * 2);
+                int newCapacity = (items.Length == 0) ? DefaultCapacity : (items.Length * 2);
 
                 if (newCapacity < min)
                 {
@@ -217,7 +269,7 @@ namespace ArrayList
                 items[Length] = value;
                 Length++;
                 changesCount++;
-           }           
+            }
         }
 
         public bool Contains(T value)
@@ -243,5 +295,6 @@ namespace ArrayList
 
             changesCount++;
         }
+
     }
 }
