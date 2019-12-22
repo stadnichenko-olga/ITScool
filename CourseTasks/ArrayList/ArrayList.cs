@@ -10,7 +10,25 @@ namespace ArrayList
 
         private T[] items;
 
-        private int Length { get; set; }
+        private int _Count;
+
+        public int Count
+        {
+            get
+            {
+                return _Count;
+            }
+
+            set
+            {
+                _Count = value;
+
+                if (value == items.Length)
+                {
+                    Capacity = items.Length * 2;
+                }
+            }
+        }
 
         private int changesCount;
 
@@ -19,7 +37,7 @@ namespace ArrayList
         public ArrayList()
         {
             items = new T[DefaultCapacity];
-            Length = 0;
+            Count = 0;
         }
 
         public ArrayList(int capacity)
@@ -30,24 +48,28 @@ namespace ArrayList
             }
 
             items = new T[capacity];
-            Length = 0;
+            Count = 0;
         }
-
 
         private void CheckIndex(int index)
         {
-            if (index < 0 || index >= Capacity)
+            if (index < 0 || index >= Count)
             {
-                throw new IndexOutOfRangeException($"Index value {index} is out of range [0,{Length - 1}]");
+                throw new IndexOutOfRangeException($"Index value {index} is out of range [0,{Count - 1}]");
             }
         }
 
-        public bool Remove(T item)
+        private void CheckReadOnly()
         {
             if (IsReadOnly)
             {
                 throw new AccessViolationException("Modification of a read-only value attempted.");
             }
+        }
+
+        public bool Remove(T item)
+        {
+            CheckReadOnly();
 
             int index = IndexOf(item);
 
@@ -62,34 +84,38 @@ namespace ArrayList
 
         public void RemoveAt(int index)
         {
-            if (IsReadOnly)
-            {
-                throw new AccessViolationException("Modification of a read-only value attempted.");
-            }
+            CheckReadOnly();
 
             CheckIndex(index);
 
+            Count--;
+
             Array itemsNew = Array.CreateInstance(typeof(T), items.Length);
-            Array.Copy(items, itemsNew, items.Length);
-            int itemsLeft = items.Length - index;
+            Array.Copy(items, itemsNew, Count);
 
-            Array.Copy(itemsNew, index + 1, items, index, itemsLeft);
+            if (index > 0)
+            {
+                Array.Copy(itemsNew, items, index);
+            }
 
-            Length--;
+            Array.Copy(itemsNew, index + 1, items, index, Count - index);
+
             changesCount++;
         }
 
         public int IndexOf(T value)
         {
-            int i = 0;
-
-            foreach (var item in items)
+            if (Equals(value, null))
             {
-                if (item.Equals(value))
+                return Count;
+            }
+
+            for (int i = 0; i < Count; i++)
+            {
+                if (Equals(items[i], value))
                 {
                     return i;
                 }
-                i++;
             }
 
             return -1;
@@ -107,57 +133,67 @@ namespace ArrayList
             {
                 CheckIndex(index);
                 items[index] = value;
-                changesCount++;
             }
         }
 
         public void Insert(int index, T value)
         {
-            if (IsReadOnly)
-            {
-                throw new AccessViolationException("Modification of a read-only value attempted.");
-            }
+            CheckReadOnly();
 
             CheckIndex(index);
 
-            if (Length == Capacity) EnsureCapacity(Length + 1);
-
             Array itemsNew = Array.CreateInstance(typeof(T), items.Length);
-            Array.Copy(items, itemsNew, Count());
-            int itemsLeft = Count() - index;
+            Array.Copy(items, itemsNew, Count);
 
-            if (itemsLeft > 0)
+            if (index > 0)
             {
-                Array.Copy(itemsNew, index, items, index + 1, itemsLeft);
+                Array.Copy(itemsNew, items, index - 1);
             }
 
             items[index] = value;
-            Length++;
+
+            Array.Copy(itemsNew, index, items, index + 1, Count - index);
+
+            Count++;
             changesCount++;
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            if (IsReadOnly)
+            CheckReadOnly();
+
+            Array itemsNew = Array.CreateInstance(typeof(T), items.Length);
+            Array.Copy(items, itemsNew, Count);
+
+            Count += array.Length;
+
+            if (arrayIndex > 0)
             {
-                throw new AccessViolationException("Modification of a read-only value attempted.");
+                Array.Copy(itemsNew, items, arrayIndex - 1);
             }
 
-            int arrayLength = array.Length;
+            Array.Copy(array, 0, items, arrayIndex, array.Length);
 
-            for (int i = 0; i < arrayLength; i++)
-            {
-                Insert(arrayIndex + i, array[i]);
-            }
+            Array.Copy(itemsNew, arrayIndex, items, arrayIndex + array.Length, Count - arrayIndex);
         }
 
-        public void TrimExcess() => Array.Resize(ref items, Capacity);
+        public void TrimExcess()
+        {
+            if (Count >= Capacity)
+            {
+                return;
+            }
+
+            Array.Resize(ref items, Count);
+
+            Capacity = Count;
+        }
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
             int initialChangesCount = changesCount;
 
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Count; i++)
             {
                 if (initialChangesCount != changesCount)
                 {
@@ -170,113 +206,59 @@ namespace ArrayList
 
         public IEnumerator GetEnumerator()
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < Count; i++)
             {
                 yield return items[i];
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
         public virtual int Capacity
         {
-            get { return items.Length; }
-            set
+            get
+            {
+                return items.Length;
+            }
+
+            private set
             {
                 if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException("Capacity value is negative");
                 }
 
-                if (value < items.Length)
+                if (value < Count)
                 {
-                    throw new ArgumentOutOfRangeException($"Capacity value is less then initial capacity = {Length}");
+                    throw new ArgumentOutOfRangeException($"Capacity value is less then Count = {Count}");
                 }
 
-                if (value != items.Length)
-                {
-                    if (value > 0)
-                    {
-                        var newItems = new T[value];
-                        if (Length > 0)
-                        {
-                            Array.Copy(items, 0, newItems, 0, Length);
-                        }
-                        items = newItems;
-                    }
-                    else
-                    {
-                        items = new T[DefaultCapacity];
-                    }
-                }
+                var newItems = new T[value];
+                Array.Copy(items, 0, newItems, 0, Count);
+
+                items = newItems;
             }
         }
 
         public bool IsReadOnly => isReadOnly;
 
-        int ICollection<T>.Count => Length;
-
-        public int Count() => Length;
-
-        public ArrayList<T> SubList(int index, int length)
-        {
-            CheckIndex(index);
-            CheckIndex(index + length);
-
-            var result = new ArrayList<T>(Capacity);
-
-            for (int i = index; i < index + length; i++)
-            {
-                result.Add(items[i]);
-            }
-
-            return result;
-        }
-
-        private void IncreaseCapacity()
-        {
-            T[] old = items;
-            items = new T[old.Length * 2];
-            Array.Copy(old, 0, items, 0, old.Length);
-            changesCount++;
-        }
-
-        private void EnsureCapacity(int min)
-        {
-            if (items.Length < min)
-            {
-                int newCapacity = (items.Length == 0) ? DefaultCapacity : (items.Length * 2);
-
-                if (newCapacity < min)
-                {
-                    newCapacity = min;
-                }
-
-                Capacity = newCapacity;
-                changesCount++;
-            }
-        }
-
         public void Add(T value)
         {
-            if (Length == Capacity) EnsureCapacity(Length + 1);
+            CheckReadOnly();
 
-            if (Length < Capacity)
-            {
-                items[Length] = value;
-                Length++;
-                changesCount++;
-            }
+            items[Count] = value;
+            Count++;
+            changesCount++;
         }
 
         public bool Contains(T value)
         {
-            foreach (var item in items)
+            if (Equals(value, null))
             {
-                if (item.Equals(value))
+                return true;
+            }
+
+            for (int i = 0; i < Count; i++)
+            {
+                if (Equals(items[i], value))
                 {
                     return true;
                 }
@@ -287,14 +269,13 @@ namespace ArrayList
 
         public void Clear()
         {
-            if (Length != 0)
+            if (Count != 0)
             {
-                Array.Clear(items, 0, Length);
-                Length = 0;
+                Array.Clear(items, 0, Count);
+                Count = 0;
             }
 
             changesCount++;
         }
-
     }
 }
