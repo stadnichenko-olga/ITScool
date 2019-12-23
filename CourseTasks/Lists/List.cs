@@ -67,7 +67,7 @@ namespace Lists
             {
                 CheckIndex(index);
 
-                Node<T> node = head;
+                var node = head;
 
                 for (int i = 0; i < index; i++)
                 {
@@ -91,7 +91,7 @@ namespace Lists
 
             var newNode = new Node<T>(data);
 
-            Node<T> node = this[index - 1];
+            var node = this[index - 1];
             newNode.Next = node.Next;
             node.Next = newNode;
 
@@ -106,7 +106,7 @@ namespace Lists
                 return true;
             }
 
-            Node<T> current = head;
+            var current = head;
             Node<T> previous = null;
 
             while (current != null)
@@ -143,7 +143,7 @@ namespace Lists
                 return RemoveFirst();
             }
 
-            Node<T> current = head;
+            var current = head;
             Node<T> previous = null;
             int i = 0;
 
@@ -156,7 +156,10 @@ namespace Lists
 
             var data = current.Data;
 
-            previous.Next = current.Next;
+            if (previous != null)
+            {
+                previous.Next = current.Next;
+            }
 
             Count--;
             changesCount++;
@@ -190,7 +193,7 @@ namespace Lists
         {
             CheckIndex(index);
 
-            Node<T> node = this[index];
+            var node = this[index];
             node.Data = data;
 
             changesCount++;
@@ -203,8 +206,8 @@ namespace Lists
                 return new LinkedList<T>();
             }
 
-            LinkedList<T> result = new LinkedList<T>();
-            Node<T> current = head;
+            var result = new LinkedList<T>();
+            var current = head;
 
             while (current != null)
             {
@@ -227,13 +230,13 @@ namespace Lists
                 return;
             }
 
-            Node<T> current = head;
+            var current = head;
             Node<T> previous = null;
             int i = 0;
 
             while (i < Count)
             {
-                Node<T> temp = current.Next;
+                var temp = current.Next;
                 current.Next = previous;
                 previous = current;
                 head = current;
@@ -251,7 +254,7 @@ namespace Lists
                 return head.Data.ToString();
             }
 
-            StringBuilder result = new StringBuilder();
+            var result = new StringBuilder();
 
             foreach (var item in this)
             {
@@ -286,15 +289,15 @@ namespace Lists
                 return false;
             }
 
-            LinkedList<T> linkedList = (LinkedList<T>)obj;
+            var linkedList = (LinkedList<T>)obj;
 
             if (Count != linkedList.Count)
             {
                 return false;
             }
 
-            Node<T> node1 = head;
-            Node<T> node2 = linkedList.head;
+            var node1 = head;
+            var node2 = linkedList.head;
             int i = 0;
 
             while (i < Count)
@@ -315,7 +318,7 @@ namespace Lists
         public IEnumerator<T> GetEnumerator()
         {
             int initialChangesCount = changesCount;
-            Node<T> current = head;
+            var current = head;
 
             for (int i = 0; i < Count; i++)
             {

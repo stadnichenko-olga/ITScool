@@ -6,7 +6,7 @@ namespace Lists
     {
         static void Main(string[] args)
         {
-            LinkedList<string> linkedList = new LinkedList<string>();
+            var linkedList = new LinkedList<string>();
 
             linkedList.Add("A");
             linkedList.Add("B");
@@ -50,7 +50,7 @@ namespace Lists
             Console.WriteLine(linkedList);
 
             Console.WriteLine("Make a copy of the List");
-            LinkedList<string> linkedListCopy = linkedList.Copy();
+            var linkedListCopy = linkedList.Copy();
             Console.WriteLine(linkedListCopy);
 
             Console.ReadKey();
