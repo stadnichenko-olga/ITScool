@@ -10,18 +10,15 @@ namespace ArrayList
 
         private T[] items;
 
-        private int _Count;
+        private int count;
 
         public int Count
         {
-            get
-            {
-                return _Count;
-            }
+            get => count;
 
-            set
+            private set
             {
-                _Count = value;
+                count = value;
 
                 if (value == items.Length)
                 {
@@ -32,7 +29,7 @@ namespace ArrayList
 
         private int changesCount;
 
-        private bool isReadOnly { get; set; }
+        public bool IsReadOnly => false;
 
         public ArrayList()
         {
@@ -44,7 +41,7 @@ namespace ArrayList
         {
             if (capacity < 0)
             {
-                throw new ArgumentOutOfRangeException("Capacity value is negative");
+                throw new ArgumentOutOfRangeException(nameof(capacity), "Capacity value is negative");
             }
 
             items = new T[capacity];
@@ -71,7 +68,7 @@ namespace ArrayList
         {
             CheckReadOnly();
 
-            int index = IndexOf(item);
+            var index = IndexOf(item);
 
             if (index >= 0)
             {
@@ -90,7 +87,7 @@ namespace ArrayList
 
             Count--;
 
-            Array itemsNew = Array.CreateInstance(typeof(T), items.Length);
+            var itemsNew = Array.CreateInstance(typeof(T), items.Length);
             Array.Copy(items, itemsNew, Count);
 
             if (index > 0)
@@ -105,11 +102,6 @@ namespace ArrayList
 
         public int IndexOf(T value)
         {
-            if (Equals(value, null))
-            {
-                return Count;
-            }
-
             for (int i = 0; i < Count; i++)
             {
                 if (Equals(items[i], value))
@@ -142,7 +134,7 @@ namespace ArrayList
 
             CheckIndex(index);
 
-            Array itemsNew = Array.CreateInstance(typeof(T), items.Length);
+            var itemsNew = Array.CreateInstance(typeof(T), items.Length);
             Array.Copy(items, itemsNew, Count);
 
             if (index > 0)
@@ -162,7 +154,7 @@ namespace ArrayList
         {
             CheckReadOnly();
 
-            Array itemsNew = Array.CreateInstance(typeof(T), items.Length);
+            var itemsNew = Array.CreateInstance(typeof(T), items.Length);
             Array.Copy(items, itemsNew, Count);
 
             Count += array.Length;
@@ -212,23 +204,20 @@ namespace ArrayList
             }
         }
 
-        public virtual int Capacity
+        public int Capacity
         {
-            get
-            {
-                return items.Length;
-            }
+            get => items.Length;
 
             private set
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException("Capacity value is negative");
+                    throw new ArgumentOutOfRangeException(nameof(value), "Capacity value is negative");
                 }
 
                 if (value < Count)
                 {
-                    throw new ArgumentOutOfRangeException($"Capacity value is less then Count = {Count}");
+                    throw new ArgumentOutOfRangeException(nameof(value), $"Capacity value is less then Count = {Count}");
                 }
 
                 var newItems = new T[value];
@@ -237,9 +226,7 @@ namespace ArrayList
                 items = newItems;
             }
         }
-
-        public bool IsReadOnly => isReadOnly;
-
+        
         public void Add(T value)
         {
             CheckReadOnly();

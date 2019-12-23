@@ -2,7 +2,7 @@
 
 namespace ArrayList
 {
-    class ArrayLists
+    static class ArrayLists
     {
         static void Main()
         {
@@ -54,34 +54,13 @@ namespace ArrayList
 
             Console.WriteLine();
 
-            if (items.Contains(null))
-            {
-                Console.WriteLine("Items contains NULL");
-            }
-            else
-            {
-                Console.WriteLine("Items doesn't contain NULL");
-            }
+            Console.WriteLine(items.Contains(null) ? "Items contains NULL" : "Items doesn't contain NULL");
 
-            if (items.Contains("John"))
-            {
-                Console.WriteLine("Items contains John");
-            }
-            else
-            {
-                Console.WriteLine("Items doesn't contain John");
-            }
+            Console.WriteLine(items.Contains("John") ? "Items contains John" : "Items doesn't contain John");
 
             Console.WriteLine($"Index of item John {items.IndexOf("John")}");
 
-            if (items.Contains("Mary"))
-            {
-                Console.WriteLine("Items contains Mary");
-            }
-            else
-            {
-                Console.WriteLine("Items doesn't contain Mary");
-            }
+            Console.WriteLine(items.Contains("Mary") ? "Items contains Mary" : "Items doesn't contain Mary");
 
             Console.WriteLine($"Index of item Mary {items.IndexOf("Mary")}");
 
