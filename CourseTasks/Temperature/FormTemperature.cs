@@ -38,7 +38,7 @@ namespace Temperature
         {
             if (!double.TryParse(boxInitialTemperature.Text, out initialTemperature))
             {
-                MessageBox.Show("Invalid temperature value.");
+                MessageBox.Show(@"Invalid temperature value.");
                 boxResultTemperature.Text = "";
             }
 
@@ -48,11 +48,11 @@ namespace Temperature
         private void FormTemperature_Load(object sender, EventArgs e)
         {
             comboBoxInitialScale.Items.Clear();
-            comboBoxInitialScale.Items.AddRange(temperatureModel.ScalesNames());
+            comboBoxInitialScale.Items.AddRange(temperatureModel.PrintScalesNames());
             comboBoxInitialScale.SelectedIndex = 0;
 
             comboBoxResultScale.Items.Clear();
-            comboBoxResultScale.Items.AddRange(temperatureModel.ScalesNames());
+            comboBoxResultScale.Items.AddRange(temperatureModel.PrintScalesNames());
             comboBoxResultScale.SelectedIndex = 0;
         }
     }
