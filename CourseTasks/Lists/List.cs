@@ -69,7 +69,7 @@ namespace Lists
 
                 var node = head;
 
-                for (int i = 0; i < index; i++)
+                for (var i = 0; i < index; i++)
                 {
                     node = node.Next;
                 }
@@ -101,13 +101,31 @@ namespace Lists
 
         public bool Remove(T data)
         {
-            if (Equals(data, null))
-            {
-                return true;
-            }
-
             var current = head;
             Node<T> previous = null;
+
+            if (Equals(data, null))
+            {
+                while (current.Data != null)
+                {
+                    previous = current;
+                    current = current.Next;
+                }
+
+                if (!Equals(previous, null))
+                {
+                    previous.Next = current.Next;
+                }
+                else
+                {
+                    head = head.Next;
+                }
+
+                Count--;
+                changesCount++;
+
+                return true;
+            }
 
             while (current != null)
             {
@@ -145,7 +163,7 @@ namespace Lists
 
             var current = head;
             Node<T> previous = null;
-            int i = 0;
+            var i = 0;
 
             while (i < index)
             {
@@ -208,17 +226,20 @@ namespace Lists
 
             var result = new LinkedList<T>();
             var current = head;
+            result.head = new Node<T>(current.Data);
+            result.Count++;
+
+            var previousNode = result.head;
+            current = current.Next;
 
             while (current != null)
             {
                 var node = new Node<T>(current.Data);
-                node.Next = result.head;
-                result.head = node;
+                previousNode.Next = node;
+                previousNode = previousNode.Next;
                 result.Count++;
                 current = current.Next;
             }
-
-            result.Revert();
 
             return result;
         }
@@ -232,7 +253,7 @@ namespace Lists
 
             var current = head;
             Node<T> previous = null;
-            int i = 0;
+            var i = 0;
 
             while (i < Count)
             {
@@ -255,19 +276,28 @@ namespace Lists
             }
 
             var result = new StringBuilder();
+            result.Append("[");
 
             foreach (var item in this)
             {
-                result.Append(item);
-                result.Append(" ");
+                if (Equals(item, null))
+                {
+                    result.Append("null");
+                    result.Append(", ");
+                }
+                else
+                {
+                    result.Append(item);
+                    result.Append(", ");
+                }
             }
 
-            return result.ToString();
+            return result.ToString().Substring(0, result.ToString().Length - 2) + "]";
         }
 
         public override int GetHashCode()
         {
-            int result = 17;
+            var result = 17;
 
             foreach (var item in this)
             {
@@ -298,7 +328,7 @@ namespace Lists
 
             var node1 = head;
             var node2 = linkedList.head;
-            int i = 0;
+            var i = 0;
 
             while (i < Count)
             {
@@ -317,10 +347,10 @@ namespace Lists
 
         public IEnumerator<T> GetEnumerator()
         {
-            int initialChangesCount = changesCount;
+            var initialChangesCount = changesCount;
             var current = head;
 
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
             {
                 if (initialChangesCount != changesCount)
                 {

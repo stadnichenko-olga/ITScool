@@ -7,17 +7,17 @@ namespace Lists
         static void Main(string[] args)
         {
             var linkedList = new LinkedList<string>();
-
+           
             linkedList.Add("A");
             linkedList.Add("B");
             linkedList.Add("C");
             linkedList.Add("D");
             linkedList.Add("E");
             linkedList.Add("F");
+            linkedList.Add(null);
             linkedList.Add("G");
             linkedList.Add("H");
             linkedList.Add("I");
-            linkedList.Add(null);
 
             Console.WriteLine(linkedList);
             Console.WriteLine($"List length = {linkedList.Count}.");

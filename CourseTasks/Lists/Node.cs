@@ -12,10 +12,10 @@
             Next = null;
         }
 
-        public Node(T data, Node<T> nodeNext)
+        public Node(T data, Node<T> nextNode)
         {
             Data = data;
-            Next = nodeNext;
+            Next = nextNode;
         }
     }
 }
