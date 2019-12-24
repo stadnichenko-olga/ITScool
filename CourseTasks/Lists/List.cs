@@ -161,17 +161,8 @@ namespace Lists
                 return RemoveFirst();
             }
 
-            var current = head;
-            Node<T> previous = null;
-            var i = 0;
-
-            while (i < index)
-            {
-                previous = current;
-                current = current.Next;
-                i++;
-            }
-
+            var previous = this[index - 1];
+            var current = this[index];
             var data = current.Data;
 
             if (previous != null)
