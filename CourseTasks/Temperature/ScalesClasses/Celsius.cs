@@ -2,17 +2,10 @@
 {
     class Celsius : IScale
     {
-        private readonly double temperature;
+        public double ConvertTemperatureFromCelsius(double temperature) => temperature;
 
-        public Celsius(double initialTemperature)
-        {
-            temperature = initialTemperature;
-        }
+        public double ConvertTemperatureToCelsius(double temperature) => temperature;
 
-        public double ConvertTemperatureFromCelsius() => temperature;
-
-        public double ConvertTemperatureToCelsius() => temperature;
-
-        public string PrintScaleName() => "Celsius";
+        public string GetScaleName() => "Celsius";
     }
 }

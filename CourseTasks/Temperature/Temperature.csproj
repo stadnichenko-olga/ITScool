@@ -56,7 +56,7 @@
       <DependentUpon>FormTemperature.cs</DependentUpon>
     </Compile>
     <Compile Include="ScalesClasses\Farenheit.cs" />
-    <Compile Include="ScalesClasses\IScales.cs" />
+    <Compile Include="ScalesClasses\IScale.cs" />
     <Compile Include="ScalesClasses\Kelvin.cs" />
     <Compile Include="Temperature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

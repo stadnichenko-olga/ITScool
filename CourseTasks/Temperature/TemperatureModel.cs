@@ -1,33 +1,35 @@
-﻿using System.Linq;
-using Temperature.ScalesClasses;
+﻿using Temperature.ScalesClasses;
 
 namespace Temperature
 {
     class TemperatureModel
     {
-        private IScale[] TemperatureScalesList { get; }
+        private IScale[] temperatureScalesList { get; }
 
-        public TemperatureModel(double initialTemperature) => TemperatureScalesList = new IScale[]
+        public TemperatureModel()
+        {
+            temperatureScalesList = new IScale[]
             {
-                new Celsius(initialTemperature),
-                new Farenheit(initialTemperature),
-                new Kelvin(initialTemperature)
+                new Celsius(),
+                new Farenheit(),
+                new Kelvin()
+            };
+        }
+
+        public string[] ScalesNames { get; } = new string[]
+            {
+                new Celsius().GetScaleName(),
+                new Farenheit().GetScaleName(),
+                new Kelvin().GetScaleName()
             };
 
-        public string[] PrintScalesNames() => TemperatureScalesList.Select(x => x.PrintScaleName()).ToArray();
+        private double ConverterToCelsius(double initialTemperature, int initialScaleIndex) =>
+            temperatureScalesList[initialScaleIndex].ConvertTemperatureToCelsius(initialTemperature);
 
-        public double ConvertTemperature(int initialScaleValue, int resultScaleValue)
-        {
-            return ConverterFromCelsius(ConverterToCelsius(initialScaleValue), resultScaleValue);
-        }
+        private double ConverterFromCelsius(double initialTemperature, int resultScaleIndex) =>
+            temperatureScalesList[resultScaleIndex].ConvertTemperatureFromCelsius(initialTemperature);
 
-        private double ConverterFromCelsius(double initialTemperature, int resultScaleValue)
-        {
-            var temperatureArray = new TemperatureModel(initialTemperature);
-            return temperatureArray.TemperatureScalesList.Select(x => x.ConvertTemperatureFromCelsius()).ToArray()[resultScaleValue];
-        }
-
-        private double ConverterToCelsius(int initialScaleValue) =>
-            TemperatureScalesList.Select(x => x.ConvertTemperatureToCelsius()).ToArray()[initialScaleValue];
+        public double TemperatureConverter(double initialTemperature, int initialScaleIndex, int resultScaleIndex) =>
+            ConverterFromCelsius(ConverterToCelsius(initialTemperature, initialScaleIndex), resultScaleIndex);
     }
 }

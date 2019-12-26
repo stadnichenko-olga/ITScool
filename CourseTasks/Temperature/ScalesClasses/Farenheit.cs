@@ -1,18 +1,11 @@
 ﻿namespace Temperature.ScalesClasses
 {
     class Farenheit : IScale
-    {
-        private readonly double temperature;
+    {        
+        public double ConvertTemperatureFromCelsius(double temperature) => temperature * 9 / 5 + 32;
 
-        public Farenheit(double initialTemperature)
-        {
-            temperature = initialTemperature;
-        }
+        public double ConvertTemperatureToCelsius(double temperature) => (temperature - 32) * 5 / 9;
 
-        public double ConvertTemperatureFromCelsius() => temperature * 9 / 5 + 32;
-
-        public double ConvertTemperatureToCelsius() => (temperature - 32) * 5 / 9;
-
-        public string PrintScaleName() => "Fahrenheit";
+        public string GetScaleName() => "Fahrenheit";
     }
 }
