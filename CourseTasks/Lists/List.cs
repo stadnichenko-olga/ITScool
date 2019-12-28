@@ -100,33 +100,10 @@ namespace Lists
         }
 
         public bool Remove(T data)
-        {
+        {            
             var current = head;
             Node<T> previous = null;
-
-            if (Equals(data, null))
-            {
-                while (current.Data != null)
-                {
-                    previous = current;
-                    current = current.Next;
-                }
-
-                if (!Equals(previous, null))
-                {
-                    previous.Next = current.Next;
-                }
-                else
-                {
-                    head = head.Next;
-                }
-
-                Count--;
-                changesCount++;
-
-                return true;
-            }
-
+            
             while (current != null)
             {
                 if (Equals(current.Data, data))
@@ -149,7 +126,7 @@ namespace Lists
                 current = current.Next;
             }
 
-            return false;
+            return Equals(data, null);
         }
 
         public T RemoveAt(int index)
@@ -162,7 +139,7 @@ namespace Lists
             }
 
             var previous = this[index - 1];
-            var current = this[index];
+            var current = previous.Next;
             var data = current.Data;
 
             if (previous != null)
@@ -216,20 +193,19 @@ namespace Lists
             }
 
             var result = new LinkedList<T>();
-            var current = head;
-            result.head = new Node<T>(current.Data);
+            var currentSource = head;
+            result.head = new Node<T>(currentSource.Data);
             result.Count++;
 
-            var previousNode = result.head;
-            current = current.Next;
+            var previousResult = result.head;
+            currentSource = currentSource.Next;
 
-            while (current != null)
+            while (currentSource != null)
             {
-                var node = new Node<T>(current.Data);
-                previousNode.Next = node;
-                previousNode = previousNode.Next;
+                previousResult.Next = new Node<T>(currentSource.Data);
+                previousResult = previousResult.Next;
                 result.Count++;
-                current = current.Next;
+                currentSource = currentSource.Next;
             }
 
             return result;
@@ -261,11 +237,6 @@ namespace Lists
 
         public override string ToString()
         {
-            if (Count == 1)
-            {
-                return head.Data.ToString();
-            }
-
             var result = new StringBuilder();
             result.Append("[");
 
@@ -273,8 +244,7 @@ namespace Lists
             {
                 if (Equals(item, null))
                 {
-                    result.Append("null");
-                    result.Append(", ");
+                    result.Append("null, ");
                 }
                 else
                 {
@@ -283,7 +253,12 @@ namespace Lists
                 }
             }
 
-            return result.ToString().Substring(0, result.ToString().Length - 2) + "]";
+            if (Count != 0)
+            {
+                result.Remove(result.Length - 2, 2);
+            }
+            
+            return result.Append("]").ToString();
         }
 
         public override int GetHashCode()

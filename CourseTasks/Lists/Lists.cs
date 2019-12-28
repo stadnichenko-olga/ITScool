@@ -7,7 +7,7 @@ namespace Lists
         static void Main(string[] args)
         {
             var linkedList = new LinkedList<string>();
-           
+
             linkedList.Add("A");
             linkedList.Add("B");
             linkedList.Add("C");
@@ -39,7 +39,7 @@ namespace Lists
                 Console.WriteLine("Remove element null");
                 Console.WriteLine(linkedList);
             }
-
+            
             Console.WriteLine($"Element index 4 = {linkedList.GetValue(4).ToString()}");
             linkedList.RemoveAt(4);
             Console.WriteLine("Remove element index 4");
