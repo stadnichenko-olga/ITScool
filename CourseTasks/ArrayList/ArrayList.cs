@@ -160,7 +160,7 @@ namespace ArrayList
             Capacity = Count;
         }
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             var initialChangesCount = changesCount;
 
@@ -175,10 +175,11 @@ namespace ArrayList
             }
         }
 
-        public IEnumerator GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
+
 
         public int Capacity
         {
