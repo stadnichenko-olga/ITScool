@@ -43,6 +43,7 @@ namespace ArrayList
             Console.WriteLine("Remove item: John");
             items.Remove("John");
             Console.WriteLine(string.Join("; ", items));
+            Console.WriteLine("After removing John from items: " + $"Count = {items.Count}; Capacity = {items.Capacity}");
 
             Console.WriteLine();
             Console.WriteLine("Remove item #3");
@@ -51,10 +52,13 @@ namespace ArrayList
             Console.WriteLine("After removing two elements from items: " + $"Count = {items.Count}; Capacity = {items.Capacity}");
 
             Console.WriteLine();
-            Console.WriteLine("CopyTo an array startong from index 3");
-            items.CopyTo(new string[] { "Jane", "Kitty", "Max" }, 3);
-            Console.WriteLine(string.Join("; ", items));
-            Console.WriteLine("After copying an array to items: " + $"Count = {items.Count}; Capacity = {items.Capacity}");
+            Console.WriteLine("CopyTo an array starting from index 1");
+            var arrayToCopyTo = new string[20];
+            arrayToCopyTo[0] = "Jane";
+            arrayToCopyTo[1] = "Greg";
+            Console.WriteLine(string.Join("; ", arrayToCopyTo));
+            items.CopyTo(arrayToCopyTo, 1);             
+            Console.WriteLine(string.Join("; ", arrayToCopyTo));           
 
             Console.WriteLine();
 

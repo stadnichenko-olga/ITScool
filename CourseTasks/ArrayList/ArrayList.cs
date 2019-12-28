@@ -6,26 +6,11 @@ namespace ArrayList
 {
     public class ArrayList<T> : IList<T>
     {
-        private const int DefaultCapacity = 8;
+        private const int defaultCapacity = 8;
 
         private T[] items;
 
-        private int count;
-
-        public int Count
-        {
-            get => count;
-
-            private set
-            {
-                count = value;
-
-                if (value == items.Length)
-                {
-                    Capacity = items.Length * 2;
-                }
-            }
-        }
+        public int Count { get; private set; }
 
         private int changesCount;
 
@@ -33,7 +18,7 @@ namespace ArrayList
 
         public ArrayList()
         {
-            items = new T[DefaultCapacity];
+            items = new T[defaultCapacity];
             Count = 0;
         }
 
@@ -85,18 +70,9 @@ namespace ArrayList
 
             CheckIndex(index);
 
+            Array.Copy(items, index + 1, items, index, Count - index - 1);
+
             Count--;
-
-            var itemsNew = Array.CreateInstance(typeof(T), items.Length);
-            Array.Copy(items, itemsNew, Count);
-
-            if (index > 0)
-            {
-                Array.Copy(itemsNew, items, index);
-            }
-
-            Array.Copy(itemsNew, index + 1, items, index, Count - index);
-
             changesCount++;
         }
 
@@ -132,21 +108,25 @@ namespace ArrayList
         {
             CheckReadOnly();
 
+            if (Count == items.Length)
+            {
+                EnsureCapacity(Count + 1);
+            }
+
             if (index == Count)
             {
                 Add(value);
-                Count++;
-                changesCount++;
                 return;
             }
 
             CheckIndex(index);
 
             Array.Copy(items, index, items, index + 1, Count - index);
-            
-            items[index] = value;            
+
+            items[index] = value;
 
             Count++;
+
             changesCount++;
         }
 
@@ -154,19 +134,20 @@ namespace ArrayList
         {
             CheckReadOnly();
 
-            var itemsNew = new T[items.Length];
-            Array.Copy(items, itemsNew, Count);
-
-            Count += array.Length;
-
-            if (arrayIndex > 0)
+            if (Equals(array, null))
             {
-                Array.Copy(itemsNew, items, arrayIndex - 1);
+                throw new ArgumentNullException(nameof(array), "Result array is NULL");
+            }
+            if (arrayIndex < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex), $"Index value {arrayIndex} is out of range [0,{array.Length - 1}]");
+            }
+            if (array.Length < arrayIndex + Count)
+            {
+                throw new ArgumentException(nameof(array), $"Capacity of {array} is not enought.");
             }
 
-            Array.Copy(array, 0, items, arrayIndex, array.Length);
-
-            Array.Copy(itemsNew, arrayIndex, items, arrayIndex + array.Length, Count - arrayIndex);
+            Array.Copy(items, 0, array, arrayIndex, Count);
         }
 
         public void TrimExcess()
@@ -176,8 +157,6 @@ namespace ArrayList
                 return;
             }
 
-            Array.Resize(ref items, Count);
-
             Capacity = Count;
         }
 
@@ -185,23 +164,20 @@ namespace ArrayList
         {
             var initialChangesCount = changesCount;
 
-            for (var i = 0; i < Count; i++)
+            foreach (var item in items)
             {
                 if (initialChangesCount != changesCount)
                 {
                     throw new InvalidOperationException("The object was changed while iterations");
                 }
 
-                yield return items[i];
+                yield return item;
             }
         }
 
         public IEnumerator GetEnumerator()
         {
-            for (var i = 0; i < Count; i++)
-            {
-                yield return items[i];
-            }
+            return GetEnumerator();
         }
 
         public int Capacity
@@ -220,25 +196,39 @@ namespace ArrayList
                     throw new ArgumentOutOfRangeException(nameof(value), $"Capacity value is less then Count = {Count}");
                 }
 
-                var newItems = new T[value];
-                Array.Copy(items, 0, newItems, 0, Count);
-
-                items = newItems;
+                Array.Resize(ref items, value);
             }
         }
-        
+
+        private void EnsureCapacity(int size)
+        {
+            if (items.Length <= size)
+            {
+                var newCapacity = items.Length * 2;
+                Capacity = Math.Max(size, newCapacity);
+            }
+        }
+
         public void Add(T value)
         {
             CheckReadOnly();
 
+            if (Count == items.Length)
+            {
+                EnsureCapacity(Count + 1);
+            }
+
+
             items[Count] = value;
+
             Count++;
+
             changesCount++;
         }
 
         public bool Contains(T value)
-        {            
-            return IndexOf(value)>=0;
+        {
+            return IndexOf(value) >= 0;
         }
 
         public void Clear()
