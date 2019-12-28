@@ -39,7 +39,7 @@ namespace ArrayList
 
         public ArrayList(int capacity)
         {
-            if (capacity < 0)
+            if (capacity <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(capacity), "Capacity value is negative");
             }
@@ -102,7 +102,7 @@ namespace ArrayList
 
         public int IndexOf(T value)
         {
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
             {
                 if (Equals(items[i], value))
                 {
@@ -132,19 +132,19 @@ namespace ArrayList
         {
             CheckReadOnly();
 
-            CheckIndex(index);
-
-            var itemsNew = Array.CreateInstance(typeof(T), items.Length);
-            Array.Copy(items, itemsNew, Count);
-
-            if (index > 0)
+            if (index == Count)
             {
-                Array.Copy(itemsNew, items, index - 1);
+                Add(value);
+                Count++;
+                changesCount++;
+                return;
             }
 
-            items[index] = value;
+            CheckIndex(index);
 
-            Array.Copy(itemsNew, index, items, index + 1, Count - index);
+            Array.Copy(items, index, items, index + 1, Count - index);
+            
+            items[index] = value;            
 
             Count++;
             changesCount++;
@@ -154,7 +154,7 @@ namespace ArrayList
         {
             CheckReadOnly();
 
-            var itemsNew = Array.CreateInstance(typeof(T), items.Length);
+            var itemsNew = new T[items.Length];
             Array.Copy(items, itemsNew, Count);
 
             Count += array.Length;
@@ -183,9 +183,9 @@ namespace ArrayList
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            int initialChangesCount = changesCount;
+            var initialChangesCount = changesCount;
 
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
             {
                 if (initialChangesCount != changesCount)
                 {
@@ -198,7 +198,7 @@ namespace ArrayList
 
         public IEnumerator GetEnumerator()
         {
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
             {
                 yield return items[i];
             }
@@ -237,21 +237,8 @@ namespace ArrayList
         }
 
         public bool Contains(T value)
-        {
-            if (Equals(value, null))
-            {
-                return true;
-            }
-
-            for (int i = 0; i < Count; i++)
-            {
-                if (Equals(items[i], value))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+        {            
+            return IndexOf(value)>=0;
         }
 
         public void Clear()

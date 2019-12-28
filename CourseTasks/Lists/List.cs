@@ -126,7 +126,7 @@ namespace Lists
                 current = current.Next;
             }
 
-            return Equals(data, null);
+            return false;
         }
 
         public T RemoveAt(int index)

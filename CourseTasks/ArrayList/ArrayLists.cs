@@ -17,9 +17,13 @@ namespace ArrayList
             Console.WriteLine(string.Join("; ", items));
             Console.WriteLine("After adding two elements to items: " + $"Count = {items.Count}; Capacity = {items.Capacity}");
 
-            items.Add("Mary");
-            items.Insert(2, "John");
+            items.Insert(items.Count, "Mary");
+            Console.WriteLine("After adding Mary to the end");
+            Console.WriteLine();
+            Console.WriteLine(string.Join("; ", items));
 
+            items.Insert(2, "John");
+            Console.WriteLine("After adding John into 2 position");
             Console.WriteLine();
             Console.WriteLine(string.Join("; ", items));
             Console.WriteLine("After adding two more elements to items: " + $"Count = {items.Count}; Capacity = {items.Capacity}");
