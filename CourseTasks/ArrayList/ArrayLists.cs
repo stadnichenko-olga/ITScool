@@ -58,7 +58,7 @@ namespace ArrayList
             arrayToCopyTo[1] = "Greg";
             Console.WriteLine(string.Join("; ", arrayToCopyTo));
             items.CopyTo(arrayToCopyTo, 1);             
-            Console.WriteLine(string.Join("; ", arrayToCopyTo));           
+            Console.WriteLine(string.Join("; ", arrayToCopyTo));
 
             Console.WriteLine();
 

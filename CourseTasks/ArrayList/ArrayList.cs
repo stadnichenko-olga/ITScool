@@ -6,7 +6,7 @@ namespace ArrayList
 {
     public class ArrayList<T> : IList<T>
     {
-        private const int defaultCapacity = 8;
+        private const int DefaultCapacity = 8;
 
         private T[] items;
 
@@ -18,7 +18,7 @@ namespace ArrayList
 
         public ArrayList()
         {
-            items = new T[defaultCapacity];
+            items = new T[DefaultCapacity];
             Count = 0;
         }
 
@@ -26,7 +26,7 @@ namespace ArrayList
         {
             if (capacity <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(capacity), "Capacity value is negative");
+                throw new ArgumentOutOfRangeException(nameof(capacity), "Capacity value is less than 1.");
             }
 
             items = new T[capacity];
@@ -45,7 +45,7 @@ namespace ArrayList
         {
             if (IsReadOnly)
             {
-                throw new AccessViolationException("Modification of a read-only value attempted.");
+                throw new NotSupportedException("Modification of a read-only value attempted.");
             }
         }
 
@@ -132,9 +132,7 @@ namespace ArrayList
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            CheckReadOnly();
-
-            if (Equals(array, null))
+            if (array == null)
             {
                 throw new ArgumentNullException(nameof(array), "Result array is NULL");
             }
@@ -168,7 +166,7 @@ namespace ArrayList
             {
                 if (initialChangesCount != changesCount)
                 {
-                    throw new InvalidOperationException("The object was changed while iterations");
+                    throw new InvalidOperationException("The object was changed while iterations.");
                 }
 
                 yield return item;
@@ -185,7 +183,7 @@ namespace ArrayList
         {
             get => items.Length;
 
-            private set
+            set
             {
                 if (value < 0)
                 {
@@ -196,6 +194,8 @@ namespace ArrayList
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), $"Capacity value is less then Count = {Count}");
                 }
+
+                changesCount++;
 
                 Array.Resize(ref items, value);
             }
