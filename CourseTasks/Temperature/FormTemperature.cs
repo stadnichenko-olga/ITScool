@@ -7,9 +7,9 @@ namespace Temperature
     {
         private double initialTemperature;
 
-        private int initalScale = 0;
+        private int initalScale;
 
-        private int resultScale = 0;
+        private int resultScale;
 
         private TemperatureModel temperatureModel = new TemperatureModel();
 
@@ -20,14 +20,13 @@ namespace Temperature
 
         private void buttonConvert_Click(object sender, EventArgs e)
         {
-            boxResultTemperature.Text = temperatureModel.TemperatureConverter(initialTemperature, initalScale, resultScale).ToString("F3");
+            boxResultTemperature.Text = temperatureModel.ConvertTemperature(initialTemperature, initalScale, resultScale).ToString("F3");
         }
 
         private void comboBoxInitialScale_SelectedIndexChanged(object sender, EventArgs e)
         {
             initalScale = comboBoxInitialScale.SelectedIndex;
         }
-
 
         private void comboBoxResultScale_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -46,11 +45,11 @@ namespace Temperature
         private void FormTemperature_Load(object sender, EventArgs e)
         {
             comboBoxInitialScale.Items.Clear();
-            comboBoxInitialScale.Items.AddRange(temperatureModel.ScalesNames);
+            comboBoxInitialScale.Items.AddRange(temperatureModel.GetScalesNames());
             comboBoxInitialScale.SelectedIndex = 0;
 
             comboBoxResultScale.Items.Clear();
-            comboBoxResultScale.Items.AddRange(temperatureModel.ScalesNames);
+            comboBoxResultScale.Items.AddRange(temperatureModel.GetScalesNames());
             comboBoxResultScale.SelectedIndex = 0;
         }
     }

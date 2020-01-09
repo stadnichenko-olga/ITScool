@@ -4,32 +4,32 @@ namespace Temperature
 {
     class TemperatureModel
     {
-        private IScale[] temperatureScalesList { get; }
-
-        public TemperatureModel()
-        {
-            temperatureScalesList = new IScale[]
+        private readonly IScale[] temperatureScalesList = new IScale[]
             {
                 new Celsius(),
                 new Farenheit(),
                 new Kelvin()
             };
+
+        public string[] GetScalesNames()
+        {
+            var scalesNames = new string[temperatureScalesList.Length];
+
+            for (int i = 0; i < temperatureScalesList.Length; i++)
+            {
+                scalesNames[i] = temperatureScalesList[i].GetScaleName();
+            }
+
+            return scalesNames;
         }
 
-        public string[] ScalesNames { get; } = new string[]
-            {
-                new Celsius().GetScaleName(),
-                new Farenheit().GetScaleName(),
-                new Kelvin().GetScaleName()
-            };
-
-        private double ConverterToCelsius(double initialTemperature, int initialScaleIndex) =>
+        private double ConvertToCelsius(double initialTemperature, int initialScaleIndex) =>
             temperatureScalesList[initialScaleIndex].ConvertTemperatureToCelsius(initialTemperature);
 
-        private double ConverterFromCelsius(double initialTemperature, int resultScaleIndex) =>
+        private double ConvertFromCelsius(double initialTemperature, int resultScaleIndex) =>
             temperatureScalesList[resultScaleIndex].ConvertTemperatureFromCelsius(initialTemperature);
 
-        public double TemperatureConverter(double initialTemperature, int initialScaleIndex, int resultScaleIndex) =>
-            ConverterFromCelsius(ConverterToCelsius(initialTemperature, initialScaleIndex), resultScaleIndex);
+        public double ConvertTemperature(double initialTemperature, int initialScaleIndex, int resultScaleIndex) =>
+            ConvertFromCelsius(ConvertToCelsius(initialTemperature, initialScaleIndex), resultScaleIndex);
     }
 }
