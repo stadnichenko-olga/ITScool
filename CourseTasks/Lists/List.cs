@@ -100,15 +100,15 @@ namespace Lists
         }
 
         public bool Remove(T data)
-        {            
+        {
             var current = head;
             Node<T> previous = null;
-            
+
             while (current != null)
             {
                 if (Equals(current.Data, data))
                 {
-                    if (!Equals(previous, null))
+                    if (previous != null)
                     {
                         previous.Next = current.Next;
                     }
@@ -142,10 +142,7 @@ namespace Lists
             var current = previous.Next;
             var data = current.Data;
 
-            if (previous != null)
-            {
-                previous.Next = current.Next;
-            }
+            previous.Next = current.Next;
 
             Count--;
             changesCount++;
@@ -192,23 +189,22 @@ namespace Lists
                 return new LinkedList<T>();
             }
 
-            var result = new LinkedList<T>();
+            var newList = new LinkedList<T>();
             var currentSource = head;
-            result.head = new Node<T>(currentSource.Data);
-            result.Count++;
+            newList.head = new Node<T>(currentSource.Data);
+            newList.Count = Count;
 
-            var previousResult = result.head;
+            var previousResult = newList.head;
             currentSource = currentSource.Next;
 
             while (currentSource != null)
             {
                 previousResult.Next = new Node<T>(currentSource.Data);
                 previousResult = previousResult.Next;
-                result.Count++;
                 currentSource = currentSource.Next;
             }
 
-            return result;
+            return newList;
         }
 
         public void Revert()
@@ -257,8 +253,9 @@ namespace Lists
             {
                 result.Remove(result.Length - 2, 2);
             }
-            
-            return result.Append("]").ToString();
+
+            result.Append("]");
+            return result.ToString();
         }
 
         public override int GetHashCode()
