@@ -162,14 +162,14 @@ namespace ArrayList
         {
             var initialChangesCount = changesCount;
 
-            foreach (var item in items)
+            for (var i = 0; i < Count; i++)
             {
                 if (initialChangesCount != changesCount)
                 {
                     throw new InvalidOperationException("The object was changed while iterations.");
                 }
 
-                yield return item;
+                yield return items[i];
             }
         }
 
@@ -203,11 +203,13 @@ namespace ArrayList
 
         private void EnsureCapacity(int size)
         {
-            if (items.Length <= size)
+            if (items.Length > size)
             {
-                var newCapacity = items.Length * 2;
-                Capacity = Math.Max(size, newCapacity);
+                return;
             }
+
+            var newCapacity = items.Length * 2;
+            Capacity = Math.Max(size, newCapacity);
         }
 
         public void Add(T value)
