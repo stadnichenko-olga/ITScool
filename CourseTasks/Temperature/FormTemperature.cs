@@ -11,29 +11,29 @@ namespace Temperature
 
         private int resultScale;
 
-        private TemperatureModel temperatureModel = new TemperatureModel();
+        private readonly TemperatureModel temperatureModel = new TemperatureModel();
 
         public FormTemperature()
         {
             InitializeComponent();
         }
 
-        private void buttonConvert_Click(object sender, EventArgs e)
+        private void ButtonConvert_Click(object sender, EventArgs e)
         {
             boxResultTemperature.Text = temperatureModel.ConvertTemperature(initialTemperature, initalScale, resultScale).ToString("F3");
         }
 
-        private void comboBoxInitialScale_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxInitialScale_SelectedIndexChanged(object sender, EventArgs e)
         {
             initalScale = comboBoxInitialScale.SelectedIndex;
         }
 
-        private void comboBoxResultScale_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxResultScale_SelectedIndexChanged(object sender, EventArgs e)
         {
             resultScale = comboBoxResultScale.SelectedIndex;
         }
 
-        private void boxInitialTemperature_TextChanged(object sender, EventArgs e)
+        private void BoxInitialTemperature_TextChanged(object sender, EventArgs e)
         {
             if (!double.TryParse(boxInitialTemperature.Text, out initialTemperature))
             {

@@ -80,7 +80,7 @@
             this.buttonConvert.TabIndex = 2;
             this.buttonConvert.Text = "Convert";
             this.buttonConvert.UseVisualStyleBackColor = true;
-            this.buttonConvert.Click += new System.EventHandler(this.buttonConvert_Click);
+            this.buttonConvert.Click += new System.EventHandler(this.ButtonConvert_Click);
             // 
             // comboBoxInitialScale
             // 
@@ -91,7 +91,7 @@
             this.comboBoxInitialScale.Name = "comboBoxInitialScale";
             this.comboBoxInitialScale.Size = new System.Drawing.Size(180, 24);
             this.comboBoxInitialScale.TabIndex = 3;
-            this.comboBoxInitialScale.SelectedIndexChanged += new System.EventHandler(this.comboBoxInitialScale_SelectedIndexChanged);
+            this.comboBoxInitialScale.SelectedIndexChanged += new System.EventHandler(this.ComboBoxInitialScale_SelectedIndexChanged);
             // 
             // labelInitialScale
             // 
@@ -126,7 +126,7 @@
             this.comboBoxResultScale.Name = "comboBoxResultScale";
             this.comboBoxResultScale.Size = new System.Drawing.Size(180, 24);
             this.comboBoxResultScale.TabIndex = 6;
-            this.comboBoxResultScale.SelectedIndexChanged += new System.EventHandler(this.comboBoxResultScale_SelectedIndexChanged);
+            this.comboBoxResultScale.SelectedIndexChanged += new System.EventHandler(this.ComboBoxResultScale_SelectedIndexChanged);
             // 
             // boxInitialTemperature
             // 
@@ -135,7 +135,7 @@
             this.boxInitialTemperature.Name = "boxInitialTemperature";
             this.boxInitialTemperature.Size = new System.Drawing.Size(177, 22);
             this.boxInitialTemperature.TabIndex = 7;
-            this.boxInitialTemperature.TextChanged += new System.EventHandler(this.boxInitialTemperature_TextChanged);
+            this.boxInitialTemperature.TextChanged += new System.EventHandler(this.BoxInitialTemperature_TextChanged);
             // 
             // boxResultTemperature
             // 
