@@ -44,12 +44,14 @@ namespace Temperature
 
         private void FormTemperature_Load(object sender, EventArgs e)
         {
+            var scaleNamesArray = temperatureModel.GetScalesNames();
+
             comboBoxInitialScale.Items.Clear();
-            comboBoxInitialScale.Items.AddRange(temperatureModel.GetScalesNames());
+            comboBoxInitialScale.Items.AddRange(scaleNamesArray);
             comboBoxInitialScale.SelectedIndex = 0;
 
             comboBoxResultScale.Items.Clear();
-            comboBoxResultScale.Items.AddRange(temperatureModel.GetScalesNames());
+            comboBoxResultScale.Items.AddRange(scaleNamesArray);
             comboBoxResultScale.SelectedIndex = 0;
         }
     }

@@ -1,27 +1,18 @@
-﻿using Temperature.ScalesClasses;
+﻿using System.Linq;
+using Temperature.ScalesClasses;
 
 namespace Temperature
 {
     class TemperatureModel
     {
-        private readonly IScale[] temperatureScalesList = new IScale[]
+        private readonly IScale[] temperatureScalesList = 
             {
                 new Celsius(),
                 new Farenheit(),
                 new Kelvin()
             };
 
-        public string[] GetScalesNames()
-        {
-            var scalesNames = new string[temperatureScalesList.Length];
-
-            for (var i = 0; i < temperatureScalesList.Length; i++)
-            {
-                scalesNames[i] = temperatureScalesList[i].GetScaleName();
-            }
-
-            return scalesNames;
-        }
+        public string[] GetScalesNames() => temperatureScalesList.Select(x => x.GetScaleName()).ToArray();
 
         private double ConvertToCelsius(double initialTemperature, int initialScaleIndex) =>
             temperatureScalesList[initialScaleIndex].ConvertTemperatureToCelsius(initialTemperature);
