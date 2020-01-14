@@ -19,7 +19,6 @@ namespace ArrayList
         public ArrayList()
         {
             items = new T[DefaultCapacity];
-            Count = 0;
         }
 
         public ArrayList(int capacity)
@@ -30,7 +29,6 @@ namespace ArrayList
             }
 
             items = new T[capacity];
-            Count = 0;
         }
 
         private void CheckIndex(int index)
@@ -101,6 +99,7 @@ namespace ArrayList
             {
                 CheckIndex(index);
                 items[index] = value;
+                changesCount++;
             }
         }
 
@@ -185,17 +184,15 @@ namespace ArrayList
 
             set
             {
-                if (value < 0)
+                if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), "Capacity value is negative");
+                    throw new ArgumentOutOfRangeException(nameof(value), "Capacity value is less than 1.");
                 }
 
                 if (value < Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), $"Capacity value is less then Count = {Count}");
                 }
-
-                changesCount++;
 
                 Array.Resize(ref items, value);
             }
@@ -220,7 +217,6 @@ namespace ArrayList
             {
                 EnsureCapacity(Count + 1);
             }
-
 
             items[Count] = value;
 
